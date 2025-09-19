@@ -1,12 +1,6 @@
-proxies:
-  - name: 🟢 直连
-    type: direct
-  - name: 🔴 拒绝
-    type: reject
-
 proxy-groups:
   - type: select
-    default: 🔴 拒绝
+    default: reject
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -22,11 +16,11 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🚫 广告拦截
   - type: select
-    default: 🟢 直连
+    default: direct
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -42,8 +36,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🏠 本地网络
   - type: select
     default: 🚀 默认自动
@@ -62,8 +56,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🍀 Google
   - type: select
     default: ♻️ 美国自动
@@ -82,8 +76,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🤖 AI
   - type: select
     default: 🚀 默认自动
@@ -102,11 +96,11 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🎮 Steam
   - type: select
-    default: 🟢 直连
+    default: direct
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -122,8 +116,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 📺 BiliBili
   - type: select
     default: 🚀 默认自动
@@ -142,11 +136,11 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 👨🏿‍💻 GitHub
   - type: select
-    default: 🟢 直连
+    default: direct
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -162,11 +156,11 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🔍 Bing
   - type: select
-    default: 🟢 直连
+    default: direct
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -182,11 +176,11 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: ☁️ OneDrive
   - type: select
-    default: 🟢 直连
+    default: direct
     proxies:
       - 🚀 默认自动
       - ♻️ 香港自动
@@ -202,8 +196,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: Ⓜ️ Microsoft
   - type: select
     default: 🚀 默认自动
@@ -222,8 +216,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 📲 Telegram
   - type: select
     default: 🚀 默认自动
@@ -242,8 +236,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 📹 YouTube
   - type: select
     default: 🚀 默认自动
@@ -262,8 +256,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🐤 Twitter
   - type: select
     default: 🚀 默认自动
@@ -282,8 +276,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🎵 TikTok
   - type: select
     default: 🚀 默认自动
@@ -302,8 +296,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🎥 NETFLIX
   - type: select
     default: 🚀 默认自动
@@ -322,8 +316,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 💶 PayPal
   - type: select
     default: 🚀 默认自动
@@ -342,8 +336,8 @@ proxy-groups:
       - 🇸🇬 狮城节点
       - 🇺🇲 美国节点
       - 🌐 全部节点
-      - 🟢 直连
-      - 🔴 拒绝
+      - direct
+      - reject
     name: 🐟 漏网之鱼
   - include-all: true
     type: select
@@ -424,12 +418,12 @@ proxy-groups:
 rules:
   - RULE-SET,awavenue_ads,🚫 广告拦截
   - RULE-SET,lan_ip,🏠 本地网络,no-resolve
-  - RULE-SET,private_ip,🟢 直连,no-resolve
-  - RULE-SET,private_domain,🟢 直连
+  - RULE-SET,private_ip,direct,no-resolve
+  - RULE-SET,private_domain,direct
   - RULE-SET,proxylite,🚀 默认自动
   - RULE-SET,google_domain,🍀 Google
   - RULE-SET,ai,🤖 AI
-  - RULE-SET,cn_steam_domain,🟢 直连
+  - RULE-SET,cn_steam_domain,direct
   - RULE-SET,steam_domain,🎮 Steam
   - RULE-SET,bilibili_domain,📺 BiliBili
   - RULE-SET,github_domain,👨🏿‍💻 GitHub
@@ -439,17 +433,17 @@ rules:
   - RULE-SET,telegram_domain,📲 Telegram
   - RULE-SET,youtube_domain,📹 YouTube
   - RULE-SET,twitter_domain,🐤 Twitter
-  - RULE-SET,cn_apple_domain,🟢 直连
+  - RULE-SET,cn_apple_domain,direct
   - RULE-SET,tiktok_domain,🎵 TikTok
   - RULE-SET,netflix_domain,🎥 NETFLIX
   - RULE-SET,paypal_domain,💶 PayPal
-  - RULE-SET,apple_ip,🟢 直连,no-resolve
+  - RULE-SET,apple_ip,direct,no-resolve
   - RULE-SET,google_ip,🍀 Google,no-resolve
   - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
   - RULE-SET,geolocation-!cn,🚀 默认自动
-  - RULE-SET,cn_domain,🟢 直连
-  - RULE-SET,cn_ip,🟢 直连
+  - RULE-SET,cn_domain,direct
+  - RULE-SET,cn_ip,direct
   - MATCH,🐟 漏网之鱼
 
 rule-providers:
