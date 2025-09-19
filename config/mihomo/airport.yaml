@@ -194,7 +194,7 @@ rule-anchor:
 rule-providers:
   # 自定义
   proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/proxy.list" }
-  lan_ip: { <<: *class, format: yaml, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/apple.mrs" }
+  lan_ip: { <<: *class, format: yaml, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lan-ip.yaml" }
   # 广告
   awavenue_ads: { <<: *domain, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml" }
 
