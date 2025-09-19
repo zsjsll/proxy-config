@@ -26,8 +26,8 @@ proxy-groups-anchor:
           🔴 拒绝,
         ],
     }
-  conbine-node: &conbine-node { select, include-all: true, type: select }
-  auto: &auto { type: url-test, include-all: true, tolerance: 20, interval: 60 }
+  conbine-node: &conbine-node { include-all: true, type: select }
+  auto: &auto { type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 60 }
   filter:
     hk: &hk "(?i)港|hk|hongkong|hong kong"
     tw: &tw "(?i)台湾|湾|tw|taiwan"
