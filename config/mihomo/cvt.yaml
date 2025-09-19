@@ -3,79 +3,6 @@ proxies:
   - { name: 🟢 直连, type: direct }
   - { name: 🔴 拒绝, type: reject }
 
-# 全局配置
-mixed-port: 7890
-socks-port: 7891
-redir-port: 7892
-port: 7893
-tproxy-port: 7894
-allow-lan: true
-bind-address: "*"
-ipv6: true
-unified-delay: true
-tcp-concurrent: true
-# interface-name: enp6s18
-log-level: warning
-find-process-mode: "off"
-global-client-fingerprint: chrome
-keep-alive-idle: 600
-keep-alive-interval: 15
-profile:
-  store-selected: true
-  store-fake-ip: true
-
-# 嗅探
-sniffer:
-  enable: true
-  sniff:
-    HTTP:
-      ports: [80, 8080-8880]
-      override-destination: true
-    TLS:
-      ports: [443, 8443]
-    QUIC:
-      ports: [443, 8443]
-  force-domain:
-    - "+.v2ex.com"
-  skip-domain:
-    - "+.baidu.com"
-
-# 入站
-tun:
-  enable: true
-  # system/gvisor/mixed
-  stack: mixed
-  dns-hijack: ["any:53", "tcp://any:53"]
-  #使用nikki，混入全部不修改的情况，开启接口指定为nikki
-  #使用仅内核自行修改下面三项为true
-  #device: nikki
-  auto-route: false
-  auto-redirect: false
-  auto-detect-interface: false
-
-# DNS模块
-dns:
-  enable: true
-  listen: 0.0.0.0:1053
-  ipv6: false
-  respect-rules: true
-  enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
-  fake-ip-filter-mode: blacklist
-  proxy-server-nameserver:
-    - https://223.5.5.5/dns-query
-  direct-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-  nameserver:
-    - https://8.8.8.8/dns-query
-  nameserver-policy:
-    "rule-set:private_domain,cn_domain,apple_domain":
-      - 223.5.5.5
-      - 119.29.29.29
-  fake-ip-filter:
-    - "rule-set:private_domain,cn_domain,apple_domain"
-
 # 出站策略，根据自己情况调整每个策略里分组排序，增删都可以，比如把美国自动放到第一个，比如删除香港故转，注意别漏掉表情逗号等。
 # 如果相应分组没有筛选到对应的国家，请根据自己节点名字调整筛选关键字。
 # 没有再使用锚点，是考虑很多新手修改难度，这样新手修改某个分组更容易些。
@@ -104,8 +31,8 @@ proxy-groups-anchor:
           🔴 拒绝,
         ],
     }
-  conbine-node: &conbine-node { select, include-all: true, type: select }
-  auto: &auto { type: url-test, include-all: true, tolerance: 20, interval: 60 }
+  conbine-node: &conbine-node { include-all: true, type: select }
+  auto: &auto { type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 60 }
   filter:
     hk: &hk "(?i)港|hk|hongkong|hong kong"
     tw: &tw "(?i)台湾|湾|tw|taiwan"
@@ -115,49 +42,49 @@ proxy-groups-anchor:
     us: &us "(?i)美|美国|us|unitedstates|united states"
 
 proxy-groups:
-  - <<: { *policy-group, name: 🚫 广告拦截, default: 🔴 拒绝 }
-  - <<: { *policy-group, name: 🏠 本地网络, default: 🟢 直连 }
-  - <<: { *policy-group, name: 🍀 Google }
-  - <<: { *policy-group, name: 🤖 AI, default: ♻️ 美国自动 }
-  - <<: { *policy-group, name: 🎮 Steam }
-  - <<: { *policy-group, name: 📺 BiliBili, default: 🟢 直连 }
-  - <<: { *policy-group, name: 👨🏿‍💻 GitHub }
-  - <<: { *policy-group, name: 🔍 Bing, default: 🟢 直连 }
-  - <<: { *policy-group, name: ☁️ OneDrive, default: 🟢 直连 }
-  - <<: { *policy-group, name: Ⓜ️ Microsoft, default: 🟢 直连 }
-  - <<: { *policy-group, name: 📲 Telegram }
-  - <<: { *policy-group, name: 📹 YouTube }
-  - <<: { *policy-group, name: 🐤 Twitter }
-  - <<: { *policy-group, name: 🎵 TikTok }
-  - <<: { *policy-group, name: 🎥 NETFLIX }
-  - <<: { *policy-group, name: 💶 PayPal }
-  - <<: { *policy-group, name: 🐟 漏网之鱼 }
+  - { <<: *policy-group, name: 🚫 广告拦截, default: 🔴 拒绝 }
+  - { <<: *policy-group, name: 🏠 本地网络, default: 🟢 直连 }
+  - { <<: *policy-group, name: 🍀 Google }
+  - { <<: *policy-group, name: 🤖 AI, default: ♻️ 美国自动 }
+  - { <<: *policy-group, name: 🎮 Steam }
+  - { <<: *policy-group, name: 📺 BiliBili, default: 🟢 直连 }
+  - { <<: *policy-group, name: 👨🏿‍💻 GitHub }
+  - { <<: *policy-group, name: 🔍 Bing, default: 🟢 直连 }
+  - { <<: *policy-group, name: ☁️ OneDrive, default: 🟢 直连 }
+  - { <<: *policy-group, name: Ⓜ️ Microsoft, default: 🟢 直连 }
+  - { <<: *policy-group, name: 📲 Telegram }
+  - { <<: *policy-group, name: 📹 YouTube }
+  - { <<: *policy-group, name: 🐤 Twitter }
+  - { <<: *policy-group, name: 🎵 TikTok }
+  - { <<: *policy-group, name: 🎥 NETFLIX }
+  - { <<: *policy-group, name: 💶 PayPal }
+  - { <<: *policy-group, name: 🐟 漏网之鱼 }
 
-  - <<: { *conbine-node, name: 🇭🇰 香港节点, filter: *hk }
-  - <<: { *conbine-node, name: 🇹🇼 台湾节点, filter: *tw }
-  - <<: { *conbine-node, name: 🇰🇷 韩国节点, filter: *kr }
-  - <<: { *conbine-node, name: 🇯🇵 日本节点, filter: *jp }
-  - <<: { *conbine-node, name: 🇸🇬 狮城节点, filter: *sg }
-  - <<: { *conbine-node, name: 🇺🇲 美国节点, filter: *us }
-  - <<: { *conbine-node, name: 🌐 全部节点 }
+  - { <<: *conbine-node, name: 🇭🇰 香港节点, filter: *hk }
+  - { <<: *conbine-node, name: 🇹🇼 台湾节点, filter: *tw }
+  - { <<: *conbine-node, name: 🇰🇷 韩国节点, filter: *kr }
+  - { <<: *conbine-node, name: 🇯🇵 日本节点, filter: *jp }
+  - { <<: *conbine-node, name: 🇸🇬 狮城节点, filter: *sg }
+  - { <<: *conbine-node, name: 🇺🇲 美国节点, filter: *us }
+  - { <<: *conbine-node, name: 🌐 全部节点 }
 
   # - <<: { *auto, name: ♻️ 非港自动, filter: "^(?!.*(港|HK|(?i)Hong)).*$" }
-  - <<: { *auto, name: 🚀 默认自动, filter: "^(?!.*(直连)).*$" }
-  - <<: { *auto, name: ♻️ 香港自动, filter: *hk }
-  - <<: { *auto, name: ♻️ 台湾自动, filter: *tw }
-  - <<: { *auto, name: ♻️ 韩国自动, filter: *kr }
-  - <<: { *auto, name: ♻️ 日本自动, filter: *jp }
-  - <<: { *auto, name: ♻️ 狮城自动, filter: *sg }
-  - <<: { *auto, name: ♻️ 美国自动, filter: *us }
+  - { <<: *auto, name: 🚀 默认自动, filter: "^(?!.*(直连)).*$" }
+  - { <<: *auto, name: ♻️ 香港自动, filter: *hk }
+  - { <<: *auto, name: ♻️ 台湾自动, filter: *tw }
+  - { <<: *auto, name: ♻️ 韩国自动, filter: *kr }
+  - { <<: *auto, name: ♻️ 日本自动, filter: *jp }
+  - { <<: *auto, name: ♻️ 狮城自动, filter: *sg }
+  - { <<: *auto, name: ♻️ 美国自动, filter: *us }
 
 # 规则匹配
 # 此规则部分没有做防泄露处理，因为弊严重大于利！
 rules:
-  - RULE-SET,awavenue_ads,📢 广告拦截
-  - RULE-SET,lan_ip,🏠 本地网络
+  - RULE-SET,awavenue_ads,🚫 广告拦截
+  - RULE-SET,lan_ip,🏠 本地网络,no-resolve
   - RULE-SET,private_ip,🟢 直连,no-resolve
   - RULE-SET,private_domain,🟢 直连
-  - RULE-SET,proxylite,🚀 默认代理
+  - RULE-SET,proxylite,🚀 默认自动
   - RULE-SET,google_domain,🍀 Google
   # - RULE-SET,google_fcm_domain,🟢 直连
   - RULE-SET,ai,🤖 AI
@@ -179,7 +106,7 @@ rules:
   - RULE-SET,google_ip,🍀 Google,no-resolve
   - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
-  - RULE-SET,geolocation-!cn,🚀 默认代理
+  - RULE-SET,geolocation-!cn,🚀 默认自动
   - RULE-SET,cn_domain,🟢 直连
   - RULE-SET,cn_ip,🟢 直连
   - MATCH,🐟 漏网之鱼
