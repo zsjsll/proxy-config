@@ -1,0 +1,6 @@
+# 国外DNS列表列表
+payload:
+  - "+.browserscan.net"
+  - "+.browserleaks.com"
+  - "+.ipleak.net"
+  - "+.dnsleaktest.com"
