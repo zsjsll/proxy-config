@@ -1,7 +1,9 @@
+# 自己写的，大部分都是官方源。
+
 # 机场订阅
 proxy-providers:
   Airport1:
-    url: "自己的机场"
+    url: "自己填写"
     type: http
     interval: 86400
     health-check:
@@ -18,18 +20,20 @@ proxies:
 # 全局配置
 mixed-port: 7890
 socks-port: 7891
-redir-port: 7892
-port: 7893
+port: 7892
+redir-port: 7893
 tproxy-port: 7894
 allow-lan: true
 bind-address: "*"
 ipv6: true
-unified-delay: true
-tcp-concurrent: true
+unified-delay: true # 开启统一延迟，也就是看起来好看一点，没什么实际作用
+tcp-concurrent: true # 启用 TCP 并发连接，将会使用 dns 解析出的所有 IP 地址进行连接，使用第一个成功的连接
 # interface-name: enp6s18
+routing-mark: 6666 # 标记出内核的流量
 log-level: warning
 find-process-mode: "off"
 global-client-fingerprint: chrome
+disable-keep-alive: false
 keep-alive-idle: 600
 keep-alive-interval: 15
 profile:
@@ -39,6 +43,8 @@ profile:
 # 嗅探
 sniffer:
   enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
   sniff:
     HTTP:
       ports: [80, 8080-8880]
@@ -51,13 +57,19 @@ sniffer:
     - "+.v2ex.com"
   skip-domain:
     - "+.baidu.com"
+  # skip-src-address:
+  #   - 192.168.0.3/32
+  # skip-dst-address:
+  #   - 192.168.0.3/32
 
 # 入站
 tun:
   enable: true
   # system/gvisor/mixed
   stack: mixed
-  dns-hijack: ["any:53", "tcp://any:53"]
+  dns-hijack:
+    - any:53
+    - tcp://any:53
   #使用nikki，混入全部不修改的情况，开启接口指定为nikki
   #使用仅内核自行修改下面三项为true
   #device: nikki
@@ -72,13 +84,18 @@ dns:
   ipv6: true
   respect-rules: true
   enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
+  fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:private_domain,cn_domain,cn_apple_domain,cn_steam_domain,awavenue-ads"
+    - "rule-set:private_domain,cn_domain,cn_apple_domain,cn_steam_domain"
+
+  # 用于解析DNS服务器的域名
+  default-nameserver:
+    - 223.5.5.5
   proxy-server-nameserver:
     - https://223.6.6.6/dns-query
   direct-nameserver:
+    - system
     - 222.172.200.68
     - 61.166.150.123
     - 223.6.6.6
@@ -90,9 +107,9 @@ dns:
       - 222.172.200.68
       - 61.166.150.123
       - 223.6.6.6
-    # 用于广告拦截，但是一旦这样设置，在dns阶段就已经进行了拦截，proxy-groups 就没有作用了
-    "rule-set:awavenue-ads":
-      - rcode://success
+  #   # 用于广告拦截，但是一旦这样设置，在dns阶段就已经进行了拦截，proxy-groups 就没有作用了
+  #   "rule-set:awavenue-ads":
+  #     - rcode://success
   # fallback:
   #   - https://9.9.9.9/dns-query
   #   - https://1.0.0.1/dns-query
@@ -113,10 +130,10 @@ proxy-groups-anchor:
   policy-group:
     &policy-group {
       type: select,
-      default: 🚀 默认自动,
+      default: 🚀 自动代理,
       proxies:
         [
-          🚀 默认自动,
+          🚀 自动代理,
           ♻️ 香港自动,
           ♻️ 台湾自动,
           ♻️ 韩国自动,
@@ -135,7 +152,7 @@ proxy-groups-anchor:
         ],
     }
   conbine-node: &conbine-node { include-all: true, type: select }
-  auto: &auto { type: url-test, url: http://www.gstatic.com/generate_204, include-all: true, tolerance: 20, interval: 60 }
+  auto: &auto { type: url-test, include-all: true, tolerance: 20, interval: 60 }
   filter:
     hk: &hk "(?i)港|hk|hongkong|hong kong"
     tw: &tw "(?i)台湾|湾|tw|taiwan"
@@ -172,7 +189,7 @@ proxy-groups:
   - { <<: *conbine-node, name: 🌐 全部节点 }
 
   # - <<: { *auto, name: ♻️ 非港自动, filter: "^(?!.*(港|HK|(?i)Hong)).*$" }
-  - { <<: *auto, name: 🚀 默认自动, filter: "^(?!.*(直连)).*$" }
+  - { <<: *auto, name: 🚀 自动代理, filter: "^(?!.*(直连)).*$" }
   - { <<: *auto, name: ♻️ 香港自动, filter: *hk }
   - { <<: *auto, name: ♻️ 台湾自动, filter: *tw }
   - { <<: *auto, name: ♻️ 韩国自动, filter: *kr }
@@ -183,35 +200,35 @@ proxy-groups:
 # 规则匹配
 # 此规则部分没有做防泄露处理，因为弊严重大于利！
 rules:
-  - RULE-SET,awavenue-ads,🚫 广告拦截
-  - RULE-SET,lan-ip,🏠 本地网络
-  - RULE-SET,proxylite,🚀 默认自动
-  - GEOSITE,private,🟢 直连
-  - GEOSITE,google,🍀 Google
+  - RULE-SET,awavenue_ads,🚫 广告拦截
+  - RULE-SET,lan_ip,🏠 本地网络,no-resolve
+  - RULE-SET,private_ip,🟢 直连,no-resolve
+  - RULE-SET,private_domain,🟢 直连
+  - RULE-SET,proxylite,🚀 自动代理
+  - RULE-SET,google_domain,🍀 Google
   # - RULE-SET,google_fcm_domain,🟢 直连
-  - GEOSITE,category-ai-!cn,🤖 AI
-  - GEOSITE,steam@cn,🟢 直连
-  - GEOSITE,steam,🎮 Steam
-  - GEOSITE,github,👨🏿‍💻 GitHub
-  - GEOSITE,bing,🔍 Bing
-  - GEOSITE,onedrive,☁️ OneDrive
-  - GEOSITE,microsoft,Ⓜ️ Microsoft
-  - GEOSITE,telegram,📲 Telegram
-  - GEOSITE,x,🐤 Twitter
-  - GEOSITE,bilibili,📺 BiliBili
-  - GEOSITE,youtube,📹 YouTube
-  - GEOSITE,tiktok,🎵 TikTok
-  - GEOSITE,netflix,🎥 NETFLIX
-  - GEOSITE,paypal,💶 PayPal
-  - GEOSITE,apple-cn,🟢 直连
-  - GEOIP,apple,🟢 直连
-  - GEOIP,private,🟢 直连
-  - GEOIP,google,🍀 Google,no-resolve
-  - GEOIP,netflix,🎥 NETFLIX,no-resolve
-  - GEOIP,telegram,📲 Telegram,no-resolve
-  - GEOIP,geolocation-!cn,🚀 默认自动
-  - GEOSITE,cn,🟢 直连
-  - GEOIP,cn,🟢 直连
+  - RULE-SET,ai,🤖 AI
+  - RULE-SET,cn_steam_domain,🟢 直连
+  - RULE-SET,steam_domain,🎮 Steam
+  - RULE-SET,bilibili_domain,📺 BiliBili
+  - RULE-SET,github_domain,👨🏿‍💻 GitHub
+  - RULE-SET,bing_domain,🔍 Bing
+  - RULE-SET,onedrive_domain,☁️ OneDrive
+  - RULE-SET,microsoft_domain,Ⓜ️ Microsoft
+  - RULE-SET,telegram_domain,📲 Telegram
+  - RULE-SET,youtube_domain,📹 YouTube
+  - RULE-SET,twitter_domain,🐤 Twitter
+  - RULE-SET,cn_apple_domain,🟢 直连
+  - RULE-SET,tiktok_domain,🎵 TikTok
+  - RULE-SET,netflix_domain,🎥 NETFLIX
+  - RULE-SET,paypal_domain,💶 PayPal
+  - RULE-SET,apple_ip,🟢 直连,no-resolve
+  - RULE-SET,google_ip,🍀 Google,no-resolve
+  - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
+  - RULE-SET,telegram_ip,📲 Telegram,no-resolve
+  - RULE-SET,geolocation-!cn,🚀 自动代理
+  - RULE-SET,cn_domain,🟢 直连
+  - RULE-SET,cn_ip,🟢 直连
   - MATCH,🐟 漏网之鱼
 
 # 规则集
@@ -224,8 +241,35 @@ rule-anchor:
 rule-providers:
   # 自定义
   proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/proxy.list" }
-  lan-ip: { <<: *class, format: yaml, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lan-ip.yaml" }
+  lan_ip: { <<: *class, format: yaml, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lan-ip.yaml" }
   # 广告
-  awavenue-ads: { <<: *domain, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml" }
+  awavenue_ads: { <<: *domain, format: yaml, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml" }
 
+  private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
+  ai: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
+  youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
+  google_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs" }
   # google_fcm_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/googlefcm.mrs" }
+  github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs" }
+  twitter_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/x.mrs" }
+  telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs" }
+  steam_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs" }
+  cn_steam_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam@cn.mrs" }
+  netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
+  bilibili_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs" }
+  paypal_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs" }
+  onedrive_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs" }
+  bing_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bing.mrs" }
+  microsoft_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs" }
+  cn_apple_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs" }
+  speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" }
+  tiktok_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs" }
+  geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
+  cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
+
+  private_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" }
+  cn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
+  google_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs" }
+  telegram_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs" }
+  netflix_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs" }
+  apple_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/apple.mrs" }
