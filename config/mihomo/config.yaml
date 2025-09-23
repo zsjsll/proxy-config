@@ -97,7 +97,7 @@ dns:
     # 用于广告拦截，但是一旦这样设置
     # 就不能开启 direct-nameserver-follow-policy: true
     # 让 direct-nameserver 的优先级高于 nameserver-policy
-    "rule-set:awavenue-ads":
+    "rule-set:awavenue-ads,custom-deny":
       - rcode://success
     "geosite:ads":
       - rcode://success
@@ -182,6 +182,7 @@ rules:
   - GEOSITE,networktest,📈 网络测试
   - RULE-SET,dns-leak,🧪 DNS检测
   - GEOSITE,private,🔒 私有网络
+  - RULE-SET,custom-deny,🚫 广告
   - RULE-SET,awavenue-ads,🚫 广告
   - GEOSITE,ads,🚫 广告
   - GEOSITE,trackerslist,📋 BT下载
@@ -220,3 +221,4 @@ rule-providers:
       url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml",
     }
   dns-leak: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/dns-leak.yaml" }
+  custom-deny: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/deny.yaml" }
