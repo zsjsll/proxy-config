@@ -101,7 +101,7 @@ dns:
     # 用于广告拦截，但是一旦这样设置
     # 就不能开启 direct-nameserver-follow-policy: true
     # 让 direct-nameserver 的优先级高于 nameserver-policy
-    "rule-set:awavenue-ads,custom-deny":
+    "rule-set:deny":
       - rcode://success
     "geosite:ads":
       - rcode://success
@@ -150,7 +150,7 @@ geox-url:
 proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
 
-  - { name: 🛠️ 自定义, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
+  - { name: 🛠️ 自定义代理, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
   - { name: 🏠 本地SRC, type: select, proxies: &CN [✔️ 直连, 🚀 节点选择] }
   - { name: 🎮 游戏CN, type: select, proxies: *CN } # 域名
@@ -181,13 +181,12 @@ proxy-groups:
 
 rules:
   - DOMAIN-SUFFIX,browserleaks.com,🚀 节点选择
-  - RULE-SET,custom,🛠️ 自定义
-  - RULE-SET,lan-ip,🏠 本地SRC,src
+  - RULE-SET,proxy,🛠️ 自定义代理
+  - RULE-SET,lanip,🏠 本地SRC,src
   - GEOSITE,networktest,📈 网络测试
-  - RULE-SET,dns-leak,🧪 DNS检测
+  - RULE-SET,dnsleak,🧪 DNS检测
   - GEOSITE,private,🔒 私有网络
-  - RULE-SET,custom-deny,🚫 广告
-  - RULE-SET,awavenue-ads,🚫 广告
+  - RULE-SET,deny,🚫 广告
   - GEOSITE,ads,🚫 广告
   - GEOSITE,trackerslist,📋 BT下载
   - GEOSITE,microsoft-cn,Ⓜ️ 微软CN
@@ -208,21 +207,14 @@ rules:
   - MATCH,🐟 漏网之鱼
 
 rule-providers:
-  custom:
-    &class {
+  proxy:
+    &domain {
       type: http,
       interval: 86400,
-      behavior: classical,
-      format: yaml,
-      url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/custom.yaml",
-    }
-  lan-ip: &ip { <<: *class, behavior: ipcidr, format: yaml, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lan-ip.yaml" }
-  awavenue-ads:
-    &domain {
-      <<: *class,
       behavior: domain,
       format: yaml,
-      url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml",
+      url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/proxy.yaml",
     }
-  dns-leak: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/dns-leak.yaml" }
-  custom-deny: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/deny.yaml" }
+  deny: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/deny.yaml" }
+  dnsleak: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/dnsleak.yaml" }
+  lanip: { <<: *domain, behavior: ipcidr, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lanip.yaml" }
