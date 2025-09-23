@@ -7,7 +7,7 @@ proxy-providers:
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204
-      interval: 300
+      interval: 180
     proxy: DIRECT
 
 # 全局配置
@@ -49,20 +49,24 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   force-domain:
-    - "+.v2ex.com"
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
   skip-domain:
-    - "+.baidu.com"
-  # skip-src-address:
-  #   - 192.168.0.3/32
-  # skip-dst-address:
-  #   - 192.168.0.3/32
+    - "+.apple.com"
+    - "Mijia Cloud"
+    - "dlg.io.mi.com"
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
 
 # 入站
 tun:
   enable: true
   # system/gvisor/mixed
   stack: mixed
-
+  device: utun
   dns-hijack:
     - any:53
     - tcp://any:53
