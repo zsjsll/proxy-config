@@ -146,6 +146,8 @@ dns:
 
 proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
+  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, include-all: true }
+  - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
   - { name: 🏠 本地SRC, type: select, proxies: &CN [✔️ 直连, 🚀 节点选择] }
@@ -167,7 +169,6 @@ proxy-groups:
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, hidden: true, include-all: true }
   - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
   - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)" }
   - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)(🇰🇷|韩|kr|korean)" }
