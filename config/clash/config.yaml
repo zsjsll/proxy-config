@@ -1,7 +1,7 @@
 # 机场订阅
 proxy-providers:
   🛫 机场订阅:
-    url: "11111111111111111111111"
+    url: "https://a.a.a/"
     type: http
     interval: 86400
     health-check:

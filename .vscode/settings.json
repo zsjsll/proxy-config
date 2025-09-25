@@ -1,0 +1,14 @@
+{
+  "yaml.schemas": {
+    // "https://raw.githubusercontent.com/dongchengjie/meta-json-schema/main/schemas/meta-json-schema.json": ["config/clash/**/*.{yaml,yml}"]
+    "https://raw.githubusercontent.com/dongchengjie/meta-json-schema/main/schemas/meta-json-schema.json": ["config/clash/**/*.{yaml,yml}"]
+  },
+
+  "json.schemas": [
+    {
+      "fileMatch": ["config/singbox/**/*.json"],
+      // "url": "https://gist.githubusercontent.com/malikshi/a13ba46d42a26975002e4dd4747a434b/raw/sing-box.schema.json"
+      "url": "https://unpkg.com/@black-duty/sing-box-schema@latest/schema.zh.json"
+    }
+  ]
+}
