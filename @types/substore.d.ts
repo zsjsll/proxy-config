@@ -45,6 +45,7 @@ interface Config {
   proxies?: object[]
   "proxy-providers"?: object
   "proxy-groups": Proxy[]
+  [key: string]: any
 }
 
 declare const ProxyUtils: {
@@ -52,4 +53,8 @@ declare const ProxyUtils: {
     safeLoad: (filePath: string | string[]) => Config
     safeDump: (obj: object) => string
   }
+
+  getFlag: (serverName: string | object[]) => void
+  removeFlag: (serverName: string | object[]) => void
+  getISO: (serverName: string | object[]) => void
 }

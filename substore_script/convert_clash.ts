@@ -21,17 +21,22 @@ function addProxies(config: Config, proxies: Proxies) {
     delete config["proxy-providers"]
   }
   config.proxies = proxies
-  return config
+  return true
 }
 
-function changeProxyGroups(config: Config) {}
+function changeProxyGroups(config: Config, proxies: Proxies) {
+  const a = ProxyUtils.getISO(proxies)
+  config["cccc"] = a
+}
 
 function saveConfig(config: Config) {
   $content = ProxyUtils.yaml.safeDump(config)
+  return true
 }
 
 const proxies = await getProxies()
 let config = getConfig()
 
-config = addProxies(config, proxies)
+addProxies(config, proxies)
+changeProxyGroups(config, proxies)
 saveConfig(config)

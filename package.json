@@ -10,10 +10,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@black-duty/sing-box-schema": "latest"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/lodash": "^4.17.20"
+    "@black-duty/sing-box-schema": "latest",
+    "@types/lodash": "latest",
+    "typescript": "latest"
   }
 }

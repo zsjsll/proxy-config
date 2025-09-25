@@ -1,13 +1,13 @@
 {
   "typeRoots": ["./node_modules/@types", "./@types", "./types"],
   "compilerOptions": {
+    "lib": ["ESNext"],
+    "removeComments": true,
     "target": "esnext",
     "module": "nodenext",
-    "checkJs": true,
-    "allowJs": true,
-    "strict": true,
-    "outDir": "./dist"
+    "checkJs": false,
+    "allowJs": false,
+    "strict": true
   },
-  // "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.js"]
 }
