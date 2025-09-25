@@ -10,6 +10,8 @@ proxy-providers:
       interval: 180
     proxy: DIRECT
 
+proxies: []
+
 # 全局配置
 mixed-port: 7890
 socks-port: 7891

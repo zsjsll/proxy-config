@@ -1,10 +1,13 @@
 {
-  // "typeRoots": ["./node_modules/@types", "types"],
+  "typeRoots": ["./node_modules/@types", "./@types", "./types"],
   "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
     "checkJs": true,
     "allowJs": true,
+    "strict": true,
     "outDir": "./dist"
-  }
+  },
+  // "include": ["src"],
+  "exclude": ["node_modules"]
 }

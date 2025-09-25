@@ -26,7 +26,7 @@ interface O {
   }
 }
 
-type Proxies = string[]
+type Proxies = object[]
 
 declare function produceArtifact(object: O): Promise<Proxies>
 
@@ -42,13 +42,14 @@ interface Proxy {
 }
 
 interface Config {
-  proxies: object[]
-  "proxy-providers": object
+  proxies?: object[]
+  "proxy-providers"?: object
   "proxy-groups": Proxy[]
 }
 
 declare const ProxyUtils: {
   yaml: {
     safeLoad: (filePath: string | string[]) => Config
+    safeDump: (obj: object) => string
   }
 }

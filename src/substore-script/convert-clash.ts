@@ -16,25 +16,22 @@ function getConfig() {
   return ProxyUtils.yaml.safeLoad($files[0])
 }
 
-/**
- * @param {Config} config
- * @param {Proxies} proxies
- */
-function addProxies(config, proxies) {
+function addProxies(config: Config, proxies: Proxies) {
   if (config["proxy-providers"] !== undefined) {
     delete config["proxy-providers"]
   }
   config.proxies = proxies
+  return config
 }
 
-/**
- * @param {Config} config
- */
-function saveConfig(config) {
+function changeProxyGroups(config: Config) {}
+
+function saveConfig(config: Config) {
   $content = ProxyUtils.yaml.safeDump(config)
 }
 
 const proxies = await getProxies()
 let config = getConfig()
-addProxies(config, proxies)
+
+config = addProxies(config, proxies)
 saveConfig(config)
