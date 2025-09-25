@@ -1,6 +1,8 @@
 {
   // "typeRoots": ["./node_modules/@types", "types"],
   "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
     "checkJs": true,
     "allowJs": true,
     "outDir": "./dist"
