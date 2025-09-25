@@ -1,0 +1,8 @@
+{
+  // "typeRoots": ["./node_modules/@types", "types"],
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "outDir": "./dist"
+  }
+}
