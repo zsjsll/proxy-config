@@ -1,13 +1,34 @@
-interface Sub {
-  name: string
-  type: "subscription" | "collection"
-  platform: "ClashMeta" | "sing-box"
-  produceType: "internal"
-  produceOpts?: {
-    "include-unsupported-proxy": boolean
+declare global {
+  interface Sub {
+    name: string
+    type: "subscription" | "collection"
+    platform: "ClashMeta" | "sing-box"
+    produceType: "internal"
+    produceOpts?: {
+      "include-unsupported-proxy": boolean
+    }
   }
+
+  interface AriportNode {
+    name: string
+    type: string
+    server: string
+    port: number
+    password: string
+    protocol: string
+    obfs: string
+    cipher: string
+    "protocol-param": string
+    "obfs-param": string
+    _subName: string
+    _subDisplayName: string
+    _collectionName: string
+    _collectionDisplayName: string
+  }
+
+  type AirportNodeList = AriportNode[]
+
+  function produceArtifact(sub: Sub): Promise<AirportNodeList>
 }
 
-type Proxies = object[]
-
-declare function produceArtifact(sub: Sub): Promise<Proxies>
+export {}

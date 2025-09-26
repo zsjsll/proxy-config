@@ -19,7 +19,7 @@ declare global {
     _subDisplayName: string
   }
 
-  interface Proxy {
+  interface ProxyGroup {
     name: string
     type: "url-test" | "select"
     tolerance?: number
@@ -33,7 +33,7 @@ declare global {
   interface Config {
     proxies?: object[]
     "proxy-providers"?: object
-    "proxy-groups": Proxy[]
+    "proxy-groups": ProxyGroup[]
     [key: string]: any
   }
 }

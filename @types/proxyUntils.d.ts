@@ -6,5 +6,5 @@ declare const ProxyUtils: {
 
   getFlag: (serverName: string | object[]) => void
   removeFlag: (serverName: string | object[]) => void
-  getISO: (serverName: string | object[]) => void
+  getISO: (serverName: string) => string
 }

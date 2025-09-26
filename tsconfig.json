@@ -1,14 +1,17 @@
 {
   "typeRoots": ["./node_modules/@types", "./@types", "./types"],
   "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": ["ESNext"],
     "removeComments": true,
-    "target": "esnext",
-    "module": "nodenext",
-    "checkJs": true,
+    "checkJs": false,
     "allowJs": true,
-    "strict": true,
     "outDir": "./dist"
   }
-  // "exclude": ["node_modules"]
 }
