@@ -6,8 +6,8 @@ async function getProxies() {
         platform: "ClashMeta",
         produceType: "internal",
         produceOpts: {
-            "include-unsupported-proxy": true,
-        },
+            "include-unsupported-proxy": true
+        }
     });
 }
 function getConfig() {
@@ -20,10 +20,6 @@ function addProxies(config, proxies) {
     config.proxies = proxies;
     return true;
 }
-function changeProxyGroups(config, proxies) {
-    const a = ProxyUtils.getISO(proxies);
-    config["cccc"] = a;
-}
 function saveConfig(config) {
     $content = ProxyUtils.yaml.safeDump(config);
     return true;
@@ -31,6 +27,5 @@ function saveConfig(config) {
 const proxies = await getProxies();
 let config = getConfig();
 addProxies(config, proxies);
-changeProxyGroups(config, proxies);
+// changeProxyGroups(config, proxies)
 saveConfig(config);
-export {};

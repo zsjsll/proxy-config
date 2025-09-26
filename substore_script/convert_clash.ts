@@ -38,5 +38,5 @@ const proxies = await getProxies()
 let config = getConfig()
 
 addProxies(config, proxies)
-changeProxyGroups(config, proxies)
+// changeProxyGroups(config, proxies)
 saveConfig(config)
