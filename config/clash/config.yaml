@@ -182,7 +182,7 @@ proxy-groups:
   - {
       name: 🐟 漏网之鱼,
       type: select,
-      proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点, ✔️ 直连],
+      proxies: [🚀 节点选择, ✔️ 直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
     }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }

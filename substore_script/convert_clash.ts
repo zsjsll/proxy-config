@@ -25,7 +25,7 @@ function addProxies(config: Config, proxies: Proxies) {
 }
 
 function changeProxyGroups(config: Config, proxies: Proxies) {
-  const a = ProxyUtils.getISO(proxies)
+  const a = proxies[0]
   config["cccc"] = a
 }
 
@@ -38,5 +38,5 @@ const proxies = await getProxies()
 let config = getConfig()
 
 addProxies(config, proxies)
-// changeProxyGroups(config, proxies)
+changeProxyGroups(config, proxies)
 saveConfig(config)
