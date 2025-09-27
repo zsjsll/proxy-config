@@ -213,9 +213,9 @@ rules:
   - RULE-SET,apple_cn,🍎 苹果CN
   - RULE-SET,google_cn,🌈 谷歌CN
   - RULE-SET,games_cn,🎮 游戏CN
-  - RULE-SET,media,🌍 媒体!CN
-  - RULE-SET,games,🕹️ 游戏!CN
   - RULE-SET,ai,🤖 AI!CN
+  - RULE-SET,games,🕹️ 游戏!CN
+  - RULE-SET,media,🌍 媒体!CN
   - RULE-SET,tld_proxy,🧱 海外FB
   - RULE-SET,proxy,🧱 海外FB
   - RULE-SET,cn,🔗 国内FB

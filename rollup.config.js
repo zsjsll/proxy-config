@@ -23,6 +23,12 @@ export default inputFiles.map((file) => {
       manualChunks: null,
       preserveModules: false,
     },
+    watch: {
+      // 排除整个输出目录或特定的输出文件
+      exclude: [file],
+      // 更好的做法是排除具体的输出文件，例如：
+      // exclude: ['substore_script/bundle.js', 'node_modules/**']
+    },
     plugins: [
       json(),
       resolve({
@@ -40,9 +46,9 @@ export default inputFiles.map((file) => {
           parser: {
             syntax: "typescript",
           },
-          target: "es2022",
+          target: "esnext",
         },
-        minify: false, // 启用压缩
+        minify: true, // 启用压缩
       }),
     ],
   }

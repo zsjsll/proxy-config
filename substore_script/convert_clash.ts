@@ -4,7 +4,12 @@ import zhLocale from "i18n-iso-countries/langs/zh.json"
 
 registerLocale(zhLocale)
 
+
+
+
 let name = "all"
+console.log(1231231)
+
 
 async function getProxies() {
   return await produceArtifact({
@@ -27,6 +32,7 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
     delete config["proxy-providers"]
   }
   config.proxies = airportNodeList
+
   return true
 }
 
@@ -36,6 +42,7 @@ function getCountryList(list: AirportNodeList) {
     return country === undefined ? "其他" : getCountryName(country, "zh")
   })
   coutnryList = [...new Set(coutnryList)]
+
   return coutnryList
 }
 
