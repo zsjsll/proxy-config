@@ -4,12 +4,8 @@ import zhLocale from "i18n-iso-countries/langs/zh.json"
 
 registerLocale(zhLocale)
 
-
-
-
 let name = "all"
 console.log(1231231)
-
 
 async function getProxies() {
   return await produceArtifact({

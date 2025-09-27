@@ -8,13 +8,14 @@ import path from "path"
 
 const inputFiles = await fg("substore_script/**/*.ts")
 
-// rollup.config.js
-/**
- * @type {import('rollup').RollupOptions}
- */
 export default inputFiles.map((file) => {
   const fileDir = path.dirname(file)
-  return {
+
+  // rollup.config.js
+  /**
+   * @type {import('rollup').RollupOptions}
+   */
+  const bundle = {
     input: file,
     output: {
       dir: fileDir,
@@ -25,9 +26,9 @@ export default inputFiles.map((file) => {
     },
     watch: {
       // 排除整个输出目录或特定的输出文件
-      exclude: [file],
-      // 更好的做法是排除具体的输出文件，例如：
-      // exclude: ['substore_script/bundle.js', 'node_modules/**']
+      allowInputInsideOutputPath: true,
+
+      include: [file],
     },
     plugins: [
       json(),
@@ -52,4 +53,5 @@ export default inputFiles.map((file) => {
       }),
     ],
   }
+  return bundle
 })
