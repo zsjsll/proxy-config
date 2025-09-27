@@ -1,3 +1,4 @@
+import { RollupOptions } from "rollup"
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import json from "@rollup/plugin-json"
@@ -11,23 +12,16 @@ const inputFiles = await fg("substore_script/**/*.ts")
 export default inputFiles.map((file) => {
   const fileDir = path.dirname(file)
 
-  // rollup.config.js
-  /**
-   * @type {import('rollup').RollupOptions}
-   */
-  const bundle = {
+  const createSubstoreScript: RollupOptions = {
     input: file,
     output: {
       dir: fileDir,
       format: "es", // 常见的库格式，如 'es', 'cjs', 'umd'
       sourcemap: false,
-      manualChunks: null,
       preserveModules: false,
     },
     watch: {
-      // 排除整个输出目录或特定的输出文件
       allowInputInsideOutputPath: true,
-
       include: [file],
     },
     plugins: [
@@ -53,5 +47,5 @@ export default inputFiles.map((file) => {
       }),
     ],
   }
-  return bundle
+  return createSubstoreScript
 })
