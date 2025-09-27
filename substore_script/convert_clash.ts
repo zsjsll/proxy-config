@@ -5,9 +5,8 @@ import zhLocale from "i18n-iso-countries/langs/zh.json"
 registerLocale(zhLocale)
 
 let name = "all"
-console.log(1231231)
 
-async function getProxies() {
+async function getAirportNodeList() {
   return await produceArtifact({
     name,
     type: "collection",
@@ -46,7 +45,7 @@ function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
   const coutnryList = getCountryList(airportNodeList)
 
   config["cccc"] = coutnryList
-  // config["country"] = countries.getName("TW", "zh")
+  config["country"] = getCountryName("TW", "zh")
 }
 
 function saveConfig(config: Config) {
@@ -54,9 +53,9 @@ function saveConfig(config: Config) {
   return true
 }
 
-const proxies = await getProxies()
+const airportNodeList = await getAirportNodeList()
 let config = getConfig()
 
-addProxies(config, proxies)
-changeProxyGroups(config, proxies)
+addProxies(config, airportNodeList)
+changeProxyGroups(config, airportNodeList)
 saveConfig(config)

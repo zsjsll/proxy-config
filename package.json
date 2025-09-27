@@ -20,10 +20,12 @@
     "@swc/core": "^1.13.19",
     "@types/lodash": "latest",
     "@types/node": "^24.5.2",
+    "esbuild": "^0.25.10",
     "fast-glob": "^3.3.3",
     "prettier": "^3.6.2",
     "rollup": "^4.52.2",
     "rollup-plugin-swc3": "^0.12.1",
+    "ts-node": "^10.9.2",
     "typescript": "latest"
   },
   "dependencies": {

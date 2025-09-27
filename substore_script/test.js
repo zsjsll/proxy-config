@@ -1,1 +1,1 @@
-console.log(0x756b5b3);
+console.log(123123123);

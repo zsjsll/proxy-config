@@ -1,4 +1,4 @@
-import { RollupOptions } from "rollup"
+import type { RollupOptions } from "rollup"
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import json from "@rollup/plugin-json"
@@ -44,6 +44,7 @@ export default inputFiles.map((file) => {
           target: "esnext",
         },
         minify: true, // 启用压缩
+
       }),
     ],
   }
