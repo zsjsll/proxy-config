@@ -44,7 +44,7 @@ const baseOptions: esbuild.BuildOptions = {
   target: ["esnext"], // 目标环境
   // platform: "node",
   logLevel: "info",
-  charset: "utf8",
+  // charset: "utf8",
 
   plugins: [TimingPlugin()],
 }

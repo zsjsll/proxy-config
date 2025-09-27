@@ -5,32 +5,23 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npx rollup -c",
-    "watch": "npx rollup -c -w"
+    "build": "ts-node esbuild.config.ts",
+    "watch": "ts-node esbuild.config.ts -w"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@black-duty/sing-box-schema": "latest",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rspack/cli": "^1.5.7",
-    "@rspack/core": "^1.5.7",
-    "@swc/cli": "^0.7.8",
-    "@swc/core": "^1.13.19",
     "@types/lodash": "latest",
-    "@types/node": "^24.5.2",
-    "esbuild": "^0.25.10",
-    "fast-glob": "^3.3.3",
-    "prettier": "^3.6.2",
-    "rollup": "^4.52.2",
-    "rollup-plugin-swc3": "^0.12.1",
-    "ts-node": "^10.9.2",
+    "@types/node": "latest",
+    "esbuild": "latest",
+    "fast-glob": "latest",
+    "prettier": "latest",
+    "ts-node": "latest",
     "typescript": "latest"
   },
   "dependencies": {
-    "i18n-iso-countries": "^7.14.0"
+    "i18n-iso-countries": "latest"
   }
 }
