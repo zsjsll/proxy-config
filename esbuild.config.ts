@@ -1,4 +1,4 @@
-import * as esbuild from "esbuild"
+import esbuild from "esbuild"
 import fg from "fast-glob"
 
 import { performance } from "perf_hooks"

@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "ts-node esbuild.config.ts",
-    "watch": "ts-node esbuild.config.ts -w"
+    "build": "pnpx tsx esbuild.config.ts",
+    "watch": "pnpx tsx esbuild.config.ts -w"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +17,7 @@
     "@types/node": "latest",
     "esbuild": "latest",
     "fast-glob": "latest",
-    "prettier": "latest",
-    "ts-node": "latest",
-    "typescript": "latest"
+    "prettier": "latest"
   },
   "dependencies": {
     "i18n-iso-countries": "latest"

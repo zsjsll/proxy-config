@@ -18,22 +18,4 @@ declare global {
     _subName: string
     _subDisplayName: string
   }
-
-  interface ProxyGroup {
-    name: string
-    type: "url-test" | "select"
-    tolerance?: number
-    interval?: number
-    "includes-all"?: boolean
-    proxies?: string[]
-    hidden?: boolean
-    [key: string]: any
-  }
-
-  interface Config {
-    proxies?: object[]
-    "proxy-providers"?: object
-    "proxy-groups": ProxyGroup[]
-    [key: string]: any
-  }
 }

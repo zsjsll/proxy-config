@@ -1,5 +1,4 @@
 import { registerLocale, getName as getCountryName } from "i18n-iso-countries"
-
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 
 registerLocale(zhLocale)
@@ -32,20 +31,65 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
 }
 
 function getCountryList(list: AirportNodeList) {
-  let coutnryList = list.map((v) => {
-    const country = ProxyUtils.getISO(v.name)
-    return country === undefined ? "其他" : getCountryName(country, "zh")
+  let proxyAreaList = list.map((v) => {
+    let proxyArea = ProxyUtils.getISO(v.name)
+    proxyArea = (proxyArea === undefined ? "其他" : getCountryName(proxyArea, "zh")) as string
+    proxyArea = proxyArea.includes("台湾") ? "台湾" : proxyArea
+    return proxyArea
   })
-  coutnryList = [...new Set(coutnryList)]
+  proxyAreaList = [...new Set(proxyAreaList)] //去重
 
-  return coutnryList
+  return proxyAreaList
+}
+
+function CreateNodeAutoSelect(proxyAreaList: string[]) {
+  let hasOther = false
+  if (proxyAreaList.includes("其他")) {
+    proxyAreaList = proxyAreaList.filter((v) => v !== "其他")
+    // hasOther = true
+  }
+
+  let filterNodeList: string[] = []
+  let autoSelectList = proxyAreaList.map((val) => {
+    const flag = ProxyUtils.getFlag(val)
+
+    const filterNode = `${flag}|${val}|${ProxyUtils.getISO(val)}|${val}|${val[0]}`
+    filterNodeList.push(filterNode)
+
+    const autoSelect: ProxyGroup = {
+      name: `${flag} ${val}节点`,
+      type: "url-test",
+      tolerance: 20,
+      interval: 60,
+      "include-all": true,
+      hidden: true,
+      filter: `(?i)(${filterNode})`,
+    }
+    return autoSelect
+  })
+  let autoSelectOther: ProxyGroup[] | [] = []
+  if (hasOther) {
+    autoSelectOther = [
+      {
+        name: `❓ 其他节点`,
+        type: "url-test",
+        tolerance: 20,
+        interval: 60,
+        "include-all": true,
+        hidden: true,
+        "exclude-filter": `(?i)(${filterNodeList.join("|")})`,
+      },
+    ]
+  }
+
+  return [...autoSelectOther, ...autoSelectList]
 }
 
 function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
-  const coutnryList = getCountryList(airportNodeList)
+  const proxyAreaList = getCountryList(airportNodeList)
+  const aaa = CreateNodeAutoSelect(proxyAreaList)
 
-  config["cccc"] = coutnryList
-  config["country"] = getCountryName("TW", "zh")
+  config["cccc"] = aaa
 }
 
 function saveConfig(config: Config) {
