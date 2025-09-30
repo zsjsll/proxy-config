@@ -31,7 +31,7 @@ services:
 ## clash
 
 模板地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=""&AIRegs=""
+脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=&AIRegs=
 
 本脚本 可以传入2个参数：
 `name` 为 substore 的订阅组合订阅名字

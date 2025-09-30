@@ -1,5 +1,5 @@
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=""&AIRegs=""
+// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=&AIRegs=
 
 // 本脚本 可以传入2个参数：
 //  name 为 substore 的订阅组合订阅名字
@@ -11,10 +11,9 @@ import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-const { pre_name, pre_AIRegs } = $arguments
+let { name, AIRegs } = $arguments
 
-const name = pre_name || "all"
-throw new Error(pre_name)
+name ||= "all"
 AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
