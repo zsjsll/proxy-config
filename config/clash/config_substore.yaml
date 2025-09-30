@@ -160,7 +160,7 @@ proxy-groups:
   - { name: 📋 BT下载, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
   - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
   - { name: 🧪 DNS测试, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
-  - { name: 🤖 AI!CN, type: select, proxies: [🚀 节点选择] } # 域名
+  - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择] } # 域名
   - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择] } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择] } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择], hidden: true } # IP
@@ -171,7 +171,7 @@ proxy-groups:
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  # - &node_test { <<: *auto_test, name: ☁️ 非港节点, hidden: true, exclude-filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
+  - &node_test { <<: *auto_test, name: 💡 AI节点, hidden: true, exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)" }
 
 rules:
   - RULE-SET,custom_lan_ip,🏠 本地SRC,src

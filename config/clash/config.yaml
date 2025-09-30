@@ -172,8 +172,16 @@ proxy-groups:
       type: select,
       proxies: [🚀 节点选择, ✔️ 直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
     } # 域名
-  - { name: 🤖 AI!CN, type: select, proxies: &NotCN [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点] } # 域名
-  - { name: 🌍 媒体!CN, type: select, proxies: *NotCN } # 域名 + IP
+  - {
+      name: 🤖 AI!CN,
+      type: select,
+      proxies: [💡 AI节点, 🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
+    } # 域名
+  - {
+      name: 🌍 媒体!CN,
+      type: select,
+      proxies: &NotCN [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
+    } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: *NotCN } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: *NotCN, hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
@@ -187,16 +195,17 @@ proxy-groups:
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - &node_test { <<: *auto_test, name: 🇭🇰 香港节点, hidden: true, filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
-  - { <<: *node_test, name: 🇹🇼 台湾节点, filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)" }
+  - &node_test { <<: *auto_test, name: 💡 AI节点, hidden: true, exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)" }
+  - { <<: *node_test, name: 🇭🇰 香港节点, filter: "(?i)(🇭🇰|港|hk|hong ?kong)" }
+  - { <<: *node_test, name: 🇹🇼 台湾节点, filter: "(?i)(🇹🇼|台|tw|tai ?wan)" }
   - { <<: *node_test, name: 🇰🇷 韩国节点, filter: "(?i)(🇰🇷|韩|kr|korean)" }
   - { <<: *node_test, name: 🇯🇵 日本节点, filter: "(?i)(🇯🇵|日|jp|japan)" }
   - { <<: *node_test, name: 🇸🇬 新加坡节点, filter: "(?i)(🇸🇬|新|sg|singapore)" }
-  - { <<: *node_test, name: 🇺🇸 美国节点, filter: "(?i)(🇺🇸|美|us|unitedstates|united states)" }
+  - { <<: *node_test, name: 🇺🇸 美国节点, filter: "(?i)(🇺🇸|美|us|united ?states)" }
   - {
       <<: *auto_test,
       name: ❓ 其他节点,
-      exclude-filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)|(🇹🇼|台|tw|taiwan|tai wan)|(🇰🇷|韩|kr|korean)|(🇯🇵|日|jp|japan)|(🇸🇬|新|sg|singapore)|(🇺🇸|美|us|unitedstates|united states|)",
+      exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇹🇼|台|tw|tai ?wan)|(?i)(🇰🇷|韩|kr|korean)|(?i)(🇯🇵|日|jp|japan)|(?i)(🇸🇬|新|sg|singapore)|(?i)(🇺🇸|美|us|united ?states|)",
     }
 
 rules:

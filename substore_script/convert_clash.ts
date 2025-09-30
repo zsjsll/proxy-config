@@ -2,7 +2,9 @@ import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-let name = "all"
+let { name } = $arguments
+
+name ??= "all"
 
 registerLocale(zhLocale)
 registerLocale(enLocale)
@@ -17,11 +19,11 @@ async function getAirportNodeList() {
     },
   })
 }
-
+// 获取配置模板
 function getConfig() {
   return ProxyUtils.yaml.safeLoad($files[0])
 }
-
+// 添加机场节点
 function addProxies(config: Config, airportNodeList: AirportNodeList) {
   if (config["proxy-providers"] !== undefined) {
     delete config["proxy-providers"]
@@ -29,8 +31,21 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
   config.proxies = airportNodeList
   return true
 }
+// 扩展AI不能使用的地区
+function extendAIProxyGroup(config: Config, reg: string[]) {
+  const AI = config["proxy-groups"].findLast((v) => v.name.includes("AI节点"))
+
+  if (reg.length !== 0) {
+    const regString = reg.join("|")
+    const tempAI = AI!["exclude-filter"]
+    if (regString !== tempAI) {
+      AI!["exclude-filter"] = tempAI + "|" + regString
+    }
+  }
+}
 
 const other = Symbol("other")
+// 获取机场的所有节点的ISO名字
 function getAreaList(list: AirportNodeList): (string | symbol)[] {
   const areaList = list.map((v) => ProxyUtils.getISO(v.name))
   const areaList_1: (string | symbol | undefined)[] = [...new Set(areaList)] //去重
@@ -61,9 +76,8 @@ function getENName(ISOname: string) {
     throw new Error(`${name}没有对应的ENName`)
   }
 }
-
+// 根据机场信息，创建自动选择的节点集群
 function CreateAutoSelectList(airportNodeList: AirportNodeList) {
-  let hasOther = false
   const areaList = getAreaList(airportNodeList)
 
   const selectProxyGroup: ProxyGroup = {
@@ -82,7 +96,7 @@ function CreateAutoSelectList(airportNodeList: AirportNodeList) {
       let CNName = getCNName(ISOname)
       let ENareaName = getENName(ISOname)
       const flag = ProxyUtils.getFlag(CNName)
-      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNName}}`
+      const filterNode = `${flag}|${CNName}|${ISOname}|${ENareaName}}`
       filterNodeList.push(filterNode)
       autoSelect.name = `${flag} ${CNName}节点`
       autoSelect.filter = `(?i)(${filterNode})`
@@ -95,14 +109,14 @@ function CreateAutoSelectList(airportNodeList: AirportNodeList) {
 
   return autoSelectList
 }
-
+// 获取 proxy—groups 上所有 auto-select 集群的 名字列表
 function getAutoSelectListNamelist(autoSelectList: ProxyGroup[]): string[] {
   const autoSelectListNamelist = autoSelectList.map((v) => {
     return v.name
   })
   return autoSelectListNamelist
 }
-
+// 写入信息到 proxy—groups
 function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
   const autoSelectList = CreateAutoSelectList(airportNodeList)
   const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList)
@@ -129,6 +143,7 @@ const airportNodeList = await getAirportNodeList()
 let config = getConfig()
 
 addProxies(config, airportNodeList)
+extendAIProxyGroup(config, ["test"])
 changeProxyGroups(config, airportNodeList)
 
 saveConfig(config)

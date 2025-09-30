@@ -1538,7 +1538,8 @@ var en_default = {
 };
 
 // substore_script/convert_clash.ts
-var name = "all";
+var { name } = $arguments;
+name ??= "all";
 (0, import_i18n_iso_countries.registerLocale)(zh_default);
 (0, import_i18n_iso_countries.registerLocale)(en_default);
 async function getAirportNodeList() {
@@ -1561,6 +1562,16 @@ function addProxies(config2, airportNodeList2) {
   }
   config2.proxies = airportNodeList2;
   return true;
+}
+function extendAIProxyGroup(config2, reg) {
+  const AI = config2["proxy-groups"].findLast((v) => v.name.includes("AI\u8282\u70B9"));
+  if (reg.length !== 0) {
+    const regString = reg.join("|");
+    const tempAI = AI["exclude-filter"];
+    if (regString !== tempAI) {
+      AI["exclude-filter"] = tempAI + "|" + regString;
+    }
+  }
 }
 var other = Symbol("other");
 function getAreaList(list) {
@@ -1591,7 +1602,6 @@ function getENName(ISOname) {
   }
 }
 function CreateAutoSelectList(airportNodeList2) {
-  let hasOther = false;
   const areaList = getAreaList(airportNodeList2);
   const selectProxyGroup = {
     name: `template`,
@@ -1608,7 +1618,7 @@ function CreateAutoSelectList(airportNodeList2) {
       let CNName = getCNName(ISOname);
       let ENareaName = getENName(ISOname);
       const flag = ProxyUtils.getFlag(CNName);
-      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNName}}`;
+      const filterNode = `${flag}|${CNName}|${ISOname}|${ENareaName}}`;
       filterNodeList.push(filterNode);
       autoSelect.name = `${flag} ${CNName}\u8282\u70B9`;
       autoSelect.filter = `(?i)(${filterNode})`;
@@ -1644,5 +1654,6 @@ function saveConfig(config2) {
 var airportNodeList = await getAirportNodeList();
 var config = getConfig();
 addProxies(config, airportNodeList);
+extendAIProxyGroup(config, ["test"]);
 changeProxyGroups(config, airportNodeList);
 saveConfig(config);
