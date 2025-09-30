@@ -1280,8 +1280,266 @@ var zh_default = {
   }
 };
 
+// node_modules/.pnpm/i18n-iso-countries@7.14.0/node_modules/i18n-iso-countries/langs/en.json
+var en_default = {
+  locale: "en",
+  countries: {
+    AF: "Afghanistan",
+    AL: "Albania",
+    DZ: "Algeria",
+    AS: "American Samoa",
+    AD: "Andorra",
+    AO: "Angola",
+    AI: "Anguilla",
+    AQ: "Antarctica",
+    AG: "Antigua and Barbuda",
+    AR: "Argentina",
+    AM: "Armenia",
+    AW: "Aruba",
+    AU: "Australia",
+    AT: "Austria",
+    AZ: "Azerbaijan",
+    BS: "Bahamas",
+    BH: "Bahrain",
+    BD: "Bangladesh",
+    BB: "Barbados",
+    BY: "Belarus",
+    BE: "Belgium",
+    BZ: "Belize",
+    BJ: "Benin",
+    BM: "Bermuda",
+    BT: "Bhutan",
+    BO: "Bolivia",
+    BA: "Bosnia and Herzegovina",
+    BW: "Botswana",
+    BV: "Bouvet Island",
+    BR: "Brazil",
+    IO: "British Indian Ocean Territory",
+    BN: "Brunei Darussalam",
+    BG: "Bulgaria",
+    BF: "Burkina Faso",
+    BI: "Burundi",
+    KH: "Cambodia",
+    CM: "Cameroon",
+    CA: "Canada",
+    CV: "Cape Verde",
+    KY: "Cayman Islands",
+    CF: "Central African Republic",
+    TD: "Chad",
+    CL: "Chile",
+    CN: ["People's Republic of China", "China"],
+    CX: "Christmas Island",
+    CC: "Cocos (Keeling) Islands",
+    CO: "Colombia",
+    KM: "Comoros",
+    CG: ["Republic of the Congo", "Congo"],
+    CD: ["Democratic Republic of the Congo", "Congo"],
+    CK: "Cook Islands",
+    CR: "Costa Rica",
+    CI: ["Cote d'Ivoire", "C\xF4te d'Ivoire", "Ivory Coast"],
+    HR: "Croatia",
+    CU: "Cuba",
+    CY: "Cyprus",
+    CZ: ["Czech Republic", "Czechia"],
+    DK: "Denmark",
+    DJ: "Djibouti",
+    DM: "Dominica",
+    DO: "Dominican Republic",
+    EC: "Ecuador",
+    EG: "Egypt",
+    SV: "El Salvador",
+    GQ: "Equatorial Guinea",
+    ER: "Eritrea",
+    EE: "Estonia",
+    ET: "Ethiopia",
+    FK: "Falkland Islands (Malvinas)",
+    FO: "Faroe Islands",
+    FJ: "Fiji",
+    FI: "Finland",
+    FR: "France",
+    GF: "French Guiana",
+    PF: "French Polynesia",
+    TF: "French Southern Territories",
+    GA: "Gabon",
+    GM: ["Republic of The Gambia", "The Gambia", "Gambia"],
+    GE: "Georgia",
+    DE: "Germany",
+    GH: "Ghana",
+    GI: "Gibraltar",
+    GR: "Greece",
+    GL: "Greenland",
+    GD: "Grenada",
+    GP: "Guadeloupe",
+    GU: "Guam",
+    GT: "Guatemala",
+    GN: "Guinea",
+    GW: "Guinea-Bissau",
+    GY: "Guyana",
+    HT: "Haiti",
+    HM: "Heard Island and McDonald Islands",
+    VA: "Holy See (Vatican City State)",
+    HN: "Honduras",
+    HK: "Hong Kong",
+    HU: "Hungary",
+    IS: "Iceland",
+    IN: "India",
+    ID: "Indonesia",
+    IR: ["Islamic Republic of Iran", "Iran"],
+    IQ: "Iraq",
+    IE: "Ireland",
+    IL: "Israel",
+    IT: "Italy",
+    JM: "Jamaica",
+    JP: "Japan",
+    JO: "Jordan",
+    KZ: "Kazakhstan",
+    KE: "Kenya",
+    KI: "Kiribati",
+    KP: "North Korea",
+    KR: ["South Korea", "Korea, Republic of", "Republic of Korea"],
+    KW: "Kuwait",
+    KG: "Kyrgyzstan",
+    LA: "Lao People's Democratic Republic",
+    LV: "Latvia",
+    LB: "Lebanon",
+    LS: "Lesotho",
+    LR: "Liberia",
+    LY: "Libya",
+    LI: "Liechtenstein",
+    LT: "Lithuania",
+    LU: "Luxembourg",
+    MO: "Macao",
+    MG: "Madagascar",
+    MW: "Malawi",
+    MY: "Malaysia",
+    MV: "Maldives",
+    ML: "Mali",
+    MT: "Malta",
+    MH: "Marshall Islands",
+    MQ: "Martinique",
+    MR: "Mauritania",
+    MU: "Mauritius",
+    YT: "Mayotte",
+    MX: "Mexico",
+    FM: "Micronesia, Federated States of",
+    MD: "Moldova, Republic of",
+    MC: "Monaco",
+    MN: "Mongolia",
+    MS: "Montserrat",
+    MA: "Morocco",
+    MZ: "Mozambique",
+    MM: "Myanmar",
+    NA: "Namibia",
+    NR: "Nauru",
+    NP: "Nepal",
+    NL: ["Netherlands", "The Netherlands", "Netherlands (Kingdom of the)"],
+    NC: "New Caledonia",
+    NZ: "New Zealand",
+    NI: "Nicaragua",
+    NE: "Niger",
+    NG: "Nigeria",
+    NU: "Niue",
+    NF: "Norfolk Island",
+    MK: ["The Republic of North Macedonia", "North Macedonia"],
+    MP: "Northern Mariana Islands",
+    NO: "Norway",
+    OM: "Oman",
+    PK: "Pakistan",
+    PW: "Palau",
+    PS: ["State of Palestine", "Palestine"],
+    PA: "Panama",
+    PG: "Papua New Guinea",
+    PY: "Paraguay",
+    PE: "Peru",
+    PH: "Philippines",
+    PN: ["Pitcairn", "Pitcairn Islands"],
+    PL: "Poland",
+    PT: "Portugal",
+    PR: "Puerto Rico",
+    QA: "Qatar",
+    RE: "Reunion",
+    RO: "Romania",
+    RU: ["Russian Federation", "Russia"],
+    RW: "Rwanda",
+    SH: "Saint Helena",
+    KN: "Saint Kitts and Nevis",
+    LC: "Saint Lucia",
+    PM: "Saint Pierre and Miquelon",
+    VC: "Saint Vincent and the Grenadines",
+    WS: "Samoa",
+    SM: "San Marino",
+    ST: "Sao Tome and Principe",
+    SA: "Saudi Arabia",
+    SN: "Senegal",
+    SC: "Seychelles",
+    SL: "Sierra Leone",
+    SG: "Singapore",
+    SK: "Slovakia",
+    SI: "Slovenia",
+    SB: "Solomon Islands",
+    SO: "Somalia",
+    ZA: "South Africa",
+    GS: "South Georgia and the South Sandwich Islands",
+    ES: "Spain",
+    LK: "Sri Lanka",
+    SD: "Sudan",
+    SR: "Suriname",
+    SJ: "Svalbard and Jan Mayen",
+    SZ: "Eswatini",
+    SE: "Sweden",
+    CH: "Switzerland",
+    SY: "Syrian Arab Republic",
+    TW: ["Taiwan, Province of China", "Taiwan"],
+    TJ: "Tajikistan",
+    TZ: ["United Republic of Tanzania", "Tanzania"],
+    TH: "Thailand",
+    TL: "Timor-Leste",
+    TG: "Togo",
+    TK: "Tokelau",
+    TO: "Tonga",
+    TT: "Trinidad and Tobago",
+    TN: "Tunisia",
+    TR: ["T\xFCrkiye", "Turkey"],
+    TM: "Turkmenistan",
+    TC: "Turks and Caicos Islands",
+    TV: "Tuvalu",
+    UG: "Uganda",
+    UA: "Ukraine",
+    AE: ["United Arab Emirates", "UAE"],
+    GB: ["United Kingdom", "UK", "Great Britain"],
+    US: ["United States of America", "United States", "USA", "U.S.A.", "US", "U.S."],
+    UM: "United States Minor Outlying Islands",
+    UY: "Uruguay",
+    UZ: "Uzbekistan",
+    VU: "Vanuatu",
+    VE: "Venezuela",
+    VN: "Vietnam",
+    VG: "Virgin Islands, British",
+    VI: "Virgin Islands, U.S.",
+    WF: "Wallis and Futuna",
+    EH: "Western Sahara",
+    YE: "Yemen",
+    ZM: "Zambia",
+    ZW: "Zimbabwe",
+    AX: ["\xC5land Islands", "Aland Islands"],
+    BQ: "Bonaire, Sint Eustatius and Saba",
+    CW: "Cura\xE7ao",
+    GG: "Guernsey",
+    IM: "Isle of Man",
+    JE: "Jersey",
+    ME: "Montenegro",
+    BL: "Saint Barth\xE9lemy",
+    MF: "Saint Martin (French part)",
+    RS: "Serbia",
+    SX: "Sint Maarten (Dutch part)",
+    SS: "South Sudan",
+    XK: "Kosovo"
+  }
+};
+
 // substore_script/convert_clash.ts
 (0, import_i18n_iso_countries.registerLocale)(zh_default);
+(0, import_i18n_iso_countries.registerLocale)(en_default);
 var name = "all";
 async function getAirportNodeList() {
   return await produceArtifact({
@@ -1304,57 +1562,66 @@ function addProxies(config2, airportNodeList2) {
   config2.proxies = airportNodeList2;
   return true;
 }
-function getCountryList(list) {
-  let proxyAreaList = list.map((v) => {
-    let proxyArea = ProxyUtils.getISO(v.name);
-    proxyArea = proxyArea === void 0 ? "\u5176\u4ED6" : (0, import_i18n_iso_countries.getName)(proxyArea, "zh");
-    proxyArea = proxyArea.includes("\u53F0\u6E7E") ? "\u53F0\u6E7E" : proxyArea;
-    return proxyArea;
-  });
-  proxyAreaList = [...new Set(proxyAreaList)];
-  return proxyAreaList;
+function getAreaList(list) {
+  let areaList = list.map((v) => ProxyUtils.getISO(v.name));
+  areaList = [...new Set(areaList)];
+  return areaList;
 }
-function CreateNodeAutoSelect(proxyAreaList) {
+function CreateAutoSelectList(airportNodeList2) {
   let hasOther = false;
-  if (proxyAreaList.includes("\u5176\u4ED6")) {
-    proxyAreaList = proxyAreaList.filter((v) => v !== "\u5176\u4ED6");
-  }
-  let filterNodeList = [];
-  let autoSelectList = proxyAreaList.map((val) => {
-    const flag = ProxyUtils.getFlag(val);
-    const filterNode = `${flag}|${val}|${ProxyUtils.getISO(val)}|${val}|${val[0]}`;
-    filterNodeList.push(filterNode);
-    const autoSelect = {
-      name: `${flag} ${val}\u8282\u70B9`,
-      type: "url-test",
-      tolerance: 20,
-      interval: 60,
-      "include-all": true,
-      hidden: true,
-      filter: `(?i)(${filterNode})`
-    };
-    return autoSelect;
+  const areaList = getAreaList(airportNodeList2).filter((v) => {
+    if (v === void 0) {
+      hasOther = true;
+      return false;
+    } else {
+      return true;
+    }
   });
-  let autoSelectOther = [];
+  const selectProxyGroup = {
+    name: `template`,
+    type: "url-test",
+    tolerance: 20,
+    interval: 60,
+    "include-all": true,
+    hidden: true
+  };
+  const filterNodeList = [];
+  const autoSelectList = areaList.map((ISOname) => {
+    if (ISOname !== void 0) {
+      let CNareaName = (0, import_i18n_iso_countries.getName)(ISOname, "zh");
+      CNareaName = CNareaName.includes("\u53F0\u6E7E") ? "\u53F0\u6E7E" : CNareaName;
+      let ENareaName = (0, import_i18n_iso_countries.getName)(ISOname, "en");
+      ENareaName = ENareaName.includes("Taiwan") ? "Taiwan" : ENareaName;
+      const flag = ProxyUtils.getFlag(CNareaName);
+      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNareaName}|${CNareaName[0]}`;
+      filterNodeList.push(filterNode);
+      const autoSelect = { ...selectProxyGroup };
+      autoSelect.name = `${flag} ${CNareaName}\u8282\u70B9`;
+      autoSelect.filter = `(?i)(${filterNode})`;
+      return autoSelect;
+    } else {
+      hasOther = true;
+    }
+  });
   if (hasOther) {
-    autoSelectOther = [
-      {
-        name: `\u2753 \u5176\u4ED6\u8282\u70B9`,
-        type: "url-test",
-        tolerance: 20,
-        interval: 60,
-        "include-all": true,
-        hidden: true,
-        "exclude-filter": `(?i)(${filterNodeList.join("|")})`
-      }
-    ];
+    const otherSelect = { ...selectProxyGroup };
+    otherSelect.name = "\u2753 \u5176\u4ED6\u8282\u70B9";
+    otherSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`;
+    autoSelectList.push(otherSelect);
   }
-  return [...autoSelectOther, ...autoSelectList];
+  return autoSelectList;
+}
+function getAutoSelectListNamelist(autoSelectList) {
+  const autoSelectListNamelist = autoSelectList.map((v) => {
+    return v.name;
+  });
+  return autoSelectListNamelist;
 }
 function changeProxyGroups(config2, airportNodeList2) {
-  const proxyAreaList = getCountryList(airportNodeList2);
-  const aaa = CreateNodeAutoSelect(proxyAreaList);
-  config2["cccc"] = aaa;
+  const autoSelectList = CreateAutoSelectList(airportNodeList2);
+  const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList);
+  config2["proxy-groups"].push(...autoSelectList);
+  config2["cccc"] = autoSelectListNamelist;
 }
 function saveConfig(config2) {
   $content = ProxyUtils.yaml.safeDump(config2);

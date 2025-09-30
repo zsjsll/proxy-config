@@ -4,7 +4,7 @@ declare const ProxyUtils: {
     safeDump: (obj: object) => string
   }
 
-  getFlag: (serverName: string | object[]) => void
+  getFlag: (serverName: string | object[]|undefined) => string
   removeFlag: (serverName: string | object[]) => void
-  getISO: (serverName: string) => string
+  getISO: (serverName: string) => string|undefined
 }

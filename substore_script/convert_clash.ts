@@ -1,7 +1,9 @@
-import { registerLocale, getName as getCountryName } from "i18n-iso-countries"
+import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
+import enLocale from "i18n-iso-countries/langs/en.json"
 
 registerLocale(zhLocale)
+registerLocale(enLocale)
 
 let name = "all"
 
@@ -30,66 +32,74 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
   return true
 }
 
-function getCountryList(list: AirportNodeList) {
-  let proxyAreaList = list.map((v) => {
-    let proxyArea = ProxyUtils.getISO(v.name)
-    proxyArea = (proxyArea === undefined ? "其他" : getCountryName(proxyArea, "zh")) as string
-    proxyArea = proxyArea.includes("台湾") ? "台湾" : proxyArea
-    return proxyArea
-  })
-  proxyAreaList = [...new Set(proxyAreaList)] //去重
+function getAreaList(list: AirportNodeList) {
+  let areaList = list.map((v) => ProxyUtils.getISO(v.name))
+  areaList = [...new Set(areaList)] //去重
 
-  return proxyAreaList
+  return areaList
 }
 
-function CreateNodeAutoSelect(proxyAreaList: string[]) {
+function CreateAutoSelectList(airportNodeList: AirportNodeList) {
   let hasOther = false
-  if (proxyAreaList.includes("其他")) {
-    proxyAreaList = proxyAreaList.filter((v) => v !== "其他")
-    // hasOther = true
-  }
-
-  let filterNodeList: string[] = []
-  let autoSelectList = proxyAreaList.map((val) => {
-    const flag = ProxyUtils.getFlag(val)
-
-    const filterNode = `${flag}|${val}|${ProxyUtils.getISO(val)}|${val}|${val[0]}`
-    filterNodeList.push(filterNode)
-
-    const autoSelect: ProxyGroup = {
-      name: `${flag} ${val}节点`,
-      type: "url-test",
-      tolerance: 20,
-      interval: 60,
-      "include-all": true,
-      hidden: true,
-      filter: `(?i)(${filterNode})`,
+  const areaList = getAreaList(airportNodeList).filter((v) => {
+    if (v === undefined) {
+      hasOther = true
+      return false
+    } else {
+      return true
     }
-    return autoSelect
-  })
-  let autoSelectOther: ProxyGroup[] | [] = []
+  }) as string[]
+
+  const selectProxyGroup: ProxyGroup = {
+    name: `template`,
+    type: "url-test",
+    tolerance: 20,
+    interval: 60,
+    "include-all": true,
+    hidden: true,
+  }
+  const filterNodeList: string[] = []
+
+  const autoSelectList = areaList.map((ISOname) => {
+    if (ISOname !== undefined) {
+      let CNareaName = getAreaName(ISOname, "zh") as string
+      CNareaName = CNareaName.includes("台湾") ? "台湾" : CNareaName
+      let ENareaName = getAreaName(ISOname, "en") as string
+      ENareaName = ENareaName.includes("Taiwan") ? "Taiwan" : ENareaName
+      const flag = ProxyUtils.getFlag(CNareaName)
+      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNareaName}|${CNareaName[0]}`
+      filterNodeList.push(filterNode)
+      const autoSelect = { ...selectProxyGroup }
+      autoSelect.name = `${flag} ${CNareaName}节点`
+      autoSelect.filter = `(?i)(${filterNode})`
+      return autoSelect
+    } else {
+      hasOther = true
+    }
+  }) as ProxyGroup[]
   if (hasOther) {
-    autoSelectOther = [
-      {
-        name: `❓ 其他节点`,
-        type: "url-test",
-        tolerance: 20,
-        interval: 60,
-        "include-all": true,
-        hidden: true,
-        "exclude-filter": `(?i)(${filterNodeList.join("|")})`,
-      },
-    ]
+    const otherSelect = { ...selectProxyGroup }
+    otherSelect.name = "❓ 其他节点"
+    otherSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`
+    autoSelectList.push(otherSelect)
   }
 
-  return [...autoSelectOther, ...autoSelectList]
+  return autoSelectList
+}
+
+function getAutoSelectListNamelist(autoSelectList: ProxyGroup[]): string[] {
+  const autoSelectListNamelist = autoSelectList.map((v) => {
+    return v.name
+  })
+  return autoSelectListNamelist
 }
 
 function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
-  const proxyAreaList = getCountryList(airportNodeList)
-  const aaa = CreateNodeAutoSelect(proxyAreaList)
+  const autoSelectList = CreateAutoSelectList(airportNodeList)
+  const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList)
+  config["proxy-groups"].push(...autoSelectList)
 
-  config["cccc"] = aaa
+  config["cccc"] = autoSelectListNamelist
 }
 
 function saveConfig(config: Config) {
@@ -102,4 +112,5 @@ let config = getConfig()
 
 addProxies(config, airportNodeList)
 changeProxyGroups(config, airportNodeList)
+
 saveConfig(config)
