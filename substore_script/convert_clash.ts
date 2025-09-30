@@ -14,7 +14,7 @@ import enLocale from "i18n-iso-countries/langs/en.json"
 const { pre_name, pre_AIRegs } = $arguments
 
 const name = pre_name || "all"
-throw new Error(name)
+throw new Error(pre_name)
 AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
