@@ -1562,21 +1562,37 @@ function addProxies(config2, airportNodeList2) {
   config2.proxies = airportNodeList2;
   return true;
 }
+var other = Symbol("other");
 function getAreaList(list) {
-  let areaList = list.map((v) => ProxyUtils.getISO(v.name));
-  areaList = [...new Set(areaList)];
-  return areaList;
+  const areaList = list.map((v) => ProxyUtils.getISO(v.name));
+  const areaList_1 = [...new Set(areaList)];
+  if (areaList_1.includes(void 0)) {
+    areaList_1.push(other);
+  }
+  const areaList_2 = areaList_1.filter((v) => typeof v !== "undefined");
+  return areaList_2;
+}
+function getCNName(ISOname) {
+  let name2 = (0, import_i18n_iso_countries.getName)(ISOname, "zh");
+  if (typeof name2 !== "undefined") {
+    name2 = name2.includes("\u53F0\u6E7E") ? "\u53F0\u6E7E" : name2;
+    return name2;
+  } else {
+    throw new Error(`${name2}\u6CA1\u6709\u5BF9\u5E94\u7684CNName`);
+  }
+}
+function getENName(ISOname) {
+  let name2 = (0, import_i18n_iso_countries.getName)(ISOname, "en");
+  if (typeof name2 !== "undefined") {
+    name2 = name2.includes("Taiwan") ? "Taiwan" : name2;
+    return name2;
+  } else {
+    throw new Error(`${name2}\u6CA1\u6709\u5BF9\u5E94\u7684ENName`);
+  }
 }
 function CreateAutoSelectList(airportNodeList2) {
   let hasOther = false;
-  const areaList = getAreaList(airportNodeList2).filter((v) => {
-    if (v === void 0) {
-      hasOther = true;
-      return false;
-    } else {
-      return true;
-    }
-  });
+  const areaList = getAreaList(airportNodeList2);
   const selectProxyGroup = {
     name: `template`,
     type: "url-test",
@@ -1587,28 +1603,21 @@ function CreateAutoSelectList(airportNodeList2) {
   };
   const filterNodeList = [];
   const autoSelectList = areaList.map((ISOname) => {
-    if (ISOname !== void 0) {
-      let CNareaName = (0, import_i18n_iso_countries.getName)(ISOname, "zh");
-      CNareaName = CNareaName.includes("\u53F0\u6E7E") ? "\u53F0\u6E7E" : CNareaName;
-      let ENareaName = (0, import_i18n_iso_countries.getName)(ISOname, "en");
-      ENareaName = ENareaName.includes("Taiwan") ? "Taiwan" : ENareaName;
-      const flag = ProxyUtils.getFlag(CNareaName);
-      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNareaName}|${CNareaName[0]}`;
+    const autoSelect = { ...selectProxyGroup };
+    if (typeof ISOname !== "symbol") {
+      let CNName = getCNName(ISOname);
+      let ENareaName = getENName(ISOname);
+      const flag = ProxyUtils.getFlag(CNName);
+      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNName}}`;
       filterNodeList.push(filterNode);
-      const autoSelect = { ...selectProxyGroup };
-      autoSelect.name = `${flag} ${CNareaName}\u8282\u70B9`;
+      autoSelect.name = `${flag} ${CNName}\u8282\u70B9`;
       autoSelect.filter = `(?i)(${filterNode})`;
-      return autoSelect;
     } else {
-      hasOther = true;
+      autoSelect.name = "\u2753 \u5176\u4ED6\u8282\u70B9";
+      autoSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`;
     }
+    return autoSelect;
   });
-  if (hasOther) {
-    const otherSelect = { ...selectProxyGroup };
-    otherSelect.name = "\u2753 \u5176\u4ED6\u8282\u70B9";
-    otherSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`;
-    autoSelectList.push(otherSelect);
-  }
   return autoSelectList;
 }
 function getAutoSelectListNamelist(autoSelectList) {
@@ -1627,7 +1636,6 @@ function changeProxyGroups(config2, airportNodeList2) {
     }
   });
   config2["proxy-groups"].push(...autoSelectList);
-  config2["cccc"] = autoSelectListNamelist;
 }
 function saveConfig(config2) {
   $content = ProxyUtils.yaml.safeDump(config2);

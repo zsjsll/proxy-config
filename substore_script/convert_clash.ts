@@ -27,27 +27,44 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
     delete config["proxy-providers"]
   }
   config.proxies = airportNodeList
-
   return true
 }
 
-function getAreaList(list: AirportNodeList) {
-  let areaList = list.map((v) => ProxyUtils.getISO(v.name))
-  areaList = [...new Set(areaList)] //去重
+const other = Symbol("other")
+function getAreaList(list: AirportNodeList): (string | symbol)[] {
+  const areaList = list.map((v) => ProxyUtils.getISO(v.name))
+  const areaList_1: (string | symbol | undefined)[] = [...new Set(areaList)] //去重
+  if (areaList_1.includes(undefined)) {
+    areaList_1.push(other)
+  }
+  const areaList_2 = areaList_1.filter((v): v is string | symbol => typeof v !== "undefined")
+  return areaList_2
+}
 
-  return areaList
+function getCNName(ISOname: string) {
+  let name = getAreaName(ISOname, "zh")
+
+  if (typeof name !== "undefined") {
+    name = name.includes("台湾") ? "台湾" : name
+    return name
+  } else {
+    throw new Error(`${name}没有对应的CNName`)
+  }
+}
+
+function getENName(ISOname: string) {
+  let name = getAreaName(ISOname, "en")
+  if (typeof name !== "undefined") {
+    name = name.includes("Taiwan") ? "Taiwan" : name
+    return name
+  } else {
+    throw new Error(`${name}没有对应的ENName`)
+  }
 }
 
 function CreateAutoSelectList(airportNodeList: AirportNodeList) {
   let hasOther = false
-  const areaList = getAreaList(airportNodeList).filter((v) => {
-    if (v === undefined) {
-      hasOther = true
-      return false
-    } else {
-      return true
-    }
-  }) as string[]
+  const areaList = getAreaList(airportNodeList)
 
   const selectProxyGroup: ProxyGroup = {
     name: `template`,
@@ -60,28 +77,21 @@ function CreateAutoSelectList(airportNodeList: AirportNodeList) {
   const filterNodeList: string[] = []
 
   const autoSelectList = areaList.map((ISOname) => {
-    if (ISOname !== undefined) {
-      let CNareaName = getAreaName(ISOname, "zh") as string
-      CNareaName = CNareaName.includes("台湾") ? "台湾" : CNareaName
-      let ENareaName = getAreaName(ISOname, "en") as string
-      ENareaName = ENareaName.includes("Taiwan") ? "Taiwan" : ENareaName
-      const flag = ProxyUtils.getFlag(CNareaName)
-      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNareaName}|${CNareaName[0]}`
+    const autoSelect = { ...selectProxyGroup }
+    if (typeof ISOname !== "symbol") {
+      let CNName = getCNName(ISOname)
+      let ENareaName = getENName(ISOname)
+      const flag = ProxyUtils.getFlag(CNName)
+      const filterNode = `${flag}|${ISOname}|${ENareaName}|${CNName}}`
       filterNodeList.push(filterNode)
-      const autoSelect = { ...selectProxyGroup }
-      autoSelect.name = `${flag} ${CNareaName}节点`
+      autoSelect.name = `${flag} ${CNName}节点`
       autoSelect.filter = `(?i)(${filterNode})`
-      return autoSelect
     } else {
-      hasOther = true
+      autoSelect.name = "❓ 其他节点"
+      autoSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`
     }
-  }) as ProxyGroup[]
-  if (hasOther) {
-    const otherSelect = { ...selectProxyGroup }
-    otherSelect.name = "❓ 其他节点"
-    otherSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`
-    autoSelectList.push(otherSelect)
-  }
+    return autoSelect
+  })
 
   return autoSelectList
 }
@@ -96,6 +106,7 @@ function getAutoSelectListNamelist(autoSelectList: ProxyGroup[]): string[] {
 function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
   const autoSelectList = CreateAutoSelectList(airportNodeList)
   const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList)
+  // const areaList = getAreaList(airportNodeList)
 
   config["proxy-groups"].forEach((v) => {
     const isAdd = ["节点选择", "!CN", "测试", "漏网之鱼"].some((kw) => v.name.includes(kw))
@@ -106,7 +117,7 @@ function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
 
   config["proxy-groups"].push(...autoSelectList)
 
-  config["cccc"] = autoSelectListNamelist
+  // config["cccc"] = areaList
 }
 
 function saveConfig(config: Config) {
