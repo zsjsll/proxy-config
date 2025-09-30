@@ -203,7 +203,7 @@ rules:
   - RULE-SET,custom_lan_ip,🏠 本地SRC,src
   - RULE-SET,custom_proxy,🧱 海外FB
   - RULE-SET,custom_direct,🔗 国内FB
-  - RULE-SET,custom_dnsleak,🧪 DNS检测
+  - RULE-SET,custom_dnsleak,🧪 DNS测试
   - RULE-SET,custom_deny,🚫 广告
   - RULE-SET,ads,🚫 广告
   - RULE-SET,networktest,📈 网络测试
