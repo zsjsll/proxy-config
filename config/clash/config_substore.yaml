@@ -147,9 +147,9 @@ dns:
 #   asn: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN-all.mmdb"
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择] }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, include-all: true }
-  # - { name: ✋ 手动选择, type: select, include-all: true }
+  - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
   - { name: 🏠 本地SRC, type: select, proxies: &CN [✔️ 直连, 🚀 节点选择] }
@@ -159,14 +159,14 @@ proxy-groups:
   - { name: 🍎 苹果CN, type: select, proxies: *CN } # 域名
   - { name: 📋 BT下载, type: select, proxies: *CN } # 域名
   - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 🧪 DNS检测, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
+  - { name: 🧪 DNS测试, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
   - { name: 🤖 AI!CN, type: select, proxies: &NotCN [🚀 节点选择] } # 域名
   - { name: 🌍 媒体!CN, type: select, proxies: *NotCN } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: *NotCN } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: *NotCN, hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
   - { name: 🔗 国内FB, type: select, proxies: *CN } # 域名 + IP
-  - { name: 🔒 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
+  - { name: 🚪 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
   - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
@@ -181,7 +181,7 @@ rules:
   - RULE-SET,custom_deny,🚫 广告
   - RULE-SET,ads,🚫 广告
   - RULE-SET,networktest,📈 网络测试
-  - RULE-SET,private,🔒 私有网络
+  - RULE-SET,private,🚪 私有网络
   - RULE-SET,trackerslist,📋 BT下载
   - RULE-SET,microsoft_cn,Ⓜ️ 微软CN
   - RULE-SET,apple_cn,🍎 苹果CN
@@ -193,7 +193,7 @@ rules:
   - RULE-SET,tld_proxy,🧱 海外FB
   - RULE-SET,proxy,🧱 海外FB
   - RULE-SET,cn,🔗 国内FB
-  - RULE-SET,private_ip,🔒 私有网络,no-resolve
+  - RULE-SET,private_ip,🚪 私有网络,no-resolve
   - RULE-SET,cn_ip,🔗 国内FB
   - RULE-SET,media_ip,🌍 媒体!CN
   - RULE-SET,games_ip,🕹️ 游戏!CN

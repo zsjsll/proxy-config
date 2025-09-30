@@ -168,7 +168,7 @@ proxy-groups:
       proxies: [✔️ 直连, 🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
     } # 域名
   - {
-      name: 🧪 DNS检测,
+      name: 🧪 DNS测试,
       type: select,
       proxies: [🚀 节点选择, ✔️ 直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ❓ 其他节点],
     } # 域名
@@ -178,7 +178,7 @@ proxy-groups:
   - { name: 📲 电报!CN, type: select, proxies: *NotCN, hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
   - { name: 🔗 国内FB, type: select, proxies: *CN } # 域名 + IP
-  - { name: 🔒 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
+  - { name: 🚪 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
   - {
       name: 🐟 漏网之鱼,
       type: select,
@@ -207,7 +207,7 @@ rules:
   - RULE-SET,custom_deny,🚫 广告
   - RULE-SET,ads,🚫 广告
   - RULE-SET,networktest,📈 网络测试
-  - RULE-SET,private,🔒 私有网络
+  - RULE-SET,private,🚪 私有网络
   - RULE-SET,trackerslist,📋 BT下载
   - RULE-SET,microsoft_cn,Ⓜ️ 微软CN
   - RULE-SET,apple_cn,🍎 苹果CN
@@ -219,7 +219,7 @@ rules:
   - RULE-SET,tld_proxy,🧱 海外FB
   - RULE-SET,proxy,🧱 海外FB
   - RULE-SET,cn,🔗 国内FB
-  - RULE-SET,private_ip,🔒 私有网络,no-resolve
+  - RULE-SET,private_ip,🚪 私有网络,no-resolve
   - RULE-SET,cn_ip,🔗 国内FB
   - RULE-SET,media_ip,🌍 媒体!CN
   - RULE-SET,games_ip,🕹️ 游戏!CN

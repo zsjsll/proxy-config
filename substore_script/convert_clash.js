@@ -1538,9 +1538,9 @@ var en_default = {
 };
 
 // substore_script/convert_clash.ts
+var name = "all";
 (0, import_i18n_iso_countries.registerLocale)(zh_default);
 (0, import_i18n_iso_countries.registerLocale)(en_default);
-var name = "all";
 async function getAirportNodeList() {
   return await produceArtifact({
     name,
@@ -1620,6 +1620,12 @@ function getAutoSelectListNamelist(autoSelectList) {
 function changeProxyGroups(config2, airportNodeList2) {
   const autoSelectList = CreateAutoSelectList(airportNodeList2);
   const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList);
+  config2["proxy-groups"].forEach((v) => {
+    const isAdd = ["\u8282\u70B9\u9009\u62E9", "!CN", "\u6D4B\u8BD5", "\u6F0F\u7F51\u4E4B\u9C7C"].some((kw) => v.name.includes(kw));
+    if (isAdd) {
+      v.proxies?.push(...autoSelectListNamelist);
+    }
+  });
   config2["proxy-groups"].push(...autoSelectList);
   config2["cccc"] = autoSelectListNamelist;
 }

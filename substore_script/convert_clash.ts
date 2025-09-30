@@ -2,11 +2,10 @@ import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-registerLocale(zhLocale)
-registerLocale(enLocale)
-
 let name = "all"
 
+registerLocale(zhLocale)
+registerLocale(enLocale)
 async function getAirportNodeList() {
   return await produceArtifact({
     name,
@@ -97,6 +96,14 @@ function getAutoSelectListNamelist(autoSelectList: ProxyGroup[]): string[] {
 function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
   const autoSelectList = CreateAutoSelectList(airportNodeList)
   const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList)
+
+  config["proxy-groups"].forEach((v) => {
+    const isAdd = ["节点选择", "!CN", "测试", "漏网之鱼"].some((kw) => v.name.includes(kw))
+    if (isAdd) {
+      v.proxies?.push(...autoSelectListNamelist)
+    }
+  })
+
   config["proxy-groups"].push(...autoSelectList)
 
   config["cccc"] = autoSelectListNamelist
