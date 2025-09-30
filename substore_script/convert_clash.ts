@@ -11,10 +11,8 @@ import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-let { name, AIRegs } = $arguments
-
-name ||= "all"
-AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+const name: string = $arguments.name || "all"
+const AIRegs: string[] | string = $arguments.AIRegs || ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
 registerLocale(enLocale)
