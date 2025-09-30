@@ -152,20 +152,20 @@ proxy-groups:
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
-  - { name: 🏠 本地SRC, type: select, proxies: &CN [✔️ 直连, 🚀 节点选择] }
-  - { name: 🎮 游戏CN, type: select, proxies: *CN } # 域名
-  - { name: Ⓜ️ 微软CN, type: select, proxies: *CN } # 域名
-  - { name: 🌈 谷歌CN, type: select, proxies: *CN } # 域名
-  - { name: 🍎 苹果CN, type: select, proxies: *CN } # 域名
-  - { name: 📋 BT下载, type: select, proxies: *CN } # 域名
+  - { name: 🏠 本地SRC, type: select, proxies: [✔️ 直连, 🚀 节点选择] }
+  - { name: 🎮 游戏CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: Ⓜ️ 微软CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 🌈 谷歌CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 🍎 苹果CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 📋 BT下载, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
   - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
   - { name: 🧪 DNS测试, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
-  - { name: 🤖 AI!CN, type: select, proxies: &NotCN [🚀 节点选择] } # 域名
-  - { name: 🌍 媒体!CN, type: select, proxies: *NotCN } # 域名 + IP
-  - { name: 🕹️ 游戏!CN, type: select, proxies: *NotCN } # 域名 + IP
-  - { name: 📲 电报!CN, type: select, proxies: *NotCN, hidden: true } # IP
+  - { name: 🤖 AI!CN, type: select, proxies: [🚀 节点选择] } # 域名
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择] } # 域名 + IP
+  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择] } # 域名 + IP
+  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择], hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
-  - { name: 🔗 国内FB, type: select, proxies: *CN } # 域名 + IP
+  - { name: 🔗 国内FB, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
   - { name: 🚪 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
   - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
