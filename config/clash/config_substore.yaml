@@ -171,7 +171,7 @@ proxy-groups:
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - &node_test { <<: *auto_test, name: ☁️ 非港节点, hidden: true, exclude-filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
+  # - &node_test { <<: *auto_test, name: ☁️ 非港节点, hidden: true, exclude-filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
 
 rules:
   - RULE-SET,custom_lan_ip,🏠 本地SRC,src
