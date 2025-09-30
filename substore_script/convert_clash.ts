@@ -11,14 +11,17 @@ import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-const name: string = $arguments.name || "all"
-const AIRegs: string[] | string = $arguments.AIRegs || ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+const { pre_name, pre_AIRegs } = $arguments
+
+const name = pre_name || "all"
+throw new Error(name)
+AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
 registerLocale(enLocale)
 async function getAirportNodeList() {
   return await produceArtifact({
-    name,
+    name: name || "all",
     type: "collection",
     platform: "ClashMeta",
     produceType: "internal",
