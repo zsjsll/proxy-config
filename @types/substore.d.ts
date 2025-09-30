@@ -3,7 +3,7 @@ export {}
 declare global {
   const $files: string[]
   let $content: string
-  const $arguments: { [k: string]: string }
+  const $arguments: { [k: string]: any }
   let $server: {
     name: string
     type: string

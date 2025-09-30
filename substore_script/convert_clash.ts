@@ -1,10 +1,20 @@
+// 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
+// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=""&AIRegs=""
+
+// 本脚本 可以传入2个参数：
+//  name 为 substore 的订阅组合订阅名字
+//  AIRegs 为 AI节点 上要过滤掉的中国节点正则表达式，
+//  如果直接修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+//  如果 传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"
+
 import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
 import zhLocale from "i18n-iso-countries/langs/zh.json"
 import enLocale from "i18n-iso-countries/langs/en.json"
 
-let { name } = $arguments
+let { name, AIRegList: AIRegs } = $arguments
 
-name ??= "all"
+name ||= "all"
+AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
 registerLocale(enLocale)
@@ -32,16 +42,18 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
   return true
 }
 // 扩展AI不能使用的地区
-function extendAIProxyGroup(config: Config, reg: string[]) {
-  const AI = config["proxy-groups"].findLast((v) => v.name.includes("AI节点"))
-
-  if (reg.length !== 0) {
-    const regString = reg.join("|")
-    const tempAI = AI!["exclude-filter"]
-    if (regString !== tempAI) {
-      AI!["exclude-filter"] = tempAI + "|" + regString
+function extendAIProxyGroup(config: Config, regs: string[] | string) {
+  config["proxy-groups"].forEach((v) => {
+    if (v.name.includes("AI节点")) {
+      if (regs.length !== 0) {
+        if (typeof regs !== "string") {
+          v["exclude-filter"] = regs.join("|")
+        } else {
+          v["exclude-filter"] = regs
+        }
+      }
     }
-  }
+  })
 }
 
 const other = Symbol("other")
@@ -143,7 +155,8 @@ const airportNodeList = await getAirportNodeList()
 let config = getConfig()
 
 addProxies(config, airportNodeList)
-extendAIProxyGroup(config, ["test"])
+
+extendAIProxyGroup(config, AIRegs)
 changeProxyGroups(config, airportNodeList)
 
 saveConfig(config)
