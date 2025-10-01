@@ -13,14 +13,14 @@ import enLocale from "i18n-iso-countries/langs/en.json"
 
 let { name, AIRegs } = $arguments
 
-name ||= "all"
-AIRegs ||= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+name ??= "all"
+AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 registerLocale(zhLocale)
 registerLocale(enLocale)
 async function getAirportNodeList() {
   return await produceArtifact({
-    name: name || "all",
+    name,
     type: "collection",
     platform: "ClashMeta",
     produceType: "internal",

@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "pnpx tsx esbuild.config.ts",
-    "watch": "pnpx tsx esbuild.config.ts -w"
+    "build": "pnpx tsx esbuild.config.ts --minify",
+    "watch": "pnpx tsx esbuild.config.ts -w --minify"
   },
   "keywords": [],
   "author": "",

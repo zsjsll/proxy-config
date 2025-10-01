@@ -4,6 +4,7 @@ import fg from "fast-glob"
 import { performance } from "perf_hooks"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
+const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const entryDir = "./substore_script"
 const entryPoints = await fg(`${entryDir}/**/*.ts`)
 const outDir = entryDir
@@ -47,6 +48,13 @@ const baseOptions: esbuild.BuildOptions = {
   // charset: "utf8",
 
   plugins: [TimingPlugin()],
+
+  ...(isMinify && {
+    minify: true, // 压缩代码
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    legalComments: "none",
+  }),
 }
 
 async function runEsbuild() {
@@ -68,12 +76,7 @@ async function runEsbuild() {
       process.exit(0)
     })
   } else {
-    const runhOnceOptions: esbuild.BuildOptions = {
-      minify: true, // 压缩代码
-      minifyIdentifiers: true,
-      minifySyntax: true,
-      legalComments: "none",
-    }
+    const runhOnceOptions: esbuild.BuildOptions = {}
     const ctx = await esbuild.context({ ...baseOptions, ...runhOnceOptions })
     try {
       console.log(`🛠️ [BUILD MODE] 执行单次构建...`)
