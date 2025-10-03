@@ -19,7 +19,5 @@
     "fast-glob": "latest",
     "prettier": "latest"
   },
-  "dependencies": {
-    "i18n-iso-countries": "latest"
-  }
+  "dependencies": {}
 }

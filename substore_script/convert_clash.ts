@@ -9,8 +9,9 @@
 
 import nameConvert from "./module/i18n"
 
-let { name, AIRegs } = $arguments
+let { name, AIRegs, mode } = $arguments
 
+mode ??= "create"
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
@@ -68,20 +69,16 @@ function get_nameIndexList(list: AirportNodeList) {
   return nameIndexList
 }
 
+interface AutoSelectListInfo {
+  autoSelectList: ProxyGroup[]
+  autoSelectNameList: string[]
+}
+
 // 根据机场信息，创建自动选择的节点集群
-function Create_autoSelectListInfo(airportNodeList: AirportNodeList) {
+function create_autoSelectListInfo(airportNodeList: AirportNodeList): AutoSelectListInfo {
   const nameIndexList = get_nameIndexList(airportNodeList)
 
-  const selectProxyGroup: ProxyGroup = {
-    name: `template`,
-    type: "url-test",
-    tolerance: 20,
-    interval: 60,
-    "include-all": true,
-    hidden: true,
-  }
   const allRegexplist: string[] = []
-
   const autoSelectList: ProxyGroup[] = []
   const autoSelectNameList: string[] = []
   nameIndexList.forEach((val) => {
@@ -116,12 +113,60 @@ function Create_autoSelectListInfo(airportNodeList: AirportNodeList) {
   return { autoSelectList, autoSelectNameList }
 }
 
-// 写入信息到 proxy—groups
-function change_proxyGroups(config: Config, airportNodeList: AirportNodeList) {
-  const autoSelectListInfo = Create_autoSelectListInfo(airportNodeList)
+function default_AutoSelectListInfo(airportNodeList: AirportNodeList): AutoSelectListInfo {
+  const defAutoSelect: ProxyGroup = {
+    name: `template`,
+    type: "url-test",
+    tolerance: 20,
+    interval: 60,
+    "include-all": true,
+    hidden: true,
+  }
 
+  const autoSelect = [
+    { name: "🇭🇰 香港节点", filter: "(?i)(🇭🇰|港|hk|hong ?kong)" },
+    { name: "🇹🇼 台湾节点", filter: "(?i)(🇹🇼|台|tw|tai ?wan)" },
+    { name: "🇰🇷 韩国节点", filter: "(?i)(🇰🇷|韩|kr|korean)" },
+    { name: "🇯🇵 日本节点", filter: "(?i)(🇯🇵|日|jp|japan)" },
+    { name: "🇸🇬 新加坡节点", filter: "(?i)(🇸🇬|新|sg|singapore)" },
+    { name: "🇺🇸 美国节点", filter: "(?i)(🇺🇸|美|us|united ?states)" },
+  ]
+
+  const temp_autoSelectList: ProxyGroup[] = autoSelect.map((e) => {
+    return { ...defAutoSelect, ...e }
+  })
+  const nameIndexList = get_nameIndexList(airportNodeList).filter((ele) => typeof ele !== "undefined")
+
+  const fglist = nameIndexList.map((element) => nameConvert.get_Name(element, "fg"))
+
+  const autoSelectList = temp_autoSelectList.filter((element) => {
+    const fgMatchs = element.name.match(/^(..)/u)
+    if (fgMatchs !== null) {
+      const fg = fgMatchs[1]
+      return fglist.includes(fg)
+    } else throw new Error("filter格式出错")
+  })
+
+  const allRegexplist: string[] = autoSelect.map((e) => {
+    const filter = e.filter.match(/^\(.*\((.*?)\)/)
+
+    if (filter !== null) return filter[1]
+    else throw new Error("filter格式出错")
+  })
+
+  const otherAutoSelect: ProxyGroup = { ...defAutoSelect, ...{ name: "❓ 其他节点", "exclude-filter": `(?i)${allRegexplist.join("|")}` } }
+  autoSelectList.push(otherAutoSelect)
+
+  const autoSelectNameList: string[] = autoSelectList.map((e) => e.name)
+
+  return { autoSelectNameList, autoSelectList }
+}
+
+// 写入信息到 proxy—groups
+function change_proxyGroups(config: Config, autoSelectListInfo: AutoSelectListInfo) {
   config["proxy-groups"].forEach((element) => {
-    const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
+    // const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
+    const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
     if (isAdd) {
       element.proxies?.push(...autoSelectListInfo.autoSelectNameList)
     }
@@ -129,20 +174,41 @@ function change_proxyGroups(config: Config, airportNodeList: AirportNodeList) {
 
   config["proxy-groups"].push(...autoSelectListInfo.autoSelectList)
 
-  // config["cccc"] = areaList
+  // config["cccc"] = autoSelectListInfo.autoSelectNameList
 }
+
+// function use_defaultProxyGroups(config: Config, airportNodeList: AirportNodeList) {
+//   const autoSelectListInfo = defaultProxyGroups(airportNodeList)
+
+//   config["proxy-groups"].forEach((element) => {
+//     // const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
+//     const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
+//     if (isAdd) {
+//       element.proxies?.push(...autoSelectListInfo.autoSelectNameList)
+//     }
+//   })
+// }
 
 function save_config(config: Config) {
   $content = ProxyUtils.yaml.safeDump(config)
   return true
 }
 
-const airportNodeList = await get_airportNodeList()
-let config = get_config()
+async function main() {
+  const airportNodeList = await get_airportNodeList()
+  let config = get_config()
 
-add_proxies(config, airportNodeList)
+  add_proxies(config, airportNodeList)
 
-extend_AIProxyGroup(config, AIRegs)
-change_proxyGroups(config, airportNodeList)
+  extend_AIProxyGroup(config, AIRegs)
 
-save_config(config)
+  let autoSelectListInfo: AutoSelectListInfo
+
+  if (mode === "create") autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
+  else autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
+  change_proxyGroups(config, autoSelectListInfo)
+
+  save_config(config)
+}
+
+main()
