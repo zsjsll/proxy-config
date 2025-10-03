@@ -7,18 +7,14 @@
 //  如果直接修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 //  如果 传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"
 
-import { registerLocale, getName as getAreaName } from "i18n-iso-countries"
-import zhLocale from "i18n-iso-countries/langs/zh.json"
-import enLocale from "i18n-iso-countries/langs/en.json"
+import nameConvert from "./module/i18n"
 
 let { name, AIRegs } = $arguments
 
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
-registerLocale(zhLocale)
-registerLocale(enLocale)
-async function getAirportNodeList() {
+async function get_airportNodeList() {
   return await produceArtifact({
     name,
     type: "collection",
@@ -30,11 +26,11 @@ async function getAirportNodeList() {
   })
 }
 // 获取配置模板
-function getConfig() {
+function get_config() {
   return ProxyUtils.yaml.safeLoad($files[0])
 }
 // 添加机场节点
-function addProxies(config: Config, airportNodeList: AirportNodeList) {
+function add_proxies(config: Config, airportNodeList: AirportNodeList) {
   if (config["proxy-providers"] !== undefined) {
     delete config["proxy-providers"]
   }
@@ -42,7 +38,7 @@ function addProxies(config: Config, airportNodeList: AirportNodeList) {
   return true
 }
 // 扩展AI不能使用的地区
-function extendAIProxyGroup(config: Config, regs: string[] | string) {
+function extend_AIProxyGroup(config: Config, regs: string[] | string) {
   config["proxy-groups"].forEach((v) => {
     if (v.name.includes("AI节点")) {
       if (regs.length !== 0) {
@@ -56,41 +52,25 @@ function extendAIProxyGroup(config: Config, regs: string[] | string) {
   })
 }
 
-const other = Symbol("other")
-// 获取机场的所有节点的ISO名字
-function getAreaList(list: AirportNodeList): (string | symbol)[] {
-  const areaList = list.map((v) => ProxyUtils.getISO(v.name))
-  const areaList_1: (string | symbol | undefined)[] = [...new Set(areaList)] //去重
-  if (areaList_1.includes(undefined)) {
-    areaList_1.push(other)
-  }
-  const areaList_2 = areaList_1.filter((v): v is string | symbol => typeof v !== "undefined")
-  return areaList_2
+// 获取机场的所有节点的名字Index
+function get_nameIndexList(list: AirportNodeList) {
+  let tempSet: Set<undefined | number> = new Set()
+  list.forEach((element) => {
+    const nameIndex = nameConvert.get_NameIndex(element.name)
+    tempSet.add(nameIndex)
+  })
+  const nameIndexList = [...tempSet].sort((a, b) => {
+    if (typeof a === "undefined") return 1
+    if (typeof b === "undefined") return -1
+    return a - b
+  })
+
+  return nameIndexList
 }
 
-function getCNName(ISOname: string) {
-  let name = getAreaName(ISOname, "zh")
-
-  if (typeof name !== "undefined") {
-    name = name.includes("台湾") ? "台湾" : name
-    return name
-  } else {
-    throw new Error(`${name}没有对应的CNName`)
-  }
-}
-
-function getENName(ISOname: string) {
-  let name = getAreaName(ISOname, "en")
-  if (typeof name !== "undefined") {
-    name = name.includes("Taiwan") ? "Taiwan" : name
-    return name
-  } else {
-    throw new Error(`${name}没有对应的ENName`)
-  }
-}
 // 根据机场信息，创建自动选择的节点集群
-function CreateAutoSelectList(airportNodeList: AirportNodeList) {
-  const areaList = getAreaList(airportNodeList)
+function Create_autoSelectListInfo(airportNodeList: AirportNodeList) {
+  const nameIndexList = get_nameIndexList(airportNodeList)
 
   const selectProxyGroup: ProxyGroup = {
     name: `template`,
@@ -100,63 +80,69 @@ function CreateAutoSelectList(airportNodeList: AirportNodeList) {
     "include-all": true,
     hidden: true,
   }
-  const filterNodeList: string[] = []
+  const allRegexplist: string[] = []
 
-  const autoSelectList = areaList.map((ISOname) => {
-    const autoSelect = { ...selectProxyGroup }
-    if (typeof ISOname !== "symbol") {
-      let CNName = getCNName(ISOname)
-      let ENareaName = getENName(ISOname)
-      const flag = ProxyUtils.getFlag(CNName)
-      const filterNode = `${flag}|${CNName}|${ISOname}|${ENareaName}}`
-      filterNodeList.push(filterNode)
-      autoSelect.name = `${flag} ${CNName}节点`
-      autoSelect.filter = `(?i)(${filterNode})`
+  const autoSelectList: ProxyGroup[] = []
+  const autoSelectNameList: string[] = []
+  nameIndexList.forEach((val) => {
+    const autoSelect: ProxyGroup = {
+      name: `template`,
+      type: "url-test",
+      tolerance: 20,
+      interval: 60,
+      "include-all": true,
+      hidden: true,
+    }
+
+    if (typeof val !== "undefined") {
+      const zhName = nameConvert.get_Name(val, "zh")
+      const enName = nameConvert.get_Name(val, "en")
+      const flag = nameConvert.get_Name(val, "fg")
+      const regexp = nameConvert.get_Name(val, "regexp")
+
+      autoSelect.name = `${flag} ${zhName}节点`
+      autoSelect.filter = `(?i)(${regexp})`
+      allRegexplist.push(regexp)
+      autoSelectNameList.push(autoSelect.name)
+      autoSelectList.push(autoSelect)
     } else {
       autoSelect.name = "❓ 其他节点"
-      autoSelect["exclude-filter"] = `(?i)${filterNodeList.join("|")}`
+      autoSelect["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
+      autoSelectNameList.push(autoSelect.name)
+      autoSelectList.push(autoSelect)
     }
-    return autoSelect
   })
 
-  return autoSelectList
+  return { autoSelectList, autoSelectNameList }
 }
-// 获取 proxy—groups 上所有 auto-select 集群的 名字列表
-function getAutoSelectListNamelist(autoSelectList: ProxyGroup[]): string[] {
-  const autoSelectListNamelist = autoSelectList.map((v) => {
-    return v.name
-  })
-  return autoSelectListNamelist
-}
+
 // 写入信息到 proxy—groups
-function changeProxyGroups(config: Config, airportNodeList: AirportNodeList) {
-  const autoSelectList = CreateAutoSelectList(airportNodeList)
-  const autoSelectListNamelist = getAutoSelectListNamelist(autoSelectList)
-  // const areaList = getAreaList(airportNodeList)
+function change_proxyGroups(config: Config, airportNodeList: AirportNodeList) {
+  const autoSelectListInfo = Create_autoSelectListInfo(airportNodeList)
 
-  config["proxy-groups"].forEach((v) => {
-    const isAdd = ["节点选择", "!CN", "测试", "漏网之鱼"].some((kw) => v.name.includes(kw))
+  config["proxy-groups"].forEach((element) => {
+    const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
     if (isAdd) {
-      v.proxies?.push(...autoSelectListNamelist)
+      element.proxies?.push(...autoSelectListInfo.autoSelectNameList)
     }
   })
 
-  config["proxy-groups"].push(...autoSelectList)
+  config["proxy-groups"].push(...autoSelectListInfo.autoSelectList)
 
   // config["cccc"] = areaList
 }
 
-function saveConfig(config: Config) {
+function save_config(config: Config) {
   $content = ProxyUtils.yaml.safeDump(config)
   return true
 }
 
-const airportNodeList = await getAirportNodeList()
-let config = getConfig()
+const airportNodeList = await get_airportNodeList()
+let config = get_config()
 
-addProxies(config, airportNodeList)
+add_proxies(config, airportNodeList)
 
-extendAIProxyGroup(config, AIRegs)
-changeProxyGroups(config, airportNodeList)
+extend_AIProxyGroup(config, AIRegs)
+change_proxyGroups(config, airportNodeList)
 
-saveConfig(config)
+save_config(config)
