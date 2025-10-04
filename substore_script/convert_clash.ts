@@ -4,14 +4,18 @@
 // 本脚本 可以传入2个参数：
 //  [name] 为 substore 的订阅组合订阅名字
 //  [AIRegs] 为 AI节点 要过滤掉的中国节点正则表达式，传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"，修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
-// [usedef] 添加后使用固定的 autoselect 群组
+// [mode]:"create"|"default" 添加后使用固定的 autoselect 群组
 
 import nameConvert from "./module/i18n"
 
-let { name, AIRegs, mode } = $arguments
+type Mode = "create" | "default"
+
+let { name, AIRegs } = $arguments
+
+let mode: Mode = $arguments.mode
 
 mode ??= "create"
-name ??= "all"
+name ??= "ariport"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
 const defAutoSelect: ProxyGroup = {
