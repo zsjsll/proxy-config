@@ -2,16 +2,15 @@
 // 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#AIRegs=&name=all
 
 // 本脚本 可以传入2个参数：
-//  name 为 substore 的订阅组合订阅名字
-//  AIRegs 为 AI节点 要过滤掉的中国节点正则表达式，
-//  如果直接修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
-//  如果 传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"
+//  [name] 为 substore 的订阅组合订阅名字
+//  [AIRegs] 为 AI节点 要过滤掉的中国节点正则表达式，传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"，修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+// [usedef] 添加后使用固定的 autoselect 群组
 
 import nameConvert from "./module/i18n"
 
-let { name, AIRegs, mode } = $arguments
+let { name, AIRegs, crt: usedef } = $arguments
 
-mode ??= "create"
+usedef ??= false
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
@@ -197,8 +196,8 @@ async function main() {
 
   let autoSelectListInfo: AutoSelectListInfo
 
-  if (mode === "create") autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
-  else autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
+  if (usedef) autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
+  else autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
   change_proxyGroups(config, autoSelectListInfo)
 
   save_config(config)

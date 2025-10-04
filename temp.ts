@@ -21,3 +21,7 @@ const a = arr.filter((ele) => {
   if (typeof ele !== "undefined") return ele
 })
 console.log(a)
+
+
+const c="false"
+console.log(boo)
