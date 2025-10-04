@@ -15,6 +15,20 @@ mode ??= "create"
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
+const autoSelect = [
+  { name: "🇭🇰 香港节点", filter: "(?i)(🇭🇰|港|hk|hong ?kong)" },
+  { name: "🇲🇴 澳门节点", filter: "(?i)(🇲🇴|澳门|MO|Macao)" },
+  { name: "🇹🇼 台湾节点", filter: "(?i)(🇹🇼|台|tw|tai ?wan)" },
+  { name: "🇯🇵 日本节点", filter: "(?i)(🇯🇵|日|jp|japan)" },
+  { name: "🇰🇷 韩国节点", filter: "(?i)(🇰🇷|韩|kr|korean)" },
+  { name: "🇸🇬 新加坡节点", filter: "(?i)(🇸🇬|新|sg|singapore)" },
+  { name: "🇺🇸 美国节点", filter: "(?i)(🇺🇸|美|us|united ?states)" },
+  { name: "🇬🇧 英国节点", filter: "(?i)(🇬🇧|英|GB|United ?Kingdom)" },
+  { name: "🇫🇷 法国节点", filter: "(?i)(🇫🇷|法|fr|France)" },
+  { name: "🇩🇪 德国节点", filter: "(?i)(🇩🇪|德|DE|Germany)" },
+  { name: "🇦🇱 澳大利亚节点", filter: "(?i)(🇦🇱|澳大利亚|澳洲|AL|Australia)" },
+]
+
 async function get_airportNodeList() {
   return await produceArtifact({
     name,
@@ -123,15 +137,6 @@ function default_AutoSelectListInfo(airportNodeList: AirportNodeList): AutoSelec
     hidden: true,
   }
 
-  const autoSelect = [
-    { name: "🇭🇰 香港节点", filter: "(?i)(🇭🇰|港|hk|hong ?kong)" },
-    { name: "🇹🇼 台湾节点", filter: "(?i)(🇹🇼|台|tw|tai ?wan)" },
-    { name: "🇰🇷 韩国节点", filter: "(?i)(🇰🇷|韩|kr|korean)" },
-    { name: "🇯🇵 日本节点", filter: "(?i)(🇯🇵|日|jp|japan)" },
-    { name: "🇸🇬 新加坡节点", filter: "(?i)(🇸🇬|新|sg|singapore)" },
-    { name: "🇺🇸 美国节点", filter: "(?i)(🇺🇸|美|us|united ?states)" },
-  ]
-
   const temp_autoSelectList: ProxyGroup[] = autoSelect.map((e) => {
     return { ...defAutoSelect, ...e }
   })
@@ -176,18 +181,6 @@ function change_proxyGroups(config: Config, autoSelectListInfo: AutoSelectListIn
 
   // config["cccc"] = autoSelectListInfo.autoSelectNameList
 }
-
-// function use_defaultProxyGroups(config: Config, airportNodeList: AirportNodeList) {
-//   const autoSelectListInfo = defaultProxyGroups(airportNodeList)
-
-//   config["proxy-groups"].forEach((element) => {
-//     // const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
-//     const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
-//     if (isAdd) {
-//       element.proxies?.push(...autoSelectListInfo.autoSelectNameList)
-//     }
-//   })
-// }
 
 function save_config(config: Config) {
   $content = ProxyUtils.yaml.safeDump(config)
