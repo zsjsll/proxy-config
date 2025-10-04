@@ -1,5 +1,5 @@
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#AIRegs=&name=all
+// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&usedef
 
 // 本脚本 可以传入2个参数：
 //  [name] 为 substore 的订阅组合订阅名字
@@ -186,21 +186,14 @@ function save_config(config: Config) {
   return true
 }
 
-async function main() {
-  const airportNodeList = await get_airportNodeList()
-  let config = get_config()
+const airportNodeList = await get_airportNodeList()
+let config = get_config()
 
-  add_proxies(config, airportNodeList)
+add_proxies(config, airportNodeList)
 
-  extend_AIProxyGroup(config, AIRegs)
-
-  let autoSelectListInfo: AutoSelectListInfo
-
-  if (usedef) autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
-  else autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
-  change_proxyGroups(config, autoSelectListInfo)
-
-  save_config(config)
-}
-
-main()
+extend_AIProxyGroup(config, AIRegs)
+let autoSelectListInfo: AutoSelectListInfo
+if (usedef) autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
+else autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
+change_proxyGroups(config, autoSelectListInfo)
+save_config(config)
