@@ -14,6 +14,16 @@ usedef ??= false
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
+const defAutoSelect: ProxyGroup = {
+  name: `template`,
+  type: "url-test",
+  tolerance: 20,
+  interval: 60,
+  url: "url: https://www.google.com/generate_204",
+  "include-all": true,
+  hidden: true,
+}
+
 const autoSelect = [
   { name: "🇭🇰 香港节点", filter: "(?i)(🇭🇰|港|hk|hong ?kong)" },
   { name: "🇲🇴 澳门节点", filter: "(?i)(🇲🇴|澳门|MO|Macao)" },
@@ -95,15 +105,7 @@ function create_autoSelectListInfo(airportNodeList: AirportNodeList): AutoSelect
   const autoSelectList: ProxyGroup[] = []
   const autoSelectNameList: string[] = []
   nameIndexList.forEach((val) => {
-    const autoSelect: ProxyGroup = {
-      name: `template`,
-      type: "url-test",
-      tolerance: 20,
-      interval: 60,
-      "include-all": true,
-      hidden: true,
-    }
-
+    const autoSelect = { ...defAutoSelect }
     if (typeof val !== "undefined") {
       const zhName = nameConvert.get_Name(val, "zh")
       const enName = nameConvert.get_Name(val, "en")
@@ -127,15 +129,6 @@ function create_autoSelectListInfo(airportNodeList: AirportNodeList): AutoSelect
 }
 
 function default_AutoSelectListInfo(airportNodeList: AirportNodeList): AutoSelectListInfo {
-  const defAutoSelect: ProxyGroup = {
-    name: `template`,
-    type: "url-test",
-    tolerance: 20,
-    interval: 60,
-    "include-all": true,
-    hidden: true,
-  }
-
   const temp_autoSelectList: ProxyGroup[] = autoSelect.map((e) => {
     return { ...defAutoSelect, ...e }
   })

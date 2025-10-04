@@ -7,6 +7,7 @@ declare global {
     tolerance?: number
     interval?: number
     "include-all"?: boolean
+    url?:string
     proxies?: string[]
     hidden?: boolean
     filter?: string
