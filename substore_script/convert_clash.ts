@@ -21,7 +21,7 @@ const defAutoSelect: ProxyGroup = {
   interval: 60,
   url: "url: https://www.google.com/generate_204",
   "include-all": true,
-  hidden: true,
+  // hidden: true,
 }
 
 const autoSelect = [
