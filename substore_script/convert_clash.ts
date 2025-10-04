@@ -8,9 +8,9 @@
 
 import nameConvert from "./module/i18n"
 
-let { name, AIRegs, crt: usedef } = $arguments
+let { name, AIRegs, mode } = $arguments
 
-usedef ??= false
+mode ??= "create"
 name ??= "all"
 AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
 
@@ -186,7 +186,7 @@ add_proxies(config, airportNodeList)
 
 extend_AIProxyGroup(config, AIRegs)
 let autoSelectListInfo: AutoSelectListInfo
-if (usedef) autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
-else autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
+if (mode === "create") autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
+else autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
 change_proxyGroups(config, autoSelectListInfo)
 save_config(config)
