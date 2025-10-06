@@ -62,7 +62,7 @@ function add_proxies(config: Config, airportNodeList: AirportNodeList) {
   if (config["proxy-providers"] !== undefined) {
     delete config["proxy-providers"]
   }
-  config.proxies = airportNodeList
+  config = { airportNodeList, ...config }
   return true
 }
 // 扩展AI不能使用的地区
