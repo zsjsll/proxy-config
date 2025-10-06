@@ -54,16 +54,16 @@ async function get_airportNodeList() {
   })
 }
 // 获取配置模板
-function get_config() {
+function get_templateConfig() {
   return ProxyUtils.yaml.safeLoad($files[0])
 }
 // 添加机场节点
-function add_proxies(config: Config, airportNodeList: AirportNodeList) {
-  if (config["proxy-providers"] !== undefined) {
-    delete config["proxy-providers"]
+function add_proxies(templateConfig: Config, airportNodeList: AirportNodeList) {
+  if (templateConfig["proxy-providers"] !== undefined) {
+    delete templateConfig["proxy-providers"]
   }
-  config = { ...airportNodeList, ...config }
-  return true
+
+  return { proxies: airportNodeList, ...templateConfig }
 }
 // 扩展AI不能使用的地区
 function extend_AIProxyGroup(config: Config, regs: string[] | string) {
@@ -184,9 +184,8 @@ function save_config(config: Config) {
 }
 
 const airportNodeList = await get_airportNodeList()
-let config = get_config()
-
-add_proxies(config, airportNodeList)
+let template_config = get_templateConfig()
+const config = add_proxies(template_config, airportNodeList)
 
 extend_AIProxyGroup(config, AIRegs)
 let autoSelectListInfo: AutoSelectListInfo
