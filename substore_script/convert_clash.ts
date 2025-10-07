@@ -183,7 +183,7 @@ class Config {
       const changProxies = ["手动选择", "自动选择"].some((kw) => element.proxies?.some((val) => val.includes(kw)))
       if (changProxies) {
         for (const [index, val] of element.proxies!.entries()) {
-          if (val.includes("选择")) element.proxies![index] = `${element.proxies![index]}(${String(sum)})`
+          if (["手动选择", "自动选择"].some((kw) => val.includes(kw))) element.proxies![index] = `${element.proxies![index]}(${String(sum)})`
         }
       }
       // 在proxies中有 "手动选择"的 在最后添加上 节点选择
