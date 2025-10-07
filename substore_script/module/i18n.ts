@@ -1,58 +1,259 @@
-// prettier-ignore
-const FG = ['🇭🇰','🇲🇴','🇹🇼','🇯🇵','🇰🇷','🇸🇬','🇺🇸','🇬🇧','🇫🇷','🇩🇪','🇦🇺','🇦🇪','🇦🇫','🇦🇱','🇩🇿','🇦🇴','🇦🇷','🇦🇲','🇦🇹','🇦🇿','🇧🇭','🇧🇩','🇧🇾','🇧🇪','🇧🇿','🇧🇯','🇧🇹','🇧🇴','🇧🇦','🇧🇼','🇧🇷','🇻🇬','🇧🇳','🇧🇬','🇧🇫','🇧🇮','🇰🇭','🇨🇲','🇨🇦','🇨🇻','🇰🇾','🇨🇫','🇹🇩','🇨🇱','🇨🇴','🇰🇲','🇨🇬','🇨🇩','🇨🇷','🇭🇷','🇨🇾','🇨🇿','🇩🇰','🇩🇯','🇩🇴','🇪🇨','🇪🇬','🇸🇻','🇬🇶','🇪🇷','🇪🇪','🇪🇹','🇫🇯','🇫🇮','🇬🇦','🇬🇲','🇬🇪','🇬🇭','🇬🇷','🇬🇱','🇬🇹','🇬🇳','🇬🇾','🇭🇹','🇭🇳','🇭🇺','🇮🇸','🇮🇳','🇮🇩','🇮🇷','🇮🇶','🇮🇪','🇮🇲','🇮🇱','🇮🇹','🇨🇮','🇯🇲','🇯🇴','🇰🇿','🇰🇪','🇰🇼','🇰🇬','🇱🇦','🇱🇻','🇱🇧','🇱🇸','🇱🇷','🇱🇾','🇱🇹','🇱🇺','🇲🇰','🇲🇬','🇲🇼','🇲🇾','🇲🇻','🇲🇱','🇲🇹','🇲🇷','🇲🇺','🇲🇽','🇲🇩','🇲🇨','🇲🇳','🇲🇪','🇲🇦','🇲🇿','🇲🇲','🇳🇦','🇳🇵','🇳🇱','🇳🇿','🇳🇮','🇳🇪','🇳🇬','🇰🇵','🇳🇴','🇴🇲','🇵🇰','🇵🇦','🇵🇾','🇵🇪','🇵🇭','🇵🇹','🇵🇷','🇶🇦','🇷🇴','🇷🇺','🇷🇼','🇸🇲','🇸🇦','🇸🇳','🇷🇸','🇸🇱','🇸🇰','🇸🇮','🇸🇴','🇿🇦','🇪🇸','🇱🇰','🇸🇩','🇸🇷','🇸🇿','🇸🇪','🇨🇭','🇸🇾','🇹🇯','🇹🇿','🇹🇭','🇹🇬','🇹🇴','🇹🇹','🇹🇳','🇹🇷','🇹🇲','🇻🇮','🇺🇬','🇺🇦','🇺🇾','🇺🇿','🇻🇪','🇻🇳','🇾🇪','🇿🇲','🇿🇼','🇦🇩','🇷🇪','🇵🇱','🇬🇺','🇻🇦','🇱🇮','🇨🇼','🇸🇨','🇦🇶','🇬🇮','🇨🇺','🇫🇴','🇦🇽','🇧🇲','🇹🇱']
-// prettier-ignore
-const ISO = ['HK','MO','TW','JP','KR','SG','US','GB','FR','DE','AU','AE','AF','AL','DZ','AO','AR','AM','AT','AZ','BH','BD','BY','BE','BZ','BJ','BT','BO','BA','BW','BR','VG','BN','BG','BF','BI','KH','CM','CA','CV','KY','CF','TD','CL','CO','KM','CG','CD','CR','HR','CY','CZ','DK','DJ','DO','EC','EG','SV','GQ','ER','EE','ET','FJ','FI','GA','GM','GE','GH','GR','GL','GT','GN','GY','HT','HN','HU','IS','IN','ID','IR','IQ','IE','IM','IL','IT','CI','JM','JO','KZ','KE','KW','KG','LA','LV','LB','LS','LR','LY','LT','LU','MK','MG','MW','MY','MV','ML','MT','MR','MU','MX','MD','MC','MN','ME','MA','MZ','MM','NA','NP','NL','NZ','NI','NE','NG','KP','NO','OM','PK','PA','PY','PE','PH','PT','PR','QA','RO','RU','RW','SM','SA','SN','RS','SL','SK','SI','SO','ZA','ES','LK','SD','SR','SZ','SE','CH','SY','TJ','TZ','TH','TG','TO','TT','TN','TR','TM','VI','UG','UA','UY','UZ','VE','VN','YE','ZM','ZW','AD','RE','PL','GU','VA','LI','CW','SC','AQ','GI','CU','FO','AX','BM','TL'];
-// prettier-ignore
-const ZH = ['香港','澳门','台湾','日本','韩国','新加坡','美国','英国','法国','德国','澳大利亚','阿联酋','阿富汗','阿尔巴尼亚','阿尔及利亚','安哥拉','阿根廷','亚美尼亚','奥地利','阿塞拜疆','巴林','孟加拉国','白俄罗斯','比利时','伯利兹','贝宁','不丹','玻利维亚','波斯尼亚和黑塞哥维那','博茨瓦纳','巴西','英属维京群岛','文莱','保加利亚','布基纳法索','布隆迪','柬埔寨','喀麦隆','加拿大','佛得角','开曼群岛','中非共和国','乍得','智利','哥伦比亚','科摩罗','刚果(布)','刚果(金)','哥斯达黎加','克罗地亚','塞浦路斯','捷克','丹麦','吉布提','多米尼加共和国','厄瓜多尔','埃及','萨尔瓦多','赤道几内亚','厄立特里亚','爱沙尼亚','埃塞俄比亚','斐济','芬兰','加蓬','冈比亚','格鲁吉亚','加纳','希腊','格陵兰','危地马拉','几内亚','圭亚那','海地','洪都拉斯','匈牙利','冰岛','印度','印尼','伊朗','伊拉克','爱尔兰','马恩岛','以色列','意大利','科特迪瓦','牙买加','约旦','哈萨克斯坦','肯尼亚','科威特','吉尔吉斯斯坦','老挝','拉脱维亚','黎巴嫩','莱索托','利比里亚','利比亚','立陶宛','卢森堡','马其顿','马达加斯加','马拉维','马来','马尔代夫','马里','马耳他','毛利塔尼亚','毛里求斯','墨西哥','摩尔多瓦','摩纳哥','蒙古','黑山共和国','摩洛哥','莫桑比克','缅甸','纳米比亚','尼泊尔','荷兰','新西兰','尼加拉瓜','尼日尔','尼日利亚','朝鲜','挪威','阿曼','巴基斯坦','巴拿马','巴拉圭','秘鲁','菲律宾','葡萄牙','波多黎各','卡塔尔','罗马尼亚','俄罗斯','卢旺达','圣马力诺','沙特阿拉伯','塞内加尔','塞尔维亚','塞拉利昂','斯洛伐克','斯洛文尼亚','索马里','南非','西班牙','斯里兰卡','苏丹','苏里南','斯威士兰','瑞典','瑞士','叙利亚','塔吉克斯坦','坦桑尼亚','泰国','多哥','汤加','特立尼达和多巴哥','突尼斯','土耳其','土库曼斯坦','美属维尔京群岛','乌干达','乌克兰','乌拉圭','乌兹别克斯坦','委内瑞拉','越南','也门','赞比亚','津巴布韦','安道尔','留尼汪','波兰','关岛','梵蒂冈','列支敦士登','库拉索','塞舌尔','南极','直布罗陀','古巴','法罗群岛','奥兰群岛','百慕达','东帝汶'];
-// prettier-ignore
-const EN = ['Hong Kong','Macao','Taiwan','Japan','Korea','Singapore','United States','United Kingdom','France','Germany','Australia','Dubai','Afghanistan','Albania','Algeria','Angola','Argentina','Armenia','Austria','Azerbaijan','Bahrain','Bangladesh','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','British Virgin Islands','Brunei','Bulgaria','Burkina-faso','Burundi','Cambodia','Cameroon','Canada','CapeVerde','CaymanIslands','Central African Republic','Chad','Chile','Colombia','Comoros','Congo-Brazzaville','Congo-Kinshasa','CostaRica','Croatia','Cyprus','Czech Republic','Denmark','Djibouti','Dominican Republic','Ecuador','Egypt','EISalvador','Equatorial Guinea','Eritrea','Estonia','Ethiopia','Fiji','Finland','Gabon','Gambia','Georgia','Ghana','Greece','Greenland','Guatemala','Guinea','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Isle of Man','Israel','Italy','Ivory Coast','Jamaica','Jordan','Kazakstan','Kenya','Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Lithuania','Luxembourg','Macedonia','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Mauritania','Mauritius','Mexico','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar(Burma)','Namibia','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','NorthKorea','Norway','Oman','Pakistan','Panama','Paraguay','Peru','Philippines','Portugal','PuertoRico','Qatar','Romania','Russia','Rwanda','SanMarino','SaudiArabia','Senegal','Serbia','SierraLeone','Slovakia','Slovenia','Somalia','SouthAfrica','Spain','SriLanka','Sudan','Suriname','Swaziland','Sweden','Switzerland','Syria','Tajikstan','Tanzania','Thailand','Togo','Tonga','TrinidadandTobago','Tunisia','Turkey','Turkmenistan','U.S.Virgin Islands','Uganda','Ukraine','Uruguay','Uzbekistan','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe','Andorra','Reunion','Poland','Guam','Vatican','Liechtensteins','Curacao','Seychelles','Antarctica','Gibraltar','Cuba','Faroe Islands','Ahvenanmaa','Bermuda','Timor-Leste'];
+const obj = {
+  HK: { flag: "🇭🇰", zhName: "香港", enName: "Hong Kong" },
+  MO: { flag: "🇲🇴", zhName: "澳门", enName: "Macao" },
+  TW: { flag: "🇹🇼", zhName: "台湾", enName: "Taiwan" },
+  JP: { flag: "🇯🇵", zhName: "日本", enName: "Japan" },
+  KR: { flag: "🇰🇷", zhName: "韩国", enName: "Korea" },
+  SG: { flag: "🇸🇬", zhName: "新加坡", enName: "Singapore" },
+  US: { flag: "🇺🇸", zhName: "美国", enName: "United States" },
+  GB: { flag: "🇬🇧", zhName: "英国", enName: "United Kingdom" },
+  FR: { flag: "🇫🇷", zhName: "法国", enName: "France" },
+  DE: { flag: "🇩🇪", zhName: "德国", enName: "Germany" },
+  AU: { flag: "🇦🇺", zhName: "澳大利亚", enName: "Australia" },
+  AE: { flag: "🇦🇪", zhName: "阿联酋", enName: "Dubai" },
+  AF: { flag: "🇦🇫", zhName: "阿富汗", enName: "Afghanistan" },
+  AL: { flag: "🇦🇱", zhName: "阿尔巴尼亚", enName: "Albania" },
+  DZ: { flag: "🇩🇿", zhName: "阿尔及利亚", enName: "Algeria" },
+  AO: { flag: "🇦🇴", zhName: "安哥拉", enName: "Angola" },
+  AR: { flag: "🇦🇷", zhName: "阿根廷", enName: "Argentina" },
+  AM: { flag: "🇦🇲", zhName: "亚美尼亚", enName: "Armenia" },
+  AT: { flag: "🇦🇹", zhName: "奥地利", enName: "Austria" },
+  AZ: { flag: "🇦🇿", zhName: "阿塞拜疆", enName: "Azerbaijan" },
+  BH: { flag: "🇧🇭", zhName: "巴林", enName: "Bahrain" },
+  BD: { flag: "🇧🇩", zhName: "孟加拉国", enName: "Bangladesh" },
+  BY: { flag: "🇧🇾", zhName: "白俄罗斯", enName: "Belarus" },
+  BE: { flag: "🇧🇪", zhName: "比利时", enName: "Belgium" },
+  BZ: { flag: "🇧🇿", zhName: "伯利兹", enName: "Belize" },
+  BJ: { flag: "🇧🇯", zhName: "贝宁", enName: "Benin" },
+  BT: { flag: "🇧🇹", zhName: "不丹", enName: "Bhutan" },
+  BO: { flag: "🇧🇴", zhName: "玻利维亚", enName: "Bolivia" },
+  BA: { flag: "🇧🇦", zhName: "波斯尼亚和黑塞哥维那", enName: "Bosnia and Herzegovina" },
+  BW: { flag: "🇧🇼", zhName: "博茨瓦纳", enName: "Botswana" },
+  BR: { flag: "🇧🇷", zhName: "巴西", enName: "Brazil" },
+  VG: { flag: "🇻🇬", zhName: "英属维京群岛", enName: "British Virgin Islands" },
+  BN: { flag: "🇧🇳", zhName: "文莱", enName: "Brunei" },
+  BG: { flag: "🇧🇬", zhName: "保加利亚", enName: "Bulgaria" },
+  BF: { flag: "🇧🇫", zhName: "布基纳法索", enName: "Burkina-faso" },
+  BI: { flag: "🇧🇮", zhName: "布隆迪", enName: "Burundi" },
+  KH: { flag: "🇰🇭", zhName: "柬埔寨", enName: "Cambodia" },
+  CM: { flag: "🇨🇲", zhName: "喀麦隆", enName: "Cameroon" },
+  CA: { flag: "🇨🇦", zhName: "加拿大", enName: "Canada" },
+  CV: { flag: "🇨🇻", zhName: "佛得角", enName: "CapeVerde" },
+  KY: { flag: "🇰🇾", zhName: "开曼群岛", enName: "CaymanIslands" },
+  CF: { flag: "🇨🇫", zhName: "中非共和国", enName: "Central African Republic" },
+  TD: { flag: "🇹🇩", zhName: "乍得", enName: "Chad" },
+  CL: { flag: "🇨🇱", zhName: "智利", enName: "Chile" },
+  CO: { flag: "🇨🇴", zhName: "哥伦比亚", enName: "Colombia" },
+  KM: { flag: "🇰🇲", zhName: "科摩罗", enName: "Comoros" },
+  CG: { flag: "🇨🇬", zhName: "刚果(布)", enName: "Congo-Brazzaville" },
+  CD: { flag: "🇨🇩", zhName: "刚果(金)", enName: "Congo-Kinshasa" },
+  CR: { flag: "🇨🇷", zhName: "哥斯达黎加", enName: "CostaRica" },
+  HR: { flag: "🇭🇷", zhName: "克罗地亚", enName: "Croatia" },
+  CY: { flag: "🇨🇾", zhName: "塞浦路斯", enName: "Cyprus" },
+  CZ: { flag: "🇨🇿", zhName: "捷克", enName: "Czech Republic" },
+  DK: { flag: "🇩🇰", zhName: "丹麦", enName: "Denmark" },
+  DJ: { flag: "🇩🇯", zhName: "吉布提", enName: "Djibouti" },
+  DO: { flag: "🇩🇴", zhName: "多米尼加共和国", enName: "Dominican Republic" },
+  EC: { flag: "🇪🇨", zhName: "厄瓜多尔", enName: "Ecuador" },
+  EG: { flag: "🇪🇬", zhName: "埃及", enName: "Egypt" },
+  SV: { flag: "🇸🇻", zhName: "萨尔瓦多", enName: "EISalvador" },
+  GQ: { flag: "🇬🇶", zhName: "赤道几内亚", enName: "Equatorial Guinea" },
+  ER: { flag: "🇪🇷", zhName: "厄立特里亚", enName: "Eritrea" },
+  EE: { flag: "🇪🇪", zhName: "爱沙尼亚", enName: "Estonia" },
+  ET: { flag: "🇪🇹", zhName: "埃塞俄比亚", enName: "Ethiopia" },
+  FJ: { flag: "🇫🇯", zhName: "斐济", enName: "Fiji" },
+  FI: { flag: "🇫🇮", zhName: "芬兰", enName: "Finland" },
+  GA: { flag: "🇬🇦", zhName: "加蓬", enName: "Gabon" },
+  GM: { flag: "🇬🇲", zhName: "冈比亚", enName: "Gambia" },
+  GE: { flag: "🇬🇪", zhName: "格鲁吉亚", enName: "Georgia" },
+  GH: { flag: "🇬🇭", zhName: "加纳", enName: "Ghana" },
+  GR: { flag: "🇬🇷", zhName: "希腊", enName: "Greece" },
+  GL: { flag: "🇬🇱", zhName: "格陵兰", enName: "Greenland" },
+  GT: { flag: "🇬🇹", zhName: "危地马拉", enName: "Guatemala" },
+  GN: { flag: "🇬🇳", zhName: "几内亚", enName: "Guinea" },
+  GY: { flag: "🇬🇾", zhName: "圭亚那", enName: "Guyana" },
+  HT: { flag: "🇭🇹", zhName: "海地", enName: "Haiti" },
+  HN: { flag: "🇭🇳", zhName: "洪都拉斯", enName: "Honduras" },
+  HU: { flag: "🇭🇺", zhName: "匈牙利", enName: "Hungary" },
+  IS: { flag: "🇮🇸", zhName: "冰岛", enName: "Iceland" },
+  IN: { flag: "🇮🇳", zhName: "印度", enName: "India" },
+  ID: { flag: "🇮🇩", zhName: "印尼", enName: "Indonesia" },
+  IR: { flag: "🇮🇷", zhName: "伊朗", enName: "Iran" },
+  IQ: { flag: "🇮🇶", zhName: "伊拉克", enName: "Iraq" },
+  IE: { flag: "🇮🇪", zhName: "爱尔兰", enName: "Ireland" },
+  IM: { flag: "🇮🇲", zhName: "马恩岛", enName: "Isle of Man" },
+  IL: { flag: "🇮🇱", zhName: "以色列", enName: "Israel" },
+  IT: { flag: "🇮🇹", zhName: "意大利", enName: "Italy" },
+  CI: { flag: "🇨🇮", zhName: "科特迪瓦", enName: "Ivory Coast" },
+  JM: { flag: "🇯🇲", zhName: "牙买加", enName: "Jamaica" },
+  JO: { flag: "🇯🇴", zhName: "约旦", enName: "Jordan" },
+  KZ: { flag: "🇰🇿", zhName: "哈萨克斯坦", enName: "Kazakstan" },
+  KE: { flag: "🇰🇪", zhName: "肯尼亚", enName: "Kenya" },
+  KW: { flag: "🇰🇼  ", zhName: "科威特", enName: "Kuwait" },
+  KG: { flag: "🇰🇬", zhName: "吉尔吉斯斯坦", enName: "Kyrgyzstan" },
+  LA: { flag: "🇱🇦", zhName: "老挝", enName: "Laos" },
+  LV: { flag: "🇱🇻", zhName: "拉脱维亚", enName: "Latvia" },
+  LB: { flag: "🇱🇧", zhName: "黎巴嫩", enName: "Lebanon" },
+  LS: { flag: "🇱🇸", zhName: "莱索托", enName: "Lesotho" },
+  LR: { flag: "🇱🇷", zhName: "利比里亚", enName: "Liberia" },
+  LY: { flag: "🇱🇾", zhName: "利比亚", enName: "Libya" },
+  LT: { flag: "🇱🇹", zhName: "立陶宛", enName: "Lithuania" },
+  LU: { flag: "🇱🇺", zhName: "卢森堡", enName: "Luxembourg" },
+  MK: { flag: "🇲🇰", zhName: "马其顿", enName: "Macedonia" },
+  MG: { flag: "🇲🇬", zhName: "马达加斯加", enName: "Madagascar" },
+  MW: { flag: "🇲🇼", zhName: "马拉维", enName: "Malawi" },
+  MY: { flag: "🇲🇾", zhName: "马来", enName: "Malaysia" },
+  MV: { flag: "🇲🇻", zhName: "马尔代夫", enName: "Maldives" },
+  ML: { flag: "🇲🇱", zhName: "马里", enName: "Mali" },
+  MT: { flag: "🇲🇹", zhName: "马耳他", enName: "Malta" },
+  MR: { flag: "🇲🇷", zhName: "毛利塔尼亚", enName: "Mauritania" },
+  MU: { flag: "🇲🇺", zhName: "毛里求斯", enName: "Mauritius" },
+  MX: { flag: "🇲🇽", zhName: "墨西哥", enName: "Mexico" },
+  MD: { flag: "🇲🇩", zhName: "摩尔多瓦", enName: "Moldova" },
+  MC: { flag: "🇲🇨", zhName: "摩纳哥", enName: "Monaco" },
+  MN: { flag: "🇲🇳", zhName: "蒙古", enName: "Mongolia" },
+  ME: { flag: "🇲🇪", zhName: "黑山共和国", enName: "Montenegro" },
+  MA: { flag: "🇲🇦", zhName: "摩洛哥", enName: "Morocco" },
+  MZ: { flag: "🇲🇿", zhName: "莫桑比克", enName: "Mozambique" },
+  MM: { flag: "🇲🇲", zhName: "缅甸", enName: "Myanmar(Burma)" },
+  NA: { flag: "🇳🇦", zhName: "纳米比亚", enName: "Namibia" },
+  NP: { flag: "🇳🇵", zhName: "尼泊尔", enName: "Nepal" },
+  NL: { flag: "🇳🇱", zhName: "荷兰", enName: "Netherlands" },
+  NZ: { flag: "🇳🇿", zhName: "新西兰", enName: "New Zealand" },
+  NI: { flag: "🇳🇮", zhName: "尼加拉瓜", enName: "Nicaragua" },
+  NE: { flag: "🇳🇪", zhName: "尼日尔", enName: "Niger" },
+  NG: { flag: "🇳🇬", zhName: "尼日利亚", enName: "Nigeria" },
+  KP: { flag: "🇰🇵", zhName: "朝鲜", enName: "NorthKorea" },
+  NO: { flag: "🇳🇴", zhName: "挪威", enName: "Norway" },
+  OM: { flag: "🇴🇲", zhName: "阿曼", enName: "Oman" },
+  PK: { flag: "🇵🇰", zhName: "巴基斯坦", enName: "Pakistan" },
+  PA: { flag: "🇵🇦", zhName: "巴拿马", enName: "Panama" },
+  PY: { flag: "🇵🇾", zhName: "巴拉圭", enName: "Paraguay" },
+  PE: { flag: "🇵🇪", zhName: "秘鲁", enName: "Peru" },
+  PH: { flag: "🇵🇭", zhName: "菲律宾", enName: "Philippines" },
+  PT: { flag: "🇵🇹", zhName: "葡萄牙", enName: "Portugal" },
+  PR: { flag: "🇵🇷", zhName: "波多黎各", enName: "PuertoRico" },
+  QA: { flag: "🇶🇦", zhName: "卡塔尔", enName: "Qatar" },
+  RO: { flag: "🇷🇴", zhName: "罗马尼亚", enName: "Romania" },
+  RU: { flag: "🇷🇺", zhName: "俄罗斯", enName: "Russia" },
+  RW: { flag: "🇷🇼", zhName: "卢旺达", enName: "Rwanda" },
+  SM: { flag: "🇸🇲", zhName: "圣马力诺", enName: "SanMarino" },
+  SA: { flag: "🇸🇦", zhName: "沙特阿拉伯", enName: "SaudiArabia" },
+  SN: { flag: "🇸🇳", zhName: "塞内加尔", enName: "Senegal" },
+  RS: { flag: "🇷🇸", zhName: "塞尔维亚", enName: "Serbia" },
+  SL: { flag: "🇸🇱", zhName: "塞拉利昂", enName: "SierraLeone" },
+  SK: { flag: "🇸🇰", zhName: "斯洛伐克", enName: "Slovakia" },
+  SI: { flag: "🇸🇮", zhName: "斯洛文尼亚", enName: "Slovenia" },
+  SO: { flag: "🇸🇴", zhName: "索马里", enName: "Somalia" },
+  ZA: { flag: "🇿🇦", zhName: "南非", enName: "SouthAfrica" },
+  ES: { flag: "🇪🇸", zhName: "西班牙", enName: "Spain" },
+  LK: { flag: "🇱🇰", zhName: "斯里兰卡", enName: "SriLanka" },
+  SD: { flag: "🇸🇩", zhName: "苏丹", enName: "Sudan" },
+  SR: { flag: "🇸🇷", zhName: "苏里南", enName: "Suriname" },
+  SZ: { flag: "🇸🇿", zhName: "斯威士兰", enName: "Swaziland" },
+  SE: { flag: "🇸🇪", zhName: "瑞典", enName: "Sweden" },
+  CH: { flag: "🇨🇭", zhName: "瑞士", enName: "Switzerland" },
+  SY: { flag: "🇸🇾", zhName: "叙利亚", enName: "Syria" },
+  TJ: { flag: "🇹🇯", zhName: "塔吉克斯坦", enName: "Tajikstan" },
+  TZ: { flag: "🇹🇿", zhName: "坦桑尼亚", enName: "Tanzania" },
+  TH: { flag: "🇹🇭", zhName: "泰国", enName: "Thailand" },
+  TG: { flag: "🇹🇬", zhName: "多哥", enName: "Togo" },
+  TO: { flag: "🇹🇴", zhName: "汤加", enName: "Tonga" },
+  TT: { flag: "🇹🇹", zhName: "特立尼达和多巴哥", enName: "TrinidadandTobago" },
+  TN: { flag: "🇹🇳", zhName: "突尼斯", enName: "Tunisia" },
+  TR: { flag: "🇹🇷", zhName: "土耳其", enName: "Turkey" },
+  TM: { flag: "🇹🇲", zhName: "土库曼斯坦", enName: "Turkmenistan" },
+  VI: { flag: "🇻🇮", zhName: "美属维尔京群岛", enName: "U.S.Virgin Islands" },
+  UG: { flag: "🇺🇬", zhName: "乌干达", enName: "Uganda" },
+  UA: { flag: "🇺🇦", zhName: "乌克兰", enName: "Ukraine" },
+  UY: { flag: "🇺🇾", zhName: "乌拉圭", enName: "Uruguay" },
+  UZ: { flag: "🇺🇿", zhName: "乌兹别克斯坦", enName: "Uzbekistan" },
+  VE: { flag: "🇻🇪", zhName: "委内瑞拉", enName: "Venezuela" },
+  VN: { flag: "🇻🇳", zhName: "越南", enName: "Vietnam" },
+  YE: { flag: "🇾🇪", zhName: "也门", enName: "Yemen" },
+  ZM: { flag: "🇿🇲", zhName: "赞比亚", enName: "Zambia" },
+  ZW: { flag: "🇿🇼", zhName: "津巴布韦", enName: "Zimbabwe" },
+  AD: { flag: "🇦🇩", zhName: "安道尔", enName: "Andorra" },
+  RE: { flag: "🇷🇪", zhName: "留尼汪", enName: "Reunion" },
+  PL: { flag: "🇵🇱", zhName: "波兰", enName: "Poland" },
+  GU: { flag: "🇬🇺", zhName: "关岛", enName: "Guam" },
+  VA: { flag: "🇻🇦", zhName: "梵蒂冈", enName: "Vatican" },
+  LI: { flag: "🇱🇮", zhName: "列支敦士登", enName: "Liechtensteins" },
+  CW: { flag: "🇨🇼", zhName: "库拉索", enName: "Curacao" },
+  SC: { flag: "🇸🇨", zhName: "塞舌尔", enName: "Seychelles" },
+  AQ: { flag: "🇦🇶", zhName: "南极", enName: "Antarctica" },
+  GI: { flag: "🇬🇮", zhName: "直布罗陀", enName: "Gibraltar" },
+  CU: { flag: "🇨🇺", zhName: "古巴", enName: "Cuba" },
+  FO: { flag: "🇫🇴", zhName: "法罗群岛", enName: "Faroe Islands" },
+  AX: { flag: "🇦🇽", zhName: "奥兰群岛", enName: "Ahvenanmaa" },
+  BM: { flag: "🇧🇲", zhName: "百慕达", enName: "Bermuda" },
+  TL: { flag: "🇹🇱", zhName: "东帝汶", enName: "Timor-Leste" },
+}
 
-type Flag = "en" | "zh" | "fg" | "iso" | "regexp"
+const isoCodes = new Map(Object.entries(obj))
+
+type IsoCodes = typeof isoCodes
+
+type Obj = typeof obj
+
+type ExtraProps = {
+  index: number
+  isoCode: string
+  regExp: string
+}
+type ExtIsoCode = Obj[keyof Obj] & ExtraProps
 
 class ProxyNameConvert {
-  private readonly fg
-  private readonly isoName
-  private readonly zhName
-  private readonly enName
-
-  constructor() {
-    this.fg = FG
-    this.isoName = ISO
-    this.zhName = ZH
-    this.enName = EN
-  }
-  private create_regExp(index: number): RegExp {
-    const cvt_fg = () => this.fg[index]
-    const cvt_isoName = () => this.isoName[index]
-    const cvt_zhName = () => this.zhName[index]
-    const cvt_enName = () => this.enName[index].replace(/\s/g, `\s?`)
-
-    const st = `${cvt_fg()}|${cvt_isoName()}|${cvt_zhName()}|${cvt_enName()}`
-    return new RegExp(st, "gi")
+  private readonly isoCodes: ExtIsoCode[]
+  constructor(isoCode: IsoCodes) {
+    this.isoCodes = this.ExIsoCodes(isoCode)
   }
 
-  get_NameIndex(serverName: string) {
-    const count = this.fg.length
-    for (let index = 0; index < count; index++) {
-      const regExp = this.create_regExp(index)
-      if (regExp.test(serverName)) return index
+  private isoToFlagEmoji(isoCode: string) {
+    if (typeof isoCode !== "string" || isoCode.length !== 2) {
+      throw new Error("isoCode 错误")
     }
+    const code = isoCode.toUpperCase()
+    const OFFSET = 127397
+    // 逐个字符转换并拼接
+    const flag = code
+      .split("")
+      .map((char) => {
+        const codePoint = (char.codePointAt(0) as number) + OFFSET
+        // String.fromCodePoint() 将码点转回字符串（区域指示符号）
+        return String.fromCodePoint(codePoint)
+      })
+      .join("") // 将两个区域指示符号拼接起来
+
+    return flag
   }
 
-  get_Name(nameIndex: number, flag: Flag) {
-    switch (flag) {
-      case "zh":
-        return this.zhName[nameIndex]
-      case "en":
-        return this.enName[nameIndex]
-      case "fg":
-        return this.fg[nameIndex]
-      case "iso":
-        return this.isoName[nameIndex]
-      case "regexp":
-        return this.create_regExp(nameIndex).source
+  private ExIsoCodes(iso: IsoCodes): ExtIsoCode[] {
+    const extIsoCodes: ExtIsoCode[] = []
+    let i = 0
+    for (const [key, val] of iso) {
+      const isoCode = key
+      const flag = this.isoToFlagEmoji(isoCode)
+      const zhName = val.zhName
+      const enName = val.enName.replace(/\s/g, `\s?`)
+      const regExp = `${flag}|${isoCode}|${zhName}|${enName}`
+      const index = i
+      i++
+      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp })
+    }
+    // return new RegExp(regExp, "gi")
+    return extIsoCodes
+  }
+
+  getIsoCode(serverName: string) {
+    for (const obj of this.isoCodes) {
+      const regExp: RegExp = new RegExp(obj.regExp, "gi")
+      if (regExp.test(serverName)) return obj
     }
   }
 }
 
-export default new ProxyNameConvert()
+export default new ProxyNameConvert(isoCodes)
+// const t = new ProxyNameConvert(isoCodes)
+
+// console.log(t.getIsoCode("TW"))

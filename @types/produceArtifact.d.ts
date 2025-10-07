@@ -1,5 +1,5 @@
 declare global {
-  interface Sub {
+  interface SubInfo {
     name: string
     type: "subscription" | "collection"
     platform: "ClashMeta" | "sing-box"
@@ -28,7 +28,7 @@ declare global {
 
   type AirportNodeList = AriportNode[]
 
-  function produceArtifact(sub: Sub): Promise<AirportNodeList>
+  function produceArtifact(sub: SubInfo): Promise<AirportNodeList>
 }
 
 export {}

@@ -8,188 +8,211 @@
 
 import nameConvert from "./module/i18n"
 
-type Mode = "create" | "default"
+let { name } = $arguments
 
-let { name, AIRegs } = $arguments
-
-let mode: Mode = $arguments.mode
-
-mode ??= "create"
 name ??= "ariport"
-AIRegs ??= ["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
+const AINodeExcludeArea = ["HK", "RU"]
 
-const defAutoSelect: ProxyGroup = {
-  name: `template`,
-  type: "url-test",
-  tolerance: 20,
-  interval: 60,
-  url: "url: https://www.google.com/generate_204",
-  "include-all": true,
-  // hidden: true,
-}
-
-const autoSelect = [
-  { name: "🇭🇰 香港节点", filter: "(?i)(🇭🇰|港|hk|hong ?kong)" },
-  { name: "🇲🇴 澳门节点", filter: "(?i)(🇲🇴|澳门|MO|Macao)" },
-  { name: "🇹🇼 台湾节点", filter: "(?i)(🇹🇼|台|tw|tai ?wan)" },
-  { name: "🇯🇵 日本节点", filter: "(?i)(🇯🇵|日|jp|japan)" },
-  { name: "🇰🇷 韩国节点", filter: "(?i)(🇰🇷|韩|kr|korean)" },
-  { name: "🇸🇬 新加坡节点", filter: "(?i)(🇸🇬|新|sg|singapore)" },
-  { name: "🇺🇸 美国节点", filter: "(?i)(🇺🇸|美|us|united ?states)" },
-  { name: "🇬🇧 英国节点", filter: "(?i)(🇬🇧|英|GB|United ?Kingdom)" },
-  { name: "🇫🇷 法国节点", filter: "(?i)(🇫🇷|法|fr|France)" },
-  { name: "🇩🇪 德国节点", filter: "(?i)(🇩🇪|德|DE|Germany)" },
-  { name: "🇦🇱 澳大利亚节点", filter: "(?i)(🇦🇱|澳大利亚|澳洲|AL|Australia)" },
-]
-
-async function get_airportNodeList() {
-  return await produceArtifact({
-    name,
-    type: "collection",
-    platform: "ClashMeta",
-    produceType: "internal",
-    produceOpts: {
-      "include-unsupported-proxy": true,
-    },
-  })
-}
-// 获取配置模板
-function get_templateConfig() {
-  return ProxyUtils.yaml.safeLoad($files[0])
-}
-// 添加机场节点
-function add_proxies(templateConfig: Config, airportNodeList: AirportNodeList) {
-  if (templateConfig["proxy-providers"] !== undefined) {
-    delete templateConfig["proxy-providers"]
+class Subscription {
+  private readonly subInfo: SubInfo
+  private readonly proxies: Promise<AirportNodeList>
+  private readonly autoSelectTemplate: ProxyGroup = {
+    name: `template`,
+    type: "url-test",
+    tolerance: 20,
+    interval: 60,
+    url: "https://www.google.com/generate_204",
+    "include-all": true,
+    hidden: true,
+  }
+  private readonly proxyGroups: ProxyGroup[] = []
+  private readonly nameList: string[] = []
+  private sum: number = 0
+  constructor(subName: string) {
+    this.subInfo = {
+      name: subName,
+      type: "collection",
+      platform: "ClashMeta",
+      produceType: "internal",
+      produceOpts: {
+        "include-unsupported-proxy": true,
+      },
+    }
+    this.proxies = this.get_Proxies()
   }
 
-  return { proxies: airportNodeList, ...templateConfig }
-}
-// 扩展AI不能使用的地区
-function extend_AIProxyGroup(config: Config, regs: string[] | string) {
-  config["proxy-groups"].forEach((v) => {
-    if (v.name.includes("AI节点")) {
-      if (regs.length !== 0) {
-        if (typeof regs !== "string") {
-          v["exclude-filter"] = regs.join("|")
+  public async get_Proxies() {
+    return await produceArtifact(this.subInfo)
+  }
+  // 获取机场的所有节点的名字Index
+  public async getAreaInfoList(): Promise<AreaInfo[]> {
+    const proxies = await this.proxies
+
+    let areaInfoList = proxies.map((element) => {
+      const a = nameConvert.getIsoCode(element.name)
+      const b = { ...a!, count: 1 }
+      return b
+    })
+    // 排序
+    areaInfoList = areaInfoList.sort((a, b) => {
+      if (typeof a.index === "undefined") return 1
+      if (typeof b.index === "undefined") return -1
+      return a.index - b.index
+    })
+
+    // 转存Map
+    const map = areaInfoList.reduce((prev: Map<number, (typeof areaInfoList)[number]>, curr) => {
+      const key = curr.index
+      if (prev.has(key)) {
+        const obj = prev.get(key)!
+        obj.count = obj.count + 1
+      } else prev.set(key, curr)
+
+      return prev
+    }, new Map())
+    const a = [...map.values()]
+    // a.at(-1)!.isoCode ??= "OTHER" //给other 个名字
+    // console.log(a)
+
+    return a
+  }
+
+  public createProxyGroups(areaInfoList: AreaInfo[], num: number = 0) {
+    const allRegexplist: string[] = []
+    // const nameList: string[] = []
+    // const proxyGroups: ProxyGroup[] = []
+    // let sum = 0
+    for (const element of areaInfoList) {
+      const proxyGroup = { ...this.autoSelectTemplate }
+      if (element.count <= num) {
+        areaInfoList.at(-1)!.count = areaInfoList.at(-1)!.count + element.count
+      } else {
+        if (typeof element.index !== "undefined") {
+          proxyGroup.name = `${element.flag} ${element.zhName}节点(${String(element.count)})`
+          proxyGroup.filter = `(?i)(${element.regExp})`
+          allRegexplist.push(element.regExp)
+          this.nameList.push(proxyGroup.name)
+          this.proxyGroups.push(proxyGroup)
+          this.sum = this.sum + element.count
         } else {
-          v["exclude-filter"] = regs
+          proxyGroup.name = `❓ 其他节点(${String(element.count)})`
+          proxyGroup["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
+          this.nameList.push(proxyGroup.name)
+          this.proxyGroups.push(proxyGroup)
+          this.sum = this.sum + element.count
         }
       }
     }
-  })
+
+    return this.proxyGroups
+  }
 }
 
-// 获取机场的所有节点的名字Index
-function get_nameIndexList(list: AirportNodeList) {
-  let tempSet: Set<undefined | number> = new Set()
-  list.forEach((element) => {
-    const nameIndex = nameConvert.get_NameIndex(element.name)
-    tempSet.add(nameIndex)
-  })
-  const nameIndexList = [...tempSet].sort((a, b) => {
-    if (typeof a === "undefined") return 1
-    if (typeof b === "undefined") return -1
-    return a - b
-  })
-
-  return nameIndexList
+interface AreaInfo {
+  count: number
+  flag: string
+  zhName: string
+  enName: string
+  index: number
+  isoCode: string
+  regExp: string
 }
 
-interface AutoSelectListInfo {
-  autoSelectList: ProxyGroup[]
-  autoSelectNameList: string[]
-}
-
-// 根据机场信息，创建自动选择的节点集群
-function create_autoSelectListInfo(airportNodeList: AirportNodeList): AutoSelectListInfo {
-  const nameIndexList = get_nameIndexList(airportNodeList)
-
-  const allRegexplist: string[] = []
-  const autoSelectList: ProxyGroup[] = []
-  const autoSelectNameList: string[] = []
-  nameIndexList.forEach((val) => {
-    const autoSelect = { ...defAutoSelect }
-    if (typeof val !== "undefined") {
-      const zhName = nameConvert.get_Name(val, "zh")
-      const enName = nameConvert.get_Name(val, "en")
-      const flag = nameConvert.get_Name(val, "fg")
-      const regexp = nameConvert.get_Name(val, "regexp")
-
-      autoSelect.name = `${flag} ${zhName}节点`
-      autoSelect.filter = `(?i)(${regexp})`
-      allRegexplist.push(regexp)
-      autoSelectNameList.push(autoSelect.name)
-      autoSelectList.push(autoSelect)
-    } else {
-      autoSelect.name = "❓ 其他节点"
-      autoSelect["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
-      autoSelectNameList.push(autoSelect.name)
-      autoSelectList.push(autoSelect)
+class Config {
+  private config: globalThis.Config
+  private AINodeExcludeArea = AINodeExcludeArea
+  // 获取配置模板
+  constructor() {
+    this.config = ProxyUtils.yaml.safeLoad($files[0])
+  }
+  public delProxyProviders() {
+    if (this.config["proxy-providers"] !== undefined) {
+      delete this.config["proxy-providers"]
     }
-  })
+  }
+  public addProxies(Subscription: AirportNodeList) {
+    this.config = { proxies: Subscription, ...this.config }
+  }
+  // 扩展AI不能使用的地区
+  public extendAIProxyGroup(areaInfoList: AreaInfo[]) {
+    const aiAreaList = areaInfoList.filter((v) => this.AINodeExcludeArea.every((kw) => v.isoCode !== kw))
+    const filter = aiAreaList.map((v) => v.regExp)
+    const sum = aiAreaList.reduce((prev, curr) => {
+      if (typeof curr.isoCode !== "undefined") {
+        console.log(curr.isoCode, curr.count)
+        prev = prev + curr.count
+      }
+      return prev
+    }, 0)
 
-  return { autoSelectList, autoSelectNameList }
+    console.log(filter)
+    console.log(sum)
+
+    this.config["proxy-groups"].forEach((v) => {
+      if (v.name.includes("AI节点")) {
+        v.name = `${v.name}(${String(sum)})`
+        v.filter = `(?i)(${filter.join("|")})`
+      }
+
+      if (v.proxies?.some((val) => val.includes("AI节点"))) {
+        for (const [index, val] of v.proxies!.entries()) {
+          if (val.includes("AI节点")) v.proxies![index] = `${v.proxies![index]}(${String(sum)})`
+        }
+      }
+    })
+  }
+
+  public changeProxyGroups(proxyGroups: ProxyGroup[]) {
+    const nameList = proxyGroups.map((v) => v.name)
+    let otherSum = 0
+    let nodeSum = 0
+    proxyGroups.forEach((v) => {
+      if (!v.name.includes("其他节点")) {
+        nodeSum = nodeSum + Number((v.name.match(/\((\d+)\)/) as RegExpMatchArray)[1])
+      } else {
+        otherSum = otherSum + Number((v.name.match(/\((\d+)\)/) as RegExpMatchArray)[1])
+      }
+    })
+
+    const sum = otherSum + nodeSum
+    this.config["proxy-groups"].forEach((element) => {
+      // 在 手动选择 和 自动选择 修改名 添加计数
+      const changeName = ["手动选择", "自动选择"].some((kw) => element.name.includes(kw))
+      if (changeName) element.name = `${element.name}(${String(sum)})`
+      // 在proxies中的 手动选择 和 自动选择 修改名 添加计数
+      const changProxies = ["手动选择", "自动选择"].some((kw) => element.proxies?.some((val) => val.includes(kw)))
+      if (changProxies) {
+        for (const [index, val] of element.proxies!.entries()) {
+          if (val.includes("选择")) element.proxies![index] = `${element.proxies![index]}(${String(sum)})`
+        }
+      }
+      // 在proxies中有 "手动选择"的 在最后添加上 节点选择
+      const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
+      if (isAdd) element.proxies?.push(...nameList)
+    })
+
+    this.config["proxy-groups"].push(...proxyGroups)
+  }
+
+  // 写入信息
+  public saveConfig() {
+    $content = ProxyUtils.yaml.safeDump(this.config)
+  }
 }
 
-function default_AutoSelectListInfo(airportNodeList: AirportNodeList): AutoSelectListInfo {
-  const temp_autoSelectList: ProxyGroup[] = autoSelect.map((e) => {
-    return { ...defAutoSelect, ...e }
-  })
-  const nameIndexList = get_nameIndexList(airportNodeList).filter((ele) => typeof ele !== "undefined")
+const config = new Config()
 
-  const fglist = nameIndexList.map((element) => nameConvert.get_Name(element, "fg"))
+config.delProxyProviders()
+const sub = new Subscription(name)
 
-  const autoSelectList = temp_autoSelectList.filter((element) => {
-    const fgMatchs = element.name.match(/^(..)/u)
-    if (fgMatchs !== null) {
-      const fg = fgMatchs[1]
-      return fglist.includes(fg)
-    } else throw new Error("filter格式出错")
-  })
+const proxies = await sub.get_Proxies()
+config.addProxies(proxies)
 
-  const allRegexplist: string[] = autoSelect.map((e) => {
-    const filter = e.filter.match(/^\(.*\((.*?)\)/)
+const areaInfoList = await sub.getAreaInfoList()
+const proxyGroups = sub.createProxyGroups(areaInfoList)
 
-    if (filter !== null) return filter[1]
-    else throw new Error("filter格式出错")
-  })
+config.changeProxyGroups(proxyGroups)
 
-  const otherAutoSelect: ProxyGroup = { ...defAutoSelect, ...{ name: "❓ 其他节点", "exclude-filter": `(?i)${allRegexplist.join("|")}` } }
-  autoSelectList.push(otherAutoSelect)
+config.extendAIProxyGroup(areaInfoList)
 
-  const autoSelectNameList: string[] = autoSelectList.map((e) => e.name)
-
-  return { autoSelectNameList, autoSelectList }
-}
-
-// 写入信息到 proxy—groups
-function change_proxyGroups(config: Config, autoSelectListInfo: AutoSelectListInfo) {
-  config["proxy-groups"].forEach((element) => {
-    // const isAdd = ["手动选择"].some((kw) => element.proxies?.includes(kw))
-    const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
-    if (isAdd) {
-      element.proxies?.push(...autoSelectListInfo.autoSelectNameList)
-    }
-  })
-
-  config["proxy-groups"].push(...autoSelectListInfo.autoSelectList)
-
-  // config["cccc"] = autoSelectListInfo.autoSelectNameList
-}
-
-function save_config(config: Config) {
-  $content = ProxyUtils.yaml.safeDump(config)
-  return true
-}
-
-const airportNodeList = await get_airportNodeList()
-let template_config = get_templateConfig()
-const config = add_proxies(template_config, airportNodeList)
-
-extend_AIProxyGroup(config, AIRegs)
-let autoSelectListInfo: AutoSelectListInfo
-if (mode === "create") autoSelectListInfo = create_autoSelectListInfo(airportNodeList)
-else autoSelectListInfo = default_AutoSelectListInfo(airportNodeList)
-change_proxyGroups(config, autoSelectListInfo)
-save_config(config)
+config.saveConfig()
