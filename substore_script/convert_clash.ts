@@ -224,6 +224,6 @@ const proxyGroups = sub.createProxyGroups(areaInfoList)
 
 config.changeProxyGroups(proxyGroups)
 
-// config.extendAIProxyGroup(areaInfoList)
+config.extendAIProxyGroup(areaInfoList)
 
 config.saveConfig()
