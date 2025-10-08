@@ -1,25 +1,30 @@
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&ai=HK|RU|JP
+// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&ai=HK|RU|JP&num=2
 
 // 本脚本 可以传入参数：
 //  [name] 为 substore 的订阅组合订阅名字
 // [ai] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
+// [num] 最小成群数量，默认为1 表示1个都成群
 
 import nameConvert from "./module/i18n"
 
-let { name, ai } = $arguments
+let { name, ai, num } = $arguments
 
 name ??= "ariport"
-
 let AINodeExcludeArea = ["HK", "RU"]
+let lessGroupCount = 1
+
 if (typeof ai === "string") {
   AINodeExcludeArea = ai.split(/[|, ]/)
-  console.log("---->[AINodeExcludeArea]<----17", AINodeExcludeArea)
+}
 
+if (typeof num === "string") {
+  lessGroupCount = Number(num)
 }
 
 class Subscription {
   private readonly subInfo: SubInfo
+  private readonly lessGroupCount: number = lessGroupCount
   private readonly proxies: Promise<AirportNodeList>
   private readonly autoSelectTemplate: ProxyGroup = {
     name: `template`,
@@ -89,7 +94,7 @@ class Subscription {
     // let sum = 0
     for (const element of areaInfoList) {
       const proxyGroup = { ...this.autoSelectTemplate }
-      if (element.count <= num) {
+      if (element.count < this.lessGroupCount) {
         areaInfoList.at(-1)!.count = areaInfoList.at(-1)!.count + element.count
       } else {
         if (typeof element.index !== "undefined") {

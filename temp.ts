@@ -1,5 +1,6 @@
-const a = "123|444,555 666"
+const text = "apple,banana|cherry ddd";
+// 匹配逗号 OR 竖线作为分隔符
+const correctSplit = text.split(/,|\||\s/);
 
-const b = a.split(/[|, ]/)
-
-console.log(b)
+console.log(correctSplit);
+// 输出：['apple', 'banana', 'cherry']
