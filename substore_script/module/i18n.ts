@@ -258,7 +258,7 @@ class ProxyNameConvert {
 }
 
 export default new ProxyNameConvert(isoCodes)
-const t = new ProxyNameConvert(isoCodes)
+// const t = new ProxyNameConvert(isoCodes)
 
-console.log(t.getIsoCode("ER"))
-console.log(t.getIsoCode("HK"))
+// console.log(t.getIsoCode("ER"))
+// console.log(t.getIsoCode("HK"))
