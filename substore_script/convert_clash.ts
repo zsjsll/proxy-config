@@ -162,7 +162,7 @@ class Config {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
         // v.filter = `(?i)(${filter.join("|")})`
-        v.filter = `(?i)(美国)})`
+        v.filter = `(?i)(美国)`
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
 
