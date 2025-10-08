@@ -88,14 +88,14 @@ class Subscription {
       } else {
         if (typeof element.index !== "undefined") {
           proxyGroup.name = `${element.flag} ${element.zhName}节点(${String(element.count)})`
-          proxyGroup.filter = `(${element.regExp})`
+          proxyGroup.filter = `(?i)(${element.regExp})`
           allRegexplist.push(element.regExp)
           this.nameList.push(proxyGroup.name)
           this.proxyGroups.push(proxyGroup)
           this.sum = this.sum + element.count
         } else {
           proxyGroup.name = `❓ 其他节点(${String(element.count)})`
-          proxyGroup["exclude-filter"] = `${allRegexplist.join("|")}`
+          proxyGroup["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
           this.nameList.push(proxyGroup.name)
           this.proxyGroups.push(proxyGroup)
           this.sum = this.sum + element.count
@@ -150,7 +150,7 @@ class Config {
     this.config["proxy-groups"].forEach((v) => {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
-        v.filter = `(${filter.join("|")})`
+        v.filter = `(?i)(${filter.join("|")})`
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
 
