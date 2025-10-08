@@ -5,7 +5,7 @@ import { performance } from "perf_hooks"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
-const debug = process.argv.includes("--debug")
+const isDebug = process.argv.includes("--debug")
 const entryDir = "./substore_script"
 const entryPoints = await fg(`${entryDir}/*.ts`)
 const outDir = entryDir
@@ -48,8 +48,8 @@ const baseOptions: esbuild.BuildOptions = {
   logLevel: "info",
   // charset: "utf8",
 
-  ...(debug && { drop: ["console", "debugger"] }),
   plugins: [TimingPlugin()],
+  ...(!isDebug && { drop: ["console", "debugger"] }),
 
   ...(isMinify && {
     minify: true, // 压缩代码

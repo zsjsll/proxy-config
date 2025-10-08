@@ -5,6 +5,7 @@
 //  [name] 为 substore 的订阅组合订阅名字
 // [ai] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 // [num] 最小成群数量，默认为1 表示1个都成群
+// [isHide] 隐藏所有自动选择的节点
 
 import nameConvert from "./module/i18n"
 

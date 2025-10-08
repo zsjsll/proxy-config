@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpx tsx esbuild.config.ts --minify",
-    "watch": "pnpx tsx esbuild.config.ts -w --minify --debug"
+    "watch": "pnpx tsx esbuild.config.ts -w --debug"
   },
   "keywords": [],
   "author": "",
