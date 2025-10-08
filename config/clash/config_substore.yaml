@@ -168,8 +168,19 @@ proxy-groups:
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, url: https://www.google.com/generate_204, include-all: true }
-  - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)" }
+  - name: ♻️ 自动选择
+    type: url-test
+    tolerance: 20
+    interval: 60
+    url: https://www.google.com/generate_204
+    include-all: true
+
+  - name: 💡 AI节点
+    type: url-test
+    tolerance: 20
+    interval: 60
+    url: https://www.google.com/generate_204
+    exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"
 
 rules:
   - RULE-SET,custom_lan_ip,🏠 本地SRC,src

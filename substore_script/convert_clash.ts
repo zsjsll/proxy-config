@@ -8,24 +8,27 @@
 
 import nameConvert from "./module/i18n"
 
-let { name, ai, num } = $arguments
+let { name, ai, num, isHide } = $arguments
 
 name ??= "airport"
 let AINodeExcludeArea = ["HK", "RU"]
 let lessGroupCount = 1
+let hidden = false
 
-if (typeof ai === "string") {
-  AINodeExcludeArea = ai.split(/[|, ]/)
-}
-
-if (typeof num === "string") {
-  lessGroupCount = Number(num)
-}
+if (isHide) hidden = true
+if (typeof ai === "string") AINodeExcludeArea = ai.split(/[|, ]/)
+if (typeof num === "string") lessGroupCount = Number(num)
 
 class Subscription {
-  private readonly subInfo: SubInfo
-  private readonly lessGroupCount: number = lessGroupCount
-  private readonly proxies: Promise<AirportNodeList>
+  private readonly subInfo: SubInfo = {
+    name: name,
+    type: "collection",
+    platform: "ClashMeta",
+    produceType: "internal",
+    produceOpts: {
+      "include-unsupported-proxy": true,
+    },
+  }
   private readonly autoSelectTemplate: ProxyGroup = {
     name: `template`,
     type: "url-test",
@@ -33,21 +36,14 @@ class Subscription {
     interval: 60,
     url: "https://www.google.com/generate_204",
     "include-all": true,
-    // hidden: true,
+    hidden: hidden,
   }
+  private readonly lessGroupCount: number = lessGroupCount
+  private readonly proxies: Promise<AirportNodeList>
   private readonly proxyGroups: ProxyGroup[] = []
   private readonly nameList: string[] = []
   private sum: number = 0
-  constructor(subName: string) {
-    this.subInfo = {
-      name: subName,
-      type: "collection",
-      platform: "ClashMeta",
-      produceType: "internal",
-      produceOpts: {
-        "include-unsupported-proxy": true,
-      },
-    }
+  constructor() {
     this.proxies = this.get_Proxies()
   }
 
@@ -131,6 +127,7 @@ interface AreaInfo {
 class Config {
   private config: globalThis.Config
   private AINodeExcludeArea = AINodeExcludeArea
+  private hidden = hidden
   // 获取配置模板
   constructor() {
     this.config = ProxyUtils.yaml.safeLoad($files[0])
@@ -144,7 +141,7 @@ class Config {
     this.config = { proxies: Subscription, ...this.config }
   }
   // 扩展AI不能使用的地区
-  public extendAIProxyGroup(areaInfoList: AreaInfo[]) {
+  public fixAIProxyGroup(areaInfoList: AreaInfo[]) {
     const aiAreaList = areaInfoList.filter((v) => this.AINodeExcludeArea.every((kw) => v.isoCode !== kw))
     const filter = aiAreaList.map((v) => v.regExp).filter((v) => typeof v !== "undefined")
     const sum = aiAreaList.reduce((prev, curr) => {
@@ -162,49 +159,56 @@ class Config {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
         v.filter = `(?i)(${filter.join("|")})`
-        // v.filter = `(?i)(🇹🇼|TW|台湾|Taiwan|🇰🇷|KR|韩国|Korea|🇸🇬|SG|新加坡|Singapore|🇺🇸|US|美国|United ?States)`
         console.log("---->[v.filter]<----165", v.filter)
 
+        if (this.hidden) v.hidden = true
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
 
-      if (v.proxies?.some((val) => val.includes("AI节点"))) {
-        for (const [index, val] of v.proxies!.entries()) {
-          if (val.includes("AI节点")) v.proxies![index] = `${v.proxies![index]}(${String(sum)})`
+      const p = v.proxies?.map((vv) => {
+        if (vv.includes("AI节点")) {
+          return `${vv}(${String(sum)})`
         }
-      }
+        return vv
+      })
+      v.proxies = p
     })
   }
 
+  public fixProxyGroups(areaInfoList: AreaInfo[]) {
+    const sum = areaInfoList.reduce((prev, curr) => {
+      prev = prev + curr.count
+      return prev
+    }, 0)
+
+    const f = ["自动选择", "手动选择"]
+
+    this.config["proxy-groups"].forEach((v) => {
+      if (v.name.includes("自动选择")) {
+        if (this.hidden) v.hidden = true
+      }
+
+      if (f.some((kw) => v.name.includes(kw))) {
+        v.name = `${v.name}(${String(sum)})`
+      }
+
+      const p = v.proxies?.map((vv) => {
+        if (f.some((kw) => vv.includes(kw))) {
+          return `${vv}(${String(sum)})`
+        }
+        return vv
+      })
+      v.proxies = p
+    })
+  }
   public changeProxyGroups(proxyGroups: ProxyGroup[]) {
     const nameList = proxyGroups.map((v) => v.name)
-    let otherSum = 0
-    let nodeSum = 0
-    proxyGroups.forEach((v) => {
-      if (!v.name.includes("其他节点")) {
-        nodeSum = nodeSum + Number((v.name.match(/\((\d+)\)/) as RegExpMatchArray)[1])
-      } else {
-        otherSum = otherSum + Number((v.name.match(/\((\d+)\)/) as RegExpMatchArray)[1])
-      }
-    })
-
-    const sum = otherSum + nodeSum
-    this.config["proxy-groups"].forEach((element) => {
-      // 在 手动选择 和 自动选择 修改名 添加计数
-      const changeName = ["手动选择", "自动选择"].some((kw) => element.name.includes(kw))
-      if (changeName) element.name = `${element.name}(${String(sum)})`
-      // 在proxies中的 手动选择 和 自动选择 修改名 添加计数
-      const changProxies = ["手动选择", "自动选择"].some((kw) => element.proxies?.some((val) => val.includes(kw)))
-      if (changProxies) {
-        for (const [index, val] of element.proxies!.entries()) {
-          if (["手动选择", "自动选择"].some((kw) => val.includes(kw))) element.proxies![index] = `${element.proxies![index]}(${String(sum)})`
-        }
-      }
+    this.config["proxy-groups"].forEach((v) => {
       // 在proxies中有 "手动选择"的 在最后添加上 节点选择
-      const isAdd = element.proxies?.some((val) => val.includes("手动选择"))
-      if (isAdd) element.proxies?.push(...nameList)
+      if (v.proxies?.some((val) => val.includes("手动选择"))) {
+        v.proxies?.push(...nameList)
+      }
     })
-
     this.config["proxy-groups"].push(...proxyGroups)
   }
 
@@ -217,7 +221,7 @@ class Config {
 const config = new Config()
 
 config.delProxyProviders()
-const sub = new Subscription(name)
+const sub = new Subscription()
 
 const proxies = await sub.get_Proxies()
 config.addProxies(proxies)
@@ -225,8 +229,8 @@ config.addProxies(proxies)
 const areaInfoList = await sub.getAreaInfoList()
 const proxyGroups = sub.createProxyGroups(areaInfoList)
 
+config.fixAIProxyGroup(areaInfoList)
+config.fixProxyGroups(areaInfoList)
 config.changeProxyGroups(proxyGroups)
-
-config.extendAIProxyGroup(areaInfoList)
 
 config.saveConfig()

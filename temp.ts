@@ -1,6 +1,5 @@
-const text = "apple,banana|cherry ddd";
-// 匹配逗号 OR 竖线作为分隔符
-const correctSplit = text.split(/,|\||\s/);
-
-console.log(correctSplit);
-// 输出：['apple', 'banana', 'cherry']
+const o = [
+  { name: "123", proxies: ["a", "b", "cccc"] },
+  { name: "333", proxies: ["d", "c"] },
+  { name: "444", proxies: ["f", "a"] },
+]
