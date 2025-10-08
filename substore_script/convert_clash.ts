@@ -10,7 +10,7 @@ import nameConvert from "./module/i18n"
 
 let { name, ai, num } = $arguments
 
-name ??= "ariport"
+name ??= "airport"
 let AINodeExcludeArea = ["HK", "RU"]
 let lessGroupCount = 1
 
