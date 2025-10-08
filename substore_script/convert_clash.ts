@@ -23,7 +23,7 @@ class Subscription {
     interval: 60,
     url: "https://www.google.com/generate_204",
     "include-all": true,
-    hidden: true,
+    // hidden: true,
   }
   private readonly proxyGroups: ProxyGroup[] = []
   private readonly nameList: string[] = []

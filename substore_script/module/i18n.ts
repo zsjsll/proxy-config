@@ -236,7 +236,7 @@ class ProxyNameConvert {
       const flag = this.isoToFlagEmoji(isoCode)
       const zhName = val.zhName
       const enName = val.enName.replace(/\s/g, `\s?`)
-      const regExp = `${flag}|${isoCode}|${zhName}|${enName}`
+      const regExp = `${flag}|\b${isoCode}\b|${zhName}|${enName}`
       const index = i
       i++
       extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp })
