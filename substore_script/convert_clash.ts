@@ -163,6 +163,8 @@ class Config {
         v.name = `${v.name}(${String(sum)})`
         v.filter = `(?i)(${filter.join("|")})`
         // v.filter = `(?i)(美国)`
+        console.log(v.filter)
+
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
 
