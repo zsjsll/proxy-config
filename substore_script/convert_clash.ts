@@ -87,7 +87,7 @@ class Subscription {
     return a
   }
 
-  public createProxyGroups(areaInfoList: AreaInfo[], num: number = 0) {
+  public createProxyGroups(areaInfoList: AreaInfo[]) {
     const allRegexplist: string[] = []
     // const nameList: string[] = []
     // const proxyGroups: ProxyGroup[] = []
@@ -97,7 +97,7 @@ class Subscription {
       if (element.count < this.lessGroupCount) {
         areaInfoList.at(-1)!.count = areaInfoList.at(-1)!.count + element.count
       } else {
-        if (typeof element.index !== "undefined") {
+        if (typeof element.regExp !== "undefined") {
           proxyGroup.name = `${element.flag} ${element.zhName}节点(${String(element.count)})`
           proxyGroup.filter = `(?i)(${element.regExp})`
           allRegexplist.push(element.regExp)
@@ -106,7 +106,7 @@ class Subscription {
           this.sum = this.sum + element.count
         } else {
           proxyGroup.name = `❓ 其他节点(${String(element.count)})`
-          proxyGroup["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
+          proxyGroup["exclude-filter"] = `(?i)(${allRegexplist.join("|")})`
           this.nameList.push(proxyGroup.name)
           this.proxyGroups.push(proxyGroup)
           this.sum = this.sum + element.count
@@ -120,12 +120,12 @@ class Subscription {
 
 interface AreaInfo {
   count: number
-  flag: string
-  zhName: string
-  enName: string
-  index: number
-  isoCode: string
-  regExp: string
+  flag?: string
+  zhName?: string
+  enName?: string
+  index?: number
+  isoCode?: string
+  regExp?: string
 }
 
 class Config {
@@ -146,7 +146,7 @@ class Config {
   // 扩展AI不能使用的地区
   public extendAIProxyGroup(areaInfoList: AreaInfo[]) {
     const aiAreaList = areaInfoList.filter((v) => this.AINodeExcludeArea.every((kw) => v.isoCode !== kw))
-    const filter = aiAreaList.map((v) => v.regExp)
+    const filter = aiAreaList.map((v) => v.regExp).filter((v) => typeof v !== "undefined")
     const sum = aiAreaList.reduce((prev, curr) => {
       if (typeof curr.isoCode !== "undefined") {
         console.log(curr.isoCode, curr.count)
@@ -161,8 +161,8 @@ class Config {
     this.config["proxy-groups"].forEach((v) => {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
-        // v.filter = `(?i)(${filter.join("|")})`
-        v.filter = `(?i)🇹🇼|TW|台湾|Taiwan|🇰🇷|KR|韩国|Korea|🇸🇬|SG|新加坡|Singapore|🇺🇸|US|美国|United ?States`
+        v.filter = `(?i)(${filter.join("|")})`
+        // v.filter = `(?i)(🇹🇼|TW|台湾|Taiwan|🇰🇷|KR|韩国|Korea|🇸🇬|SG|新加坡|Singapore|🇺🇸|US|美国|United ?States)`
         console.log("---->[v.filter]<----165", v.filter)
 
         if (v["exclude-filter"]) delete v["exclude-filter"]
