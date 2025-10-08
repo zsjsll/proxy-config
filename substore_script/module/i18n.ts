@@ -247,14 +247,18 @@ class ProxyNameConvert {
 
   getIsoCode(serverName: string) {
     for (const obj of this.isoCodes) {
-      const regExp: RegExp = new RegExp(obj.regExp, "g")
+      const r = obj.regExp.split("|")
+      const last = r.pop() as string
+
+      const regExp: RegExp = new RegExp(r.join("|"), "g")
       if (regExp.test(serverName)) return obj
+      if (new RegExp(last, "ig").test(serverName)) return obj
     }
   }
 }
 
 export default new ProxyNameConvert(isoCodes)
-// const t = new ProxyNameConvert(isoCodes)
+const t = new ProxyNameConvert(isoCodes)
 
-// console.log(t.getIsoCode("eritreA"))
-// console.log(t.getIsoCode("HK"))
+console.log(t.getIsoCode("ER"))
+console.log(t.getIsoCode("HK"))
