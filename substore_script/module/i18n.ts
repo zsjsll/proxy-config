@@ -236,7 +236,7 @@ class ProxyNameConvert {
       const flag = this.isoToFlagEmoji(isoCode)
       const zhName = val.zhName
       const enName = val.enName.replace(/\s/g, `\s?`)
-      const regExp = `${flag}|\b${isoCode}\b|${zhName}|${enName}`
+      const regExp = `${flag}|${isoCode}|${zhName}|(?i:${enName})`
       const index = i
       i++
       extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp })
@@ -247,7 +247,7 @@ class ProxyNameConvert {
 
   getIsoCode(serverName: string) {
     for (const obj of this.isoCodes) {
-      const regExp: RegExp = new RegExp(obj.regExp, "gi")
+      const regExp: RegExp = new RegExp(obj.regExp, "g")
       if (regExp.test(serverName)) return obj
     }
   }
@@ -256,4 +256,5 @@ class ProxyNameConvert {
 export default new ProxyNameConvert(isoCodes)
 // const t = new ProxyNameConvert(isoCodes)
 
-// console.log(t.getIsoCode("TW"))
+// console.log(t.getIsoCode("eritreA"))
+// console.log(t.getIsoCode("HK"))

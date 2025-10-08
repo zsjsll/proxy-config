@@ -1,10 +1,9 @@
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
 // 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&usedef
 
-// 本脚本 可以传入2个参数：
+// 本脚本 可以传入参数：
 //  [name] 为 substore 的订阅组合订阅名字
-//  [AIRegs] 为 AI节点 要过滤掉的中国节点正则表达式，传入参数，请使用字符串形式 eg："(?i)(🇭🇰|港|hk|hong ?kong)|(?i)(🇷🇺|俄|RU|Russia)"，修改脚本 可以以数组的形式传入参数 eg：["(?i)(🇭🇰|港|hk|hong ?kong)", "(?i)(🇷🇺|俄|RU|Russia)"]
-// [mode]:"create"|"default" 添加后使用固定的 autoselect 群组
+
 
 import nameConvert from "./module/i18n"
 
@@ -89,14 +88,14 @@ class Subscription {
       } else {
         if (typeof element.index !== "undefined") {
           proxyGroup.name = `${element.flag} ${element.zhName}节点(${String(element.count)})`
-          proxyGroup.filter = `(?i)(${element.regExp})`
+          proxyGroup.filter = `(${element.regExp})`
           allRegexplist.push(element.regExp)
           this.nameList.push(proxyGroup.name)
           this.proxyGroups.push(proxyGroup)
           this.sum = this.sum + element.count
         } else {
           proxyGroup.name = `❓ 其他节点(${String(element.count)})`
-          proxyGroup["exclude-filter"] = `(?i)${allRegexplist.join("|")}`
+          proxyGroup["exclude-filter"] = `${allRegexplist.join("|")}`
           this.nameList.push(proxyGroup.name)
           this.proxyGroups.push(proxyGroup)
           this.sum = this.sum + element.count
@@ -151,7 +150,7 @@ class Config {
     this.config["proxy-groups"].forEach((v) => {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
-        v.filter = `(?i)(${filter.join("|")})`
+        v.filter = `(${filter.join("|")})`
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
 
