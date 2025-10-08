@@ -161,9 +161,9 @@ class Config {
     this.config["proxy-groups"].forEach((v) => {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
-        v.filter = `(?i)(${filter.join("|")})`
+        // v.filter = `(?i)(${filter.join("|")})`
+        v.filter = `(?i)(🇹🇼|TW|台湾|Taiwan|🇰🇷|KR|韩国|Korea|🇸🇬|SG|新加坡|Singapore|🇺🇸|US|美国|United ?States|)`
         console.log("---->[v.filter]<----165", v.filter)
-        // v.filter = `(?i)(美国)`
 
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
