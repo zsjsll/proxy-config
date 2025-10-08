@@ -1,4 +1,5 @@
-const arr = [1, 2, 3, 4]
+const a = "123|444,555 666"
 
-const b = arr.includes(7)
+const b = a.split(/[|, ]/)
+
 console.log(b)

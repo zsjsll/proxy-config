@@ -1,16 +1,22 @@
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&usedef
+// 脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#name=all&ai=HK|RU|JP
 
 // 本脚本 可以传入参数：
 //  [name] 为 substore 的订阅组合订阅名字
-
+// [ai] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 
 import nameConvert from "./module/i18n"
 
-let { name } = $arguments
+let { name, ai } = $arguments
 
 name ??= "ariport"
-const AINodeExcludeArea = ["HK", "RU"]
+
+let AINodeExcludeArea = ["HK", "RU"]
+if (typeof ai === "string") {
+  AINodeExcludeArea = ai.split(/[|, ]/)
+  console.log("---->[AINodeExcludeArea]<----17", AINodeExcludeArea)
+
+}
 
 class Subscription {
   private readonly subInfo: SubInfo
