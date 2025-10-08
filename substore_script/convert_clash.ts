@@ -163,6 +163,8 @@ class Config {
         v.name = `${v.name}(${String(sum)})`
         v.filter = `(?i)(${filter.join("|")})`
         if (v["exclude-filter"]) delete v["exclude-filter"]
+        console.log(v)
+
       }
 
       if (v.proxies?.some((val) => val.includes("AI节点"))) {
