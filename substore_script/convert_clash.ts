@@ -162,8 +162,8 @@ class Config {
       if (v.name.includes("AI节点")) {
         v.name = `${v.name}(${String(sum)})`
         v.filter = `(?i)(${filter.join("|")})`
+        console.log("---->[v.filter]<----165", v.filter)
         // v.filter = `(?i)(美国)`
-        console.log(v.filter)
 
         if (v["exclude-filter"]) delete v["exclude-filter"]
       }
