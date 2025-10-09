@@ -38,7 +38,7 @@ profile:
 # 嗅探
 sniffer:
   enable: true
-  force-dns-mapping: true
+  # force-dns-mapping: true
   parse-pure-ip: true
   sniff:
     HTTP:
