@@ -40,7 +40,7 @@ class Subscription {
     hidden: hidden,
   }
   private readonly lessGroupCount: number = lessGroupCount
-  private readonly proxies: Promise<AirportNodeList>
+  private readonly proxies: Promise<Proxies>
   private readonly proxyGroups: ProxyGroup[] = []
   private readonly nameList: string[] = []
   private sum: number = 0
@@ -138,7 +138,7 @@ class Config {
       delete this.config["proxy-providers"]
     }
   }
-  public addProxies(Subscription: AirportNodeList) {
+  public addProxies(Subscription: Proxies) {
     this.config = { proxies: Subscription, ...this.config }
   }
   // 扩展AI不能使用的地区

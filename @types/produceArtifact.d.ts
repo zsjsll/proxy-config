@@ -9,7 +9,7 @@ declare global {
     }
   }
 
-  interface AriportNode {
+  interface Proxy {
     name: string
     type: string
     server: string
@@ -26,9 +26,9 @@ declare global {
     _collectionDisplayName: string
   }
 
-  type AirportNodeList = AriportNode[]
+  type Proxies = Proxy[]
 
-  function produceArtifact(sub: SubInfo): Promise<AirportNodeList>
+  function produceArtifact(sub: SubInfo): Promise<Proxies>
 }
 
 export {}

@@ -235,185 +235,20 @@ var ProxyNameConvert = class {
 };
 var i18n_default = new ProxyNameConvert(isoCodes);
 
-// substore_script/convert_clash.ts
-var { name, ai, num, isHide } = $arguments;
-name ??= "airport";
-var AINodeExcludeArea = ["HK", "RU"];
-var lessGroupCount = 1;
-var hidden = false;
-if (isHide) hidden = true;
-if (typeof ai === "string") AINodeExcludeArea = ai.split(/[|, ]/);
-if (typeof num === "string") lessGroupCount = Number(num);
-var Subscription = class {
-  subInfo = {
-    name,
-    type: "collection",
-    platform: "ClashMeta",
-    produceType: "internal",
-    produceOpts: {
-      "include-unsupported-proxy": true
-    }
-  };
-  autoSelectTemplate = {
-    name: `template`,
-    type: "url-test",
-    tolerance: 20,
-    interval: 60,
-    url: "https://www.google.com/generate_204",
-    "include-all": true,
-    hidden
-  };
-  lessGroupCount = lessGroupCount;
-  proxies;
-  proxyGroups = [];
-  nameList = [];
-  sum = 0;
-  constructor() {
-    this.proxies = this.get_Proxies();
-  }
-  async get_Proxies() {
-    return await produceArtifact(this.subInfo);
-  }
-  // 获取机场的所有节点的名字Index
-  async getAreaInfoList() {
-    const proxies2 = await this.proxies;
-    let areaInfoList2 = proxies2.map((element) => {
-      const a2 = i18n_default.getIsoCode(element.name);
-      const b = { ...a2, count: 1 };
-      return b;
-    });
-    areaInfoList2 = areaInfoList2.sort((a2, b) => {
-      if (typeof a2.index === "undefined") return 1;
-      if (typeof b.index === "undefined") return -1;
-      return a2.index - b.index;
-    });
-    const map = areaInfoList2.reduce((prev, curr) => {
-      const key = curr.index;
-      if (prev.has(key)) {
-        const obj2 = prev.get(key);
-        obj2.count = obj2.count + 1;
-      } else prev.set(key, curr);
-      return prev;
-    }, /* @__PURE__ */ new Map());
-    const a = [...map.values()];
-    return a;
-  }
-  createProxyGroups(areaInfoList2) {
-    const allRegexplist = [];
-    for (const element of areaInfoList2) {
-      const proxyGroup = { ...this.autoSelectTemplate };
-      if (element.count < this.lessGroupCount) {
-        areaInfoList2.at(-1).count = areaInfoList2.at(-1).count + element.count;
-      } else {
-        if (typeof element.regExp !== "undefined") {
-          proxyGroup.name = `${element.flag} ${element.zhName}\u8282\u70B9(${String(element.count)})`;
-          proxyGroup.filter = `(?i)(${element.regExp})`;
-          allRegexplist.push(element.regExp);
-          this.nameList.push(proxyGroup.name);
-          this.proxyGroups.push(proxyGroup);
-          this.sum = this.sum + element.count;
-        } else {
-          proxyGroup.name = `\u2753 \u5176\u4ED6\u8282\u70B9(${String(element.count)})`;
-          proxyGroup["exclude-filter"] = `(?i)(${allRegexplist.join("|")})`;
-          this.nameList.push(proxyGroup.name);
-          this.proxyGroups.push(proxyGroup);
-          this.sum = this.sum + element.count;
-        }
-      }
-    }
-    return this.proxyGroups;
-  }
-};
-var Config = class {
-  config;
-  AINodeExcludeArea = AINodeExcludeArea;
-  hidden = hidden;
-  // 获取配置模板
-  constructor() {
-    this.config = ProxyUtils.yaml.safeLoad($files[0]);
-  }
-  delProxyProviders() {
-    if (this.config["proxy-providers"] !== void 0) {
-      delete this.config["proxy-providers"];
-    }
-  }
-  addProxies(Subscription2) {
-    this.config = { proxies: Subscription2, ...this.config };
-  }
-  // 扩展AI不能使用的地区
-  fixAIProxyGroup(areaInfoList2) {
-    const aiAreaList = areaInfoList2.filter((v) => this.AINodeExcludeArea.every((kw) => v.isoCode !== kw));
-    const filter = aiAreaList.map((v) => v.regExp).filter((v) => typeof v !== "undefined");
-    const sum = aiAreaList.reduce((prev, curr) => {
-      if (typeof curr.isoCode !== "undefined") {
-        console.log(curr.isoCode, curr.count);
-        prev = prev + curr.count;
-      }
-      return prev;
-    }, 0);
-    console.log(filter);
-    console.log(sum);
-    this.config["proxy-groups"].forEach((v) => {
-      if (v.name.includes("AI\u8282\u70B9")) {
-        v.name = `${v.name}(${String(sum)})`;
-        v.filter = `(?i)(${filter.join("|")})`;
-        console.log("---->[v.filter]<----165", v.filter);
-        if (this.hidden) v.hidden = true;
-        if (v["exclude-filter"]) delete v["exclude-filter"];
-      }
-      const p = v.proxies?.map((vv) => {
-        if (vv.includes("AI\u8282\u70B9")) {
-          return `${vv}(${String(sum)})`;
-        }
-        return vv;
-      });
-      v.proxies = p;
-    });
-  }
-  fixProxyGroups(areaInfoList2) {
-    const sum = areaInfoList2.reduce((prev, curr) => {
-      prev = prev + curr.count;
-      return prev;
-    }, 0);
-    const f = ["\u81EA\u52A8\u9009\u62E9", "\u624B\u52A8\u9009\u62E9"];
-    this.config["proxy-groups"].forEach((v) => {
-      if (v.name.includes("\u81EA\u52A8\u9009\u62E9")) {
-        if (this.hidden) v.hidden = true;
-      }
-      if (f.some((kw) => v.name.includes(kw))) {
-        v.name = `${v.name}(${String(sum)})`;
-      }
-      const p = v.proxies?.map((vv) => {
-        if (f.some((kw) => vv.includes(kw))) {
-          return `${vv}(${String(sum)})`;
-        }
-        return vv;
-      });
-      v.proxies = p;
-    });
-  }
-  changeProxyGroups(proxyGroups2) {
-    const nameList = proxyGroups2.map((v) => v.name);
-    this.config["proxy-groups"].forEach((v) => {
-      if (v.proxies?.some((val) => val.includes("\u624B\u52A8\u9009\u62E9"))) {
-        v.proxies?.push(...nameList);
-      }
-    });
-    this.config["proxy-groups"].push(...proxyGroups2);
-  }
-  // 写入信息
-  saveConfig() {
-    $content = ProxyUtils.yaml.safeDump(this.config);
-  }
-};
-var config = new Config();
-config.delProxyProviders();
-var sub = new Subscription();
-var proxies = await sub.get_Proxies();
-config.addProxies(proxies);
-var areaInfoList = await sub.getAreaInfoList();
-var proxyGroups = sub.createProxyGroups(areaInfoList);
-config.fixAIProxyGroup(areaInfoList);
-config.fixProxyGroups(areaInfoList);
-config.changeProxyGroups(proxyGroups);
-config.saveConfig();
+// substore_script/clash/fix_proxy_groups.ts
+var { isHidden = false } = $arguments;
+var content = ProxyUtils.yaml.safeLoad($content);
+if (content.proxies === void 0) throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E2D\u6CA1\u6709 proxies, \u8BF7\u5148\u5BFC\u5165");
+var pList = content.proxies;
+var areaInfoList = pList.map((element) => {
+  const a = i18n_default.getIsoCode(element.name);
+  const b = { ...a, count: 1 };
+  return b;
+});
+areaInfoList = areaInfoList.sort((a, b) => {
+  if (typeof a.index === "undefined") return 1;
+  if (typeof b.index === "undefined") return -1;
+  return a.index - b.index;
+});
+console.log(123123123);
+console.log(areaInfoList);

@@ -19,4 +19,14 @@ declare global {
     _subName: string
     _subDisplayName: string
   }
+
+  interface AreaInfo {
+    count: number
+    flag?: string
+    zhName?: string
+    enName?: string
+    index?: number
+    isoCode?: string
+    regExp?: string
+  }
 }

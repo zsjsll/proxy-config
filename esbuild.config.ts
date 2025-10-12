@@ -7,7 +7,7 @@ const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watc
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./substore_script"
-const entryPoints = await fg(`${entryDir}/*.ts`)
+const entryPoints = await fg(`${entryDir}/**/*.ts`)
 const outDir = entryDir
 
 function TimingPlugin(): esbuild.Plugin {

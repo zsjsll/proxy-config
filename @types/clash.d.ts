@@ -7,7 +7,7 @@ declare global {
     tolerance?: number
     interval?: number
     "include-all"?: boolean
-    url?:string
+    url?: string
     proxies?: string[]
     hidden?: boolean
     filter?: string
@@ -17,7 +17,7 @@ declare global {
   }
 
   interface Config {
-    proxies?: object[]
+    proxies?: Proxies
     "proxy-providers"?: object
     "proxy-groups": ProxyGroup[]
     [key: string]: any
