@@ -82,7 +82,7 @@ content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 const aiAreaList = fixAreaList.filter((area) => aiExclude.split(/[|, ]/).every((kw) => area.isoCode !== kw))
 
 const aiRegExp = aiAreaList.map((area) => area.regExp).join("|")
-const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) + (fixAreaList.at(-1)!.isoCode === "" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
+const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
 
 // 获取新建的代理群组的所有名字，便于添加到符合条件的 proxies 中
 const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name)
