@@ -80,6 +80,8 @@ content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
 const aiAreaList = fixAreaList.filter((area) => aiExclude.split(/[|, ]/).every((kw) => area.isoCode !== kw))
+if (fixAreaList.at(-1)!.isoCode === "") aiAreaList.push(fixAreaList.at(-1)!) //过滤其他节点
+
 const aiRegExp = aiAreaList.map((area) => area.regExp).join("|")
 const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
@@ -87,7 +89,6 @@ const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
 const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name)
 const sum = fixAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
-// 修改 AI节点和proxies中含有 AI节点的代理群组
 content["proxy-groups"].forEach((proxyGroup) => {
   // 修改 AI节点 的名字(添加节点总数)
   if (proxyGroup.name.includes("AI节点")) {
