@@ -2,7 +2,7 @@ export {}
 
 let { name = "airport" } = $arguments
 
-const p = await produceArtifact({
+const pList = await produceArtifact({
   name: name,
   type: "collection",
   platform: "ClashMeta",
@@ -18,6 +18,6 @@ if (content["proxy-providers"] !== undefined) {
   delete content["proxy-providers"]
 }
 
-content = { proxies: p, ...content }
+content = { proxies: pList, ...content }
 
 $content = ProxyUtils.yaml.safeDump(content)

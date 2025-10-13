@@ -190,9 +190,9 @@ const obj = {
   TL: { flag: "🇹🇱", zhName: "东帝汶", enName: "Timor-Leste" },
 }
 
-const isoCodes = new Map(Object.entries(obj))
+const oriAreaList = new Map(Object.entries(obj))
 
-type IsoCodes = typeof isoCodes
+type OriAreaList = typeof oriAreaList
 
 type Obj = typeof obj
 
@@ -200,20 +200,21 @@ type ExtraProps = {
   index: number
   isoCode: string
   regExp: string
+  count: number
 }
-type ExtIsoCode = Obj[keyof Obj] & ExtraProps
+export type AreaList = Obj[keyof Obj] & ExtraProps
 
 class ProxyNameConvert {
-  private readonly isoCodes: ExtIsoCode[]
-  constructor(isoCode: IsoCodes) {
-    this.isoCodes = this.ExIsoCodes(isoCode)
+  private readonly areaList: AreaList[]
+  constructor(areaList: OriAreaList) {
+    this.areaList = this.ExIsoCodes(areaList)
   }
 
-  private isoToFlagEmoji(isoCode: string) {
-    if (typeof isoCode !== "string" || isoCode.length !== 2) {
+  private isoToFlagEmoji(areaList: string) {
+    if (typeof areaList !== "string" || areaList.length !== 2) {
       throw new Error("isoCode 错误")
     }
-    const code = isoCode.toUpperCase()
+    const code = areaList.toUpperCase()
     const OFFSET = 127397
     // 逐个字符转换并拼接
     const flag = code
@@ -228,37 +229,39 @@ class ProxyNameConvert {
     return flag
   }
 
-  private ExIsoCodes(iso: IsoCodes): ExtIsoCode[] {
-    const extIsoCodes: ExtIsoCode[] = []
+  private ExIsoCodes(areaList: OriAreaList): AreaList[] {
+    const extIsoCodes: AreaList[] = []
     let i = 0
-    for (const [key, val] of iso) {
+    for (const [key, val] of areaList) {
       const isoCode = key
       const flag = this.isoToFlagEmoji(isoCode)
       const zhName = val.zhName
       const enName = val.enName.replace(/\s/g, ` ?`)
       const regExp = `${flag}|${isoCode}|${zhName}|${enName}`
       const index = i
+      const count = 1
+
       i++
-      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp })
+      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp, count })
     }
     // return new RegExp(regExp, "gi")
     return extIsoCodes
   }
 
-  getIsoCode(serverName: string) {
-    for (const obj of this.isoCodes) {
-      const r = obj.regExp.split("|")
-      const last = r.pop() as string
-
-      const regExp: RegExp = new RegExp(r.join("|"), "g")
-      if (regExp.test(serverName)) return obj
-      if (new RegExp(last, "ig").test(serverName)) return obj
-    }
+  getIsoCode(serverName: string = ""): AreaList {
+    let resoult = this.areaList.find((area) => {
+      const keywords = area.regExp.split("|")
+      if (keywords.some((keyword) => serverName.includes(keyword))) return true
+    })
+    if (resoult === undefined) resoult = { index: this.areaList.length, isoCode: "", flag: "🏴‍☠️", zhName: "其他", enName: "Other", regExp: "", count: 1 }
+    return resoult
   }
 }
 
-export default new ProxyNameConvert(isoCodes)
-// const t = new ProxyNameConvert(isoCodes)
+export const nameConvert = new ProxyNameConvert(oriAreaList)
+// const t = new ProxyNameConvert(oriAreaList)
 
 // console.log(t.getIsoCode("ER"))
-// console.log(t.getIsoCode("HK"))
+// console.log(t.getIsoCode("中国香港"))
+// console.log(t.getIsoCode("er"))
+// console.log(t.getIsoCode())

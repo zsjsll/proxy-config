@@ -185,7 +185,7 @@ proxy-groups:
       interval: 60,
       url: https://www.google.com/generate_204,
       include-all: true,
-      exclude-filter: "(?i)(🇭🇰|港|hk|hong ?kong)",
+      exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong",
     }
 
 rules:

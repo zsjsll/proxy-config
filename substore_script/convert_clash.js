@@ -190,17 +190,17 @@ var obj = {
   BM: { flag: "\u{1F1E7}\u{1F1F2}", zhName: "\u767E\u6155\u8FBE", enName: "Bermuda" },
   TL: { flag: "\u{1F1F9}\u{1F1F1}", zhName: "\u4E1C\u5E1D\u6C76", enName: "Timor-Leste" }
 };
-var isoCodes = new Map(Object.entries(obj));
+var oriAreaList = new Map(Object.entries(obj));
 var ProxyNameConvert = class {
-  isoCodes;
-  constructor(isoCode) {
-    this.isoCodes = this.ExIsoCodes(isoCode);
+  areaList;
+  constructor(areaList) {
+    this.areaList = this.ExIsoCodes(areaList);
   }
-  isoToFlagEmoji(isoCode) {
-    if (typeof isoCode !== "string" || isoCode.length !== 2) {
+  isoToFlagEmoji(areaList) {
+    if (typeof areaList !== "string" || areaList.length !== 2) {
       throw new Error("isoCode \u9519\u8BEF");
     }
-    const code = isoCode.toUpperCase();
+    const code = areaList.toUpperCase();
     const OFFSET = 127397;
     const flag = code.split("").map((char) => {
       const codePoint = char.codePointAt(0) + OFFSET;
@@ -208,32 +208,32 @@ var ProxyNameConvert = class {
     }).join("");
     return flag;
   }
-  ExIsoCodes(iso) {
+  ExIsoCodes(areaList) {
     const extIsoCodes = [];
     let i = 0;
-    for (const [key, val] of iso) {
+    for (const [key, val] of areaList) {
       const isoCode = key;
       const flag = this.isoToFlagEmoji(isoCode);
       const zhName = val.zhName;
       const enName = val.enName.replace(/\s/g, ` ?`);
       const regExp = `${flag}|${isoCode}|${zhName}|${enName}`;
       const index = i;
+      const count = 1;
       i++;
-      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp });
+      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp, count });
     }
     return extIsoCodes;
   }
-  getIsoCode(serverName) {
-    for (const obj2 of this.isoCodes) {
-      const r = obj2.regExp.split("|");
-      const last = r.pop();
-      const regExp = new RegExp(r.join("|"), "g");
-      if (regExp.test(serverName)) return obj2;
-      if (new RegExp(last, "ig").test(serverName)) return obj2;
-    }
+  getIsoCode(serverName = "") {
+    let resoult = this.areaList.find((area) => {
+      const keywords = area.regExp.split("|");
+      if (keywords.some((keyword) => serverName.includes(keyword))) return true;
+    });
+    if (resoult === void 0) resoult = { index: this.areaList.length, isoCode: "", flag: "\u{1F3F4}\u200D\u2620\uFE0F", zhName: "\u5176\u4ED6", enName: "Other", regExp: "", count: 1 };
+    return resoult;
   }
 };
-var i18n_default = new ProxyNameConvert(isoCodes);
+var nameConvert = new ProxyNameConvert(oriAreaList);
 
 // substore_script/convert_clash.ts
 var { name, ai, num, isHide } = $arguments;
@@ -278,7 +278,7 @@ var Subscription = class {
   async getAreaInfoList() {
     const proxies2 = await this.proxies;
     let areaInfoList2 = proxies2.map((element) => {
-      const a2 = i18n_default.getIsoCode(element.name);
+      const a2 = nameConvert.getIsoCode(element.name);
       const b = { ...a2, count: 1 };
       return b;
     });

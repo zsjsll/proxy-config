@@ -7,7 +7,13 @@ const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watc
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./substore_script"
-const entryPoints = await fg(`${entryDir}/**/*.ts`)
+const paths = await fg(`${entryDir}/**/*.ts`)
+
+function entryPointsExcludeFilter(entryPoints: string[], filter: string[]) {
+  return entryPoints.filter((v) => filter.some((kw) => !v.includes(kw)))
+}
+const entryPoints = entryPointsExcludeFilter(paths, ["module"])
+
 const outDir = entryDir
 
 function TimingPlugin(): esbuild.Plugin {

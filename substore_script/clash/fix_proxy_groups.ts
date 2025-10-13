@@ -1,40 +1,76 @@
-import nameConvert from "../module/i18n"
+import { nameConvert, AreaList } from "../module/i18n"
 
 export {}
 
-let { isHidden = false } = $arguments
+let { isHidden = false, num = 1 } = $arguments
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
+
+const defProxyGroup: ProxyGroup = {
+  name: "template",
+  type: "url-test",
+  tolerance: 20,
+  interval: 60,
+  url: "https://www.google.com/generate_204",
+  "include-all": true,
+  hidden: Boolean(isHidden),
+}
 
 if (content.proxies === undefined) throw new Error("配置文件中没有 proxies, 请先导入")
 
 let pList = content.proxies
 
-let areaInfoList: AreaInfo[] = pList.map((element) => {
-  const a = nameConvert.getIsoCode(element.name)
-  const b = { ...a, count: 1 }
-  return b
+const areaList: AreaList[] = Array.from(
+  pList
+    .map((element) => nameConvert.getIsoCode(element.name))
+    .sort((a, b) => a.index - b.index) // 排序
+    .reduce((prev: Map<number, AreaList>, curr) => {
+      const key = curr.index
+      if (prev.has(key)) {
+        const obj = prev.get(key)!
+        obj.count = obj.count + 1
+      } else prev.set(key, curr)
+
+      return prev
+    }, new Map())
+    .values()
+)
+
+// 在最后添加一个空的元素 用于统计过滤的节点信息
+if (areaList.at(-1)!.isoCode !== "") {
+  areaList.push(nameConvert.getIsoCode())
+  areaList.at(-1)!.count = 0
+}
+
+// 过滤count小于阈值的节点，添加到其他节点中
+const filterAreaList = areaList.filter((area) => {
+  if (area.count < Number(num)) {
+    areaList.at(-1)!.count = areaList.at(-1)!.count + area.count
+    return false
+  }
+  return true
 })
-// 排序
-areaInfoList = areaInfoList.sort((a, b) => {
-  if (typeof a.index === "undefined") return 1
-  if (typeof b.index === "undefined") return -1
-  return a.index - b.index
+
+// 提取其他节点的过滤正则表达式
+const excludeFilter = filterAreaList
+  .map((a) => a.regExp)
+  .filter((a) => a !== "")
+  .join("|")
+
+const fixAreaList = filterAreaList.map((area) => {
+  if (area.isoCode === "") area.regExp = "(?i)" + excludeFilter
+  else area.regExp = "(?i)" + area.regExp
+  return area
 })
 
-console.log(123123123)
-console.log(areaInfoList)
+const newProxyGroups: ProxyGroup[] = filterAreaList.map((area) => ({
+  ...defProxyGroup,
+  name: `${area.flag} ${area.zhName}节点(${String(area.count)})`,
+  filter: `(?i)${area.regExp}`,
+}))
+if (newProxyGroups.at(-1)!.filter === "(?i)") {
+  delete newProxyGroups.at(-1)!.filter
+  newProxyGroups.at(-1)!["exclude-filter"] = `(?i)${excludeFilter}`
+}
 
-
-// // 转存Map
-// const map = areaInfoList.reduce((prev: Map<number, (typeof areaInfoList)[number]>, curr) => {
-//   const key = curr.index
-//   if (prev.has(key)) {
-//     const obj = prev.get(key)!
-//     obj.count = obj.count + 1
-//   } else prev.set(key, curr)
-
-//   return prev
-// }, new Map())
-
-// const a = [...map.values()]
+content["proxy-groups"] = { ...content["proxy-groups"], ...newProxyGroups }

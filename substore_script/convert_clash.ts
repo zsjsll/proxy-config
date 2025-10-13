@@ -7,7 +7,7 @@
 // [num] 最小成群数量，默认为1 表示1个都成群
 // [isHide] 隐藏所有自动选择的节点
 
-import nameConvert from "./module/i18n"
+import {nameConvert} from "./module/i18n"
 
 let { name, ai, num, isHide } = $arguments
 

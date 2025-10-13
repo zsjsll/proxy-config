@@ -190,17 +190,17 @@ var obj = {
   BM: { flag: "\u{1F1E7}\u{1F1F2}", zhName: "\u767E\u6155\u8FBE", enName: "Bermuda" },
   TL: { flag: "\u{1F1F9}\u{1F1F1}", zhName: "\u4E1C\u5E1D\u6C76", enName: "Timor-Leste" }
 };
-var isoCodes = new Map(Object.entries(obj));
+var oriAreaList = new Map(Object.entries(obj));
 var ProxyNameConvert = class {
-  isoCodes;
-  constructor(isoCode) {
-    this.isoCodes = this.ExIsoCodes(isoCode);
+  areaList;
+  constructor(areaList2) {
+    this.areaList = this.ExIsoCodes(areaList2);
   }
-  isoToFlagEmoji(isoCode) {
-    if (typeof isoCode !== "string" || isoCode.length !== 2) {
+  isoToFlagEmoji(areaList2) {
+    if (typeof areaList2 !== "string" || areaList2.length !== 2) {
       throw new Error("isoCode \u9519\u8BEF");
     }
-    const code = isoCode.toUpperCase();
+    const code = areaList2.toUpperCase();
     const OFFSET = 127397;
     const flag = code.split("").map((char) => {
       const codePoint = char.codePointAt(0) + OFFSET;
@@ -208,47 +208,81 @@ var ProxyNameConvert = class {
     }).join("");
     return flag;
   }
-  ExIsoCodes(iso) {
+  ExIsoCodes(areaList2) {
     const extIsoCodes = [];
     let i = 0;
-    for (const [key, val] of iso) {
+    for (const [key, val] of areaList2) {
       const isoCode = key;
       const flag = this.isoToFlagEmoji(isoCode);
       const zhName = val.zhName;
       const enName = val.enName.replace(/\s/g, ` ?`);
       const regExp = `${flag}|${isoCode}|${zhName}|${enName}`;
       const index = i;
+      const count = 1;
       i++;
-      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp });
+      extIsoCodes.push({ index, isoCode, flag, zhName, enName, regExp, count });
     }
     return extIsoCodes;
   }
-  getIsoCode(serverName) {
-    for (const obj2 of this.isoCodes) {
-      const r = obj2.regExp.split("|");
-      const last = r.pop();
-      const regExp = new RegExp(r.join("|"), "g");
-      if (regExp.test(serverName)) return obj2;
-      if (new RegExp(last, "ig").test(serverName)) return obj2;
-    }
+  getIsoCode(serverName = "") {
+    let resoult = this.areaList.find((area) => {
+      const keywords = area.regExp.split("|");
+      if (keywords.some((keyword) => serverName.includes(keyword))) return true;
+    });
+    if (resoult === void 0) resoult = { index: this.areaList.length, isoCode: "", flag: "\u{1F3F4}\u200D\u2620\uFE0F", zhName: "\u5176\u4ED6", enName: "Other", regExp: "", count: 1 };
+    return resoult;
   }
 };
-var i18n_default = new ProxyNameConvert(isoCodes);
+var nameConvert = new ProxyNameConvert(oriAreaList);
 
 // substore_script/clash/fix_proxy_groups.ts
-var { isHidden = false } = $arguments;
+var { isHidden = false, num = 1 } = $arguments;
 var content = ProxyUtils.yaml.safeLoad($content);
+var defProxyGroup = {
+  name: "template",
+  type: "url-test",
+  tolerance: 20,
+  interval: 60,
+  url: "https://www.google.com/generate_204",
+  "include-all": true,
+  hidden: Boolean(isHidden)
+};
 if (content.proxies === void 0) throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E2D\u6CA1\u6709 proxies, \u8BF7\u5148\u5BFC\u5165");
 var pList = content.proxies;
-var areaInfoList = pList.map((element) => {
-  const a = i18n_default.getIsoCode(element.name);
-  const b = { ...a, count: 1 };
-  return b;
+var areaList = Array.from(
+  pList.map((element) => nameConvert.getIsoCode(element.name)).sort((a, b) => a.index - b.index).reduce((prev, curr) => {
+    const key = curr.index;
+    if (prev.has(key)) {
+      const obj2 = prev.get(key);
+      obj2.count = obj2.count + 1;
+    } else prev.set(key, curr);
+    return prev;
+  }, /* @__PURE__ */ new Map()).values()
+);
+if (areaList.at(-1).isoCode !== "") {
+  areaList.push(nameConvert.getIsoCode());
+  areaList.at(-1).count = 0;
+}
+var filterAreaList = areaList.filter((area) => {
+  if (area.count < Number(num)) {
+    areaList.at(-1).count = areaList.at(-1).count + area.count;
+    return false;
+  }
+  return true;
 });
-areaInfoList = areaInfoList.sort((a, b) => {
-  if (typeof a.index === "undefined") return 1;
-  if (typeof b.index === "undefined") return -1;
-  return a.index - b.index;
+var excludeFilter = filterAreaList.map((a) => a.regExp).filter((a) => a !== "").join("|");
+var fixAreaList = filterAreaList.map((area) => {
+  if (area.isoCode === "") area.regExp = "(?i)" + excludeFilter;
+  else area.regExp = "(?i)" + area.regExp;
+  return area;
 });
-console.log(123123123);
-console.log(areaInfoList);
+var newProxyGroups = filterAreaList.map((area) => ({
+  ...defProxyGroup,
+  name: `${area.flag} ${area.zhName}\u8282\u70B9(${String(area.count)})`,
+  filter: `(?i)${area.regExp}`
+}));
+if (newProxyGroups.at(-1).filter === "(?i)") {
+  delete newProxyGroups.at(-1).filter;
+  newProxyGroups.at(-1)["exclude-filter"] = `(?i)${excludeFilter}`;
+}
+content["proxy-groups"] = { ...content["proxy-groups"], ...newProxyGroups };
