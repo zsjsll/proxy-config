@@ -253,7 +253,7 @@ class ProxyNameConvert {
       const keywords = area.regExp.split("|")
       if (keywords.some((keyword) => serverName.includes(keyword))) return true
     })
-    if (resoult === undefined) resoult = { index: this.areaList.length, isoCode: "", flag: "🏴‍☠️", zhName: "其他", enName: "Other", regExp: "", count: 1 }
+    if (resoult === undefined) resoult = { index: this.areaList.length, isoCode: "", flag: "❓", zhName: "其他", enName: "Other", regExp: "", count: 1 }
     return resoult
   }
 }

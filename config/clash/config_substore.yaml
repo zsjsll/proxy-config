@@ -6,7 +6,7 @@ proxy-providers:
     interval: 86400
     health-check:
       enable: true
-      url: https://www.google.com/generate_204
+      url: https://www.gstatic.com/generate_204
       interval: 180
     proxy: DIRECT
 
@@ -177,13 +177,13 @@ proxy-groups:
   - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连, ✋ 手动选择] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
-  - { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, url: https://www.google.com/generate_204, include-all: true }
+  - { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, url: https://www.gstatic.com/generate_204, include-all: true }
   - {
       name: 💡 AI节点,
       type: url-test,
       tolerance: 20,
       interval: 60,
-      url: https://www.google.com/generate_204,
+      url: https://www.gstatic.com/generate_204,
       include-all: true,
       exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong",
     }

@@ -1,17 +1,1 @@
-// substore_script/clash/add_proxies.ts
-var { name = "airport" } = $arguments;
-var pList = await produceArtifact({
-  name,
-  type: "collection",
-  platform: "ClashMeta",
-  produceType: "internal",
-  produceOpts: {
-    "include-unsupported-proxy": true
-  }
-});
-var content = ProxyUtils.yaml.safeLoad($files[0]);
-if (content["proxy-providers"] !== void 0) {
-  delete content["proxy-providers"];
-}
-content = { proxies: pList, ...content };
-$content = ProxyUtils.yaml.safeDump(content);
+var{name:r="airport",fixEmoji:a=!1}=$arguments,o=await produceArtifact({name:r,type:"collection",platform:"ClashMeta",produceType:"internal",produceOpts:{"include-unsupported-proxy":!0}}),e=ProxyUtils.yaml.safeLoad($files[0]);e["proxy-providers"]!==void 0&&delete e["proxy-providers"];a&&o.forEach(t=>{t.name.replace("\u{1F3F4}\u200D\u2620\uFE0F","\u2753")});e={proxies:o,...e};$content=ProxyUtils.yaml.safeDump(e);
