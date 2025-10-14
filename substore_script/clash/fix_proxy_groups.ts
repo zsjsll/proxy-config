@@ -6,7 +6,7 @@
 // [aiExclude] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 // [num] 最小成群数量，默认为1 表示1个都成群
 
-import { nameConvert, AreaList } from "../module/i18n"
+import { nameConvert, AreaList } from "../tools/i18n"
 
 let { isHidden = false, num = 1, aiExclude = "HK|RU" } = $arguments
 
