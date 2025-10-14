@@ -189,6 +189,7 @@ proxy-groups:
     }
 
 rules:
+  # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
   - RULE-SET,custom_lan_ip,🏠 本地SRC,src
   - RULE-SET,custom_proxy,🧱 海外FB
   - RULE-SET,custom_direct,🔗 国内FB
