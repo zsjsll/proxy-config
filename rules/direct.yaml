@@ -1,6 +1,23 @@
-# 国外DNS列表列表
 payload:
-  - "+.1l1.fun"
-  - "+.bigpig.online"
-  - "+.zsjsll.pp.ua"
-  - "+.zsjsll.iask.in"
+  # 示例
+  # - DOMAIN-SUFFIX,google.com
+  # - DOMAIN-KEYWORD,google
+  # - DOMAIN,ad.com
+  # - SRC-IP-CIDR,192.168.1.201/32
+  # - IP-CIDR,127.0.0.0/8
+  # - GEOIP,CN
+  # - DST-PORT,80
+  # - SRC-PORT,7777
+
+  - DOMAIN-SUFFIX,1l1.fun
+  - DOMAIN-SUFFIX,bigpig.online
+  - DOMAIN-SUFFIX,zsjsll.pp.ua
+  - DOMAIN-SUFFIX,zsjsll.iask.in
+
+  # 匹配 192.168.31.200-192.168.31.250 的ip
+  - SRC-IP-CIDR,192.168.31.200/29
+  - SRC-IP-CIDR,192.168.31.208/28
+  - SRC-IP-CIDR,192.168.31.224/28
+  - SRC-IP-CIDR,192.168.31.240/29
+  - SRC-IP-CIDR,192.168.31.248/31
+  - SRC-IP-CIDR,192.168.31.250/32

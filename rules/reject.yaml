@@ -9,10 +9,7 @@ payload:
   # - DST-PORT,80
   # - SRC-PORT,7777
 
-  # DNS泄露测试网站
-  - DOMAIN-SUFFIX,browserscan.net
-  - DOMAIN-SUFFIX,browserleaks.com
-  - DOMAIN-SUFFIX,ipleak.net
-  - DOMAIN-SUFFIX,dnsleaktest.com
-
-  - DOMAIN-SUFFIX,start.me
+  # 电视广告
+  - DOMAIN-SUFFIX,update.qvb.qcloud.com
+  - DOMAIN-SUFFIX,cedock.com
+  - DOMAIN-SUFFIX,huan.tv

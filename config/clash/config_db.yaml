@@ -1,6 +1,6 @@
 # 机场订阅
 proxy-providers:
-  🛫 机场订阅:
+  airport:
     url: "https://a.a.a/"
     type: http
     interval: 86400
@@ -25,7 +25,7 @@ unified-delay: true # 开启统一延迟，也就是看起来好看一点，没�
 tcp-concurrent: true # 启用 TCP 并发连接，将会使用 dns 解析出的所有 IP 地址进行连接，使用第一个成功的连接
 # interface-name: enp6s18
 # routing-mark: 6666 # 标记出内核的流量
-log-level: warning
+log-level: silent
 find-process-mode: "off"
 global-client-fingerprint: chrome
 disable-keep-alive: false
@@ -102,7 +102,7 @@ dns:
     # 用于广告拦截，但是一旦这样设置
     # 就不能开启 direct-nameserver-follow-policy: true
     # 让 direct-nameserver 的优先级高于 nameserver-policy
-    "rule-set:deny":
+    "rule-set:reject":
       - rcode://success
     "geosite:ads":
       - rcode://success
@@ -128,20 +128,21 @@ dns:
     - 222.172.200.68
     - 61.166.150.123
     - 223.6.6.6
+    - 223.5.5.5
 
   # 不要用 fallback ，在解析的时候会同时使用 nameserver 和 fallback ，造成DNS泄露
   nameserver:
-    - https://101.101.101.101/dns-query
-    - https://101.102.103.104/dns-query
-    - https://8.8.8.8/dns-query
-    - https://8.8.4.4/dns-query
-    - https://1.1.1.1/dns-query
-    - https://1.0.0.1/dns-query
+    - https://101.101.101.101/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://101.102.103.104/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://1.1.1.1/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://1.0.0.1/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://8.8.8.8/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
 # GEO相关设置
 geodata-loader: memconservative
 geo-auto-update: true
-geo-update-interval: 12
+geo-update-interval: 24
 geox-url:
   geosite: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
   geoip: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.metadb"
@@ -149,74 +150,74 @@ geox-url:
   asn: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN-all.mmdb"
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
-  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, include-all: true }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
-  - { name: 🏠 本地SRC, type: select, proxies: &CN [✔️ 直连, 🚀 节点选择] }
-  - { name: 🎮 游戏CN, type: select, proxies: *CN } # 域名
-  - { name: Ⓜ️ 微软CN, type: select, proxies: *CN } # 域名
-  - { name: 🌈 谷歌CN, type: select, proxies: *CN } # 域名
-  - { name: 🍎 苹果CN, type: select, proxies: *CN } # 域名
-  - { name: 📋 BT下载, type: select, proxies: *CN } # 域名
-  - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] } # 域名
-  - { name: 🧪 DNS检测, type: select, proxies: [🚀 节点选择, ✔️ 直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] } # 域名
-  - { name: 🤖 AI!CN, type: select, proxies: &NotCN [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] } # 域名
-  - { name: 🌍 媒体!CN, type: select, proxies: *NotCN } # 域名 + IP
-  - { name: 🕹️ 游戏!CN, type: select, proxies: *NotCN } # 域名 + IP
-  - { name: 📲 电报!CN, type: select, proxies: *NotCN, hidden: true } # IP
+  - { name: 🎮 游戏CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: Ⓜ️ 微软CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 🌈 谷歌CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 🍎 苹果CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 📋 BT下载, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
+  - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
+  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
+  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
-  - { name: 🔗 国内FB, type: select, proxies: *CN } # 域名 + IP
-  - { name: 🔒 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
-  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇰🇷 韩国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, ✔️ 直连] }
+  - { name: 🔗 国内FB, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
+  - { name: 🔐 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✋ 手动选择, ✔️ 直连] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)" }
-  - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)" }
-  - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)(🇰🇷|韩|kr|korean)" }
-  - { <<: *auto_test, name: 🇯🇵 日本节点, filter: "(?i)(🇯🇵|日|jp|japan)" }
-  - { <<: *auto_test, name: 🇸🇬 新加坡节点, filter: "(?i)(🇸🇬|新|sg|singapore)" }
-  - { <<: *auto_test, name: 🇺🇸 美国节点, filter: "(?i)(🇺🇸|美|us|unitedstates|united states)" }
+  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 20, interval: 60, include-all: true, url: https://www.gstatic.com/generate_204 }
+
+  - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia|🇯🇵|日|jp|japan" }
+  - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)🇭🇰|港|hk|hong ?kong" }
+  - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)🇹🇼|台|tw|tai ?wan" }
+  # - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)🇰🇷|韩|kr|korean" }
+  - { <<: *auto_test, name: 🇯🇵 日本节点, filter: "(?i)🇯🇵|日|jp|japan" }
+  - { <<: *auto_test, name: 🇸🇬 新加坡节点, filter: "(?i)🇸🇬|新加坡|狮城|sg|singapore" }
+  - { <<: *auto_test, name: 🇺🇸 美国节点, filter: "(?i)🇺🇸|美|us|united ?states" }
+  - {
+      <<: *auto_test,
+      name: ❓ 其他节点,
+      exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong|🇹🇼|台|tw|tai ?wan|🇯🇵|日|jp|japan|🇸🇬|新加坡|狮城|sg|singapore|🇺🇸|美|us|united ?states",
+    }
 
 rules:
-  - RULE-SET,lanip,🏠 本地SRC,src
+  # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
   - RULE-SET,proxy,🧱 海外FB
   - RULE-SET,direct,🔗 国内FB
-  - RULE-SET,dnsleak,🧪 DNS检测
   - RULE-SET,deny,🚫 广告
   - GEOSITE,ads,🚫 广告
   - GEOSITE,networktest,📈 网络测试
-  - GEOSITE,private,🔒 私有网络
+  - GEOSITE,private,🔐 私有网络
   - GEOSITE,trackerslist,📋 BT下载
   - GEOSITE,microsoft-cn,Ⓜ️ 微软CN
   - GEOSITE,apple-cn,🍎 苹果CN
   - GEOSITE,google-cn,🌈 谷歌CN
   - GEOSITE,games-cn,🎮 游戏CN
+  - GEOSITE,ai,🤖 AI!CN
   - GEOSITE,media,🌍 媒体!CN
   - GEOSITE,games,🕹️ 游戏!CN
-  - GEOSITE,ai,🤖 AI!CN
   - GEOSITE,tld-proxy,🧱 海外FB
   - GEOSITE,proxy,🧱 海外FB
   - GEOSITE,cn,🔗 国内FB
-  - GEOIP,privateip,🔒 私有网络,no-resolve
+  - GEOIP,privateip,🔐 私有网络,no-resolve
   - GEOIP,cn,🔗 国内FB
   - GEOIP,media,🌍 媒体!CN
   - GEOIP,games,🕹️ 游戏!CN
   - GEOIP,telegram,📲 电报!CN,no-resolve
   - MATCH,🐟 漏网之鱼
 
+rule-anchor:
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
+  class: &class { type: http, interval: 86400, behavior: classical, format: yaml }
+
 rule-providers:
-  proxy:
-    &domain {
-      type: http,
-      interval: 86400,
-      behavior: domain,
-      format: yaml,
-      url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/proxy.yaml",
-    }
-  deny: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/deny.yaml" }
-  dnsleak: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/dnsleak.yaml" }
-  lanip: { <<: *domain, behavior: ipcidr, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/lanip.yaml" }
-  direct: { <<: *domain, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/direct.yaml" }
+  proxy: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/proxy.yaml" }
+  direct: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/direct.yaml" }
+  reject: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/reject.yaml" }
