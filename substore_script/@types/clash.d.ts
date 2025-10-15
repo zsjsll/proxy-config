@@ -18,8 +18,20 @@ declare global {
 
   interface Config {
     proxies?: Proxies
-    "proxy-providers"?: object
+    "proxy-providers"?: { [K: string]: ProxyProvider }
     "proxy-groups": ProxyGroup[]
     [key: string]: any
+  }
+
+  interface ProxyProvider {
+    url: string
+    type: "http" | "file" | "inline"
+    interval: number
+    "health-check": {
+      enable: boolean
+      url: "https://cp.cloudflare.com" | "https://www.gstatic.com/generate_204"
+      interval: number
+    }
+    proxy: "DIRECT" | string
   }
 }

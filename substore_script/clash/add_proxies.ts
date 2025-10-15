@@ -6,11 +6,12 @@
 [name] 为 substore 的订阅组合订阅名字
 [fixEmoji]:boolen 修改其他节点的emoji为❓
 [type]: "subscription"|"collection" 修改其他节点的emoji为❓
+[urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 sutstore 的订阅将无效，并且启用 proxy-providers 的模式进行订阅
 */
 
 export {}
 
-let { name = "airport", fixEmoji = false, type = "subscription" } = $arguments
+let { name = "airport", fixEmoji = false, type = "subscription", urls } = $arguments
 
 const pList = await produceArtifact({
   name: name,
@@ -24,9 +25,17 @@ const pList = await produceArtifact({
 
 let content = ProxyUtils.yaml.safeLoad($files[0])
 
-// if (content["proxy-providers"] !== undefined) {
-//   delete content["proxy-providers"]
-// }
+let template: ProxyProvider = {
+  url: "https://a.a.a/",
+  type: "http",
+  interval: 43200,
+  "health-check": {
+    enable: true,
+    url: "https://www.gstatic.com/generate_204",
+    interval: 300,
+  },
+  proxy: "DIRECT",
+}
 
 if (Boolean(fixEmoji)) {
   pList.forEach((p) => {
@@ -35,6 +44,18 @@ if (Boolean(fixEmoji)) {
   console.log("🚀 ~ pList:", pList)
 }
 
-content = { proxies: pList, ...content }
+if (urls) {
+  if (content["proxy-providers"]) throw new Error("请先删除 proxy-providers")
+
+  const proxyProviders = urls.split(/[|, ]/).reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
+    const name = "airport" + index
+    obj[name] = template
+    obj[name].url = url
+    return obj
+  }, {})
+  content["proxy-providers"] = proxyProviders
+} else {
+  content = { proxies: pList, ...content }
+}
 
 $content = ProxyUtils.yaml.safeDump(content)

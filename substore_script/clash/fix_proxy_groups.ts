@@ -1,12 +1,15 @@
 /*!
-配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
+// 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
 脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden&aiExclude=HK|RU|JP&num=1
 
 本脚本 可以传入参数：
 [isHidden]:boolen 隐藏所有自动选择的节点
 [aiExclude] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 [num] 最小成群数量，默认为1 表示1个都成群
+
 */
+
+
 
 import { nameConvert, AreaList } from "../tools/i18n"
 

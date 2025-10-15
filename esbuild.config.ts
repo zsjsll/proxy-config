@@ -1,6 +1,7 @@
 import esbuild from "esbuild"
 import fg from "fast-glob"
 import { performance } from "perf_hooks"
+import fs from "fs"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
@@ -14,6 +15,12 @@ async function getEntryPointsr(entryDir: string, filterFiles: string[]) {
 }
 const entryPoints = await getEntryPointsr(entryDir, ["clash"])
 console.log(entryPoints)
+
+function extractBanner(filePath: string): string | undefined {
+  const content = fs.readFileSync(filePath, "utf8")
+  const match = content.match(/\/\*!([\s\S]*?)\*\//)
+  return match ? `/*!${match[1].trim()}*/` : undefined
+}
 
 const outDir = entryDir
 
@@ -63,7 +70,7 @@ const baseOptions: esbuild.BuildOptions = {
     minify: true, // 压缩代码
     minifyIdentifiers: true,
     minifySyntax: true,
-    legalComments: "inline",
+    legalComments: "eof",
   }),
 }
 

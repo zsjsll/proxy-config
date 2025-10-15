@@ -94,17 +94,14 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "geosite:fakeip-filter,cn,private"
-    - "rule-set:direct"
-    # - "geosite:apple-cn,games-cn,microsoft-cn,google-cn"
+    - "rule-set:fakeip_filter,cn,private,custom_direct"
 
   nameserver-policy:
-    # 用于广告拦截，但是一旦这样设置
+    # 用于广告拦截，一旦这样设置
     # 就不能开启 direct-nameserver-follow-policy: true
     # 让 direct-nameserver 的优先级高于 nameserver-policy
-    "rule-set:reject":
-      - rcode://success
-    "geosite:ads":
+
+    "rule-set:ads,custom_reject":
       - rcode://success
 
   # 用于解析DNS服务器的域名
@@ -113,6 +110,8 @@ dns:
     - https://223.5.5.5/dns-query
     - https://1.12.12.12/dns-query
     - https://120.53.53.53/dns-query
+    # - quic://223.6.6.6:853
+    # - quic://223.5.5.5:853
 
   # 代理节点域名解析服务器，仅用于解析代理节点的域名
   proxy-server-nameserver:
@@ -120,6 +119,8 @@ dns:
     - https://223.5.5.5/dns-query
     - https://1.12.12.12/dns-query
     - https://120.53.53.53/dns-query
+    # - quic://223.6.6.6:853
+    # - quic://223.5.5.5:853
 
   # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
   # 用于 direct 出口域名解析的 DNS 服务器
@@ -138,19 +139,15 @@ dns:
     - https://1.0.0.1/dns-query#ecs=222.172.200.68/24&ecs-override=true
     - https://8.8.8.8/dns-query#ecs=222.172.200.68/24&ecs-override=true
     - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # - tls://[2606:4700:4700::64]#ecs=222.172.200.68/24&ecs-override=true
+    # - tls://[2606:4700:4700::1111]#ecs=222.172.200.68/24&ecs-override=true
+    # - quic://94.140.14.140/#ecs=222.172.200.68/24&ecs-override=true
+    # - quic://94.140.14.141/#ecs=222.172.200.68/24&ecs-override=true
 
-# GEO相关设置
-geodata-loader: memconservative
-geo-auto-update: true
-geo-update-interval: 24
-geox-url:
-  geosite: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
-  geoip: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.metadb"
-  mmdb: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb"
-  asn: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN-all.mmdb"
+auto_test: &auto_test { type: url-test, tolerance: 50, interval: 180, include-all: true }
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
@@ -167,49 +164,37 @@ proxy-groups:
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
   - { name: 🔗 国内FB, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
   - { name: 🔐 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
-  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✋ 手动选择, ✔️ 直连] }
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连, ✋ 手动选择] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
-  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 50, interval: 180, include-all: true }
-
+  - { <<: *auto_test, name: ♻️ 自动选择 }
   - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
-  - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)🇭🇰|港|hk|hong ?kong" }
-  - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)🇹🇼|台|tw|tai ?wan" }
-  # - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)🇰🇷|韩|kr|korean" }
-  - { <<: *auto_test, name: 🇯🇵 日本节点, filter: "(?i)🇯🇵|日|jp|japan" }
-  - { <<: *auto_test, name: 🇸🇬 新加坡节点, filter: "(?i)🇸🇬|新加坡|狮城|sg|singapore" }
-  - { <<: *auto_test, name: 🇺🇸 美国节点, filter: "(?i)🇺🇸|美|us|united ?states" }
-  - {
-      <<: *auto_test,
-      name: ❓ 其他节点,
-      exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong|🇹🇼|台|tw|tai ?wan|🇯🇵|日|jp|japan|🇸🇬|新加坡|狮城|sg|singapore|🇺🇸|美|us|united ?states",
-    }
 
 rules:
   # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
+  - RULE-SET,custom_proxy,🧱 海外FB
+  - RULE-SET,custom_direct,🔗 国内FB
+  - RULE-SET,custom_reject,🚫 广告
+  - RULE-SET,ads,🚫 广告
+  - RULE-SET,networktest,📈 网络测试
+  - RULE-SET,private,🔐 私有网络
+  - RULE-SET,trackerslist,📋 BT下载
+  - RULE-SET,microsoft_cn,Ⓜ️ 微软CN
+  - RULE-SET,apple_cn,🍎 苹果CN
+  - RULE-SET,google_cn,🌈 谷歌CN
+  - RULE-SET,games_cn,🎮 游戏CN
+  - RULE-SET,ai,🤖 AI!CN
+  - RULE-SET,games,🕹️ 游戏!CN
+  - RULE-SET,media,🌍 媒体!CN
+  - RULE-SET,tld_proxy,🧱 海外FB
   - RULE-SET,proxy,🧱 海外FB
-  - RULE-SET,direct,🔗 国内FB
-  - RULE-SET,deny,🚫 广告
-  - GEOSITE,ads,🚫 广告
-  - GEOSITE,networktest,📈 网络测试
-  - GEOSITE,private,🔐 私有网络
-  - GEOSITE,trackerslist,📋 BT下载
-  - GEOSITE,microsoft-cn,Ⓜ️ 微软CN
-  - GEOSITE,apple-cn,🍎 苹果CN
-  - GEOSITE,google-cn,🌈 谷歌CN
-  - GEOSITE,games-cn,🎮 游戏CN
-  - GEOSITE,ai,🤖 AI!CN
-  - GEOSITE,media,🌍 媒体!CN
-  - GEOSITE,games,🕹️ 游戏!CN
-  - GEOSITE,tld-proxy,🧱 海外FB
-  - GEOSITE,proxy,🧱 海外FB
-  - GEOSITE,cn,🔗 国内FB
-  - GEOIP,privateip,🔐 私有网络,no-resolve
-  - GEOIP,cn,🔗 国内FB
-  - GEOIP,media,🌍 媒体!CN
-  - GEOIP,games,🕹️ 游戏!CN
-  - GEOIP,telegram,📲 电报!CN,no-resolve
+  - RULE-SET,cn,🔗 国内FB
+  - RULE-SET,private_ip,🔐 私有网络,no-resolve
+  - RULE-SET,cn_ip,🔗 国内FB
+  - RULE-SET,media_ip,🌍 媒体!CN
+  - RULE-SET,games_ip,🕹️ 游戏!CN
+  - RULE-SET,telegram_ip,📲 电报!CN,no-resolve
   - MATCH,🐟 漏网之鱼
 
 rule-anchor:
@@ -218,6 +203,28 @@ rule-anchor:
   class: &class { type: http, interval: 86400, behavior: classical, format: yaml }
 
 rule-providers:
-  proxy: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/proxy.yaml" }
-  direct: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/direct.yaml" }
-  reject: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/reject.yaml" }
+  fakeip_filter: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" }
+  private: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
+  ads: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ads.mrs" }
+  trackerslist: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/trackerslist.mrs" }
+  microsoft_cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
+  apple_cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs" }
+  google_cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs" }
+  games_cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs" }
+  media: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/media.mrs" }
+  games: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games.mrs" }
+  ai: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs" }
+  networktest: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/networktest.mrs" }
+  tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+  proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
+  cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs" }
+
+  private_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs" }
+  cn_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
+  media_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/mediaip.mrs" }
+  games_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/gamesip.mrs" }
+  telegram_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
+
+  custom_proxy: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/proxy.yaml" }
+  custom_direct: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/direct.yaml" }
+  custom_reject: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/rules/reject.yaml" }
