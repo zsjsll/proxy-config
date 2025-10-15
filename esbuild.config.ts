@@ -12,7 +12,7 @@ const paths = await fg(`${entryDir}/**/*.ts`)
 function entryPointsExcludeFilter(entryPoints: string[], filter: string[]) {
   return entryPoints.filter((v) => filter.some((kw) => !v.includes(kw)))
 }
-const entryPoints = entryPointsExcludeFilter(paths, ["module"])
+const entryPoints = entryPointsExcludeFilter(paths, ["module", "@types", "tools"])
 
 const outDir = entryDir
 
