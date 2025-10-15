@@ -173,7 +173,7 @@ proxy-groups:
       interval: 60,
       url: https://www.gstatic.com/generate_204,
       include-all: true,
-      exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong",
+      exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia",
     }
 
 rules:
