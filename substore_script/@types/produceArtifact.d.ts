@@ -1,13 +1,15 @@
 declare global {
   interface SubInfo {
     name: string
-    type: "subscription" | "collection"
+    type: Type
     platform: "ClashMeta" | "sing-box"
     produceType: "internal"
     produceOpts?: {
       "include-unsupported-proxy": boolean
     }
   }
+
+  type Type = "subscription" | "collection"
 
   interface Proxy {
     name: string
