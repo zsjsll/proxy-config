@@ -1,5 +1,6 @@
 import esbuild from "esbuild"
 import fg from "fast-glob"
+import path from "path"
 
 import { performance } from "perf_hooks"
 
@@ -7,16 +8,18 @@ const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watc
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./substore_script"
-const paths = await fg(`${entryDir}/**/*.ts`)
 
-function entryPointsExcludeFilter(entryPoints: string[], filter: string[]) {
-  return entryPoints.filter((v) => filter.some((kw) => !v.includes(kw)))
+async function getEntryPointsr(entryDir: string, filterFiles: string[]) {
+  const entryPoints = await fg(`${entryDir}/**/*.ts`)
+  filterFiles = filterFiles.map((v) => entryDir + "/" + v)
+  return entryPoints.filter((point) => filterFiles.some((kw) => point.includes(kw)))
 }
-const entryPoints = entryPointsExcludeFilter(paths, ["module", "@types", "tools"])
+const entryPoints = await getEntryPointsr(entryDir, ["clash"])
+console.log(entryPoints)
 
 const outDir = entryDir
 
-function TimingPlugin(): esbuild.Plugin {
+function TimingPlugin(): esbuild.Plugin {5
   return {
     name: "timing-and-alias-reporter",
 
