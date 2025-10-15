@@ -1,7 +1,5 @@
 import esbuild from "esbuild"
 import fg from "fast-glob"
-import path from "path"
-
 import { performance } from "perf_hooks"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
@@ -19,7 +17,7 @@ console.log(entryPoints)
 
 const outDir = entryDir
 
-function TimingPlugin(): esbuild.Plugin {5
+function TimingPlugin(): esbuild.Plugin {
   return {
     name: "timing-and-alias-reporter",
 
@@ -50,6 +48,7 @@ const baseOptions: esbuild.BuildOptions = {
   entryPoints: entryPoints,
   bundle: true,
   outdir: outDir,
+  outbase: outDir,
   format: "esm", // 输出 ES Module 格式
   sourcemap: false, // 生成 Source Map
   target: ["esnext"], // 目标环境
@@ -64,7 +63,7 @@ const baseOptions: esbuild.BuildOptions = {
     minify: true, // 压缩代码
     minifyIdentifiers: true,
     minifySyntax: true,
-    legalComments: "none",
+    legalComments: "inline",
   }),
 }
 
