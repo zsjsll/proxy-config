@@ -2,6 +2,7 @@ import esbuild from "esbuild"
 import fg from "fast-glob"
 import { performance } from "perf_hooks"
 import fs from "fs"
+import path from "path"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
@@ -15,12 +16,6 @@ async function getEntryPointsr(entryDir: string, filterFiles: string[]) {
 }
 const entryPoints = await getEntryPointsr(entryDir, ["clash"])
 console.log(entryPoints)
-
-function extractBanner(filePath: string): string | undefined {
-  const content = fs.readFileSync(filePath, "utf8")
-  const match = content.match(/\/\*!([\s\S]*?)\*\//)
-  return match ? `/*!${match[1].trim()}*/` : undefined
-}
 
 const outDir = entryDir
 
@@ -51,6 +46,42 @@ function TimingPlugin(): esbuild.Plugin {
   }
 }
 
+function BannerInjectPlugin(bannerMap: Map<string, string>, outDir: string): esbuild.Plugin {
+  return {
+    name: "banner-inject-postbuild",
+    setup(build) {
+      build.onEnd((result) => {
+        if (result.errors.length > 0) return
+
+        for (const output of Object.keys(result.metafile?.outputs || {})) {
+          const absPath = path.resolve(output)
+
+          const sourcePath = result.metafile?.outputs[output]?.entryPoint
+          if (!sourcePath) continue
+
+          const banner = bannerMap.get(path.relative("./", sourcePath))
+          if (!banner) continue
+
+          try {
+            const content = fs.readFileSync(absPath, "utf8")
+            fs.writeFileSync(absPath, `${banner}\n${content}`)
+            console.log(`📝 注释已注入: ${path.basename(absPath)}`)
+          } catch (e) {
+            console.warn(`⚠️ 注入失败: ${absPath}`, e)
+          }
+        }
+      })
+    },
+  }
+}
+
+const bannerMap = new Map<string, string>()
+for (const file of entryPoints) {
+  const content = fs.readFileSync(file, "utf8")
+  const match = content.match(/\/\*!([\s\S]*?)\*\//)
+  if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
+}
+
 const baseOptions: esbuild.BuildOptions = {
   entryPoints: entryPoints,
   bundle: true,
@@ -61,16 +92,17 @@ const baseOptions: esbuild.BuildOptions = {
   target: ["esnext"], // 目标环境
   // platform: "node",
   logLevel: "info",
+  metafile: true,
   // charset: "utf8",
 
-  plugins: [TimingPlugin()],
+  plugins: [TimingPlugin(), BannerInjectPlugin(bannerMap, outDir)],
   ...(!isDebug && { drop: ["console", "debugger"] }),
 
   ...(isMinify && {
     minify: true, // 压缩代码
     minifyIdentifiers: true,
     minifySyntax: true,
-    legalComments: "eof",
+    legalComments: "none",
   }),
 }
 
