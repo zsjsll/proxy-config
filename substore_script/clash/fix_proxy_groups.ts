@@ -79,7 +79,7 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 }
 
 // 附加到旧群组上
-content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
+if (!!isExt) content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
 const aiAreaList = fixAreaList.filter((area) => aiExclude.split(/[|, ]/).every((kw) => area.isoCode !== kw))

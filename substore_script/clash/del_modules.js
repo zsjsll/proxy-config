@@ -2,4 +2,4 @@
 
 参数：
 [modules] :string,'|' ',' ' ' 区分，比如 ai=tun|dns,proxies*/
-var{del:l=""}=$arguments,o=l.split(/[|, ]/),t=ProxyUtils.yaml.safeLoad($content);o.forEach(e=>{t[e]&&delete t[e]});$content=ProxyUtils.yaml.safeDump(t);
+var{del:l=""}=$arguments,n=l.split(/[|, ]/),t=ProxyUtils.yaml.safeLoad($content);n.map(e=>{t[e]&&delete t[e]});$content=ProxyUtils.yaml.safeDump(t);
