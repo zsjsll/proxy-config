@@ -1,7 +1,8 @@
 import esbuild from "esbuild"
 import fg from "fast-glob"
 import { performance } from "perf_hooks"
-import fs from "fs"
+import fs from "fs/promises"
+import fss from "fs"
 import path from "path"
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
@@ -46,30 +47,36 @@ function TimingPlugin(): esbuild.Plugin {
   }
 }
 
-function BannerInjectPlugin(bannerMap: Map<string, string>, outDir: string): esbuild.Plugin {
+function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
   return {
     name: "banner-inject-postbuild",
     setup(build) {
-      build.onEnd((result) => {
+      build.onEnd(async (result) => {
         if (result.errors.length > 0) return
 
-        for (const output of Object.keys(result.metafile?.outputs || {})) {
-          const absPath = path.resolve(output)
+        const outputs = Object.keys(result.metafile?.outputs || {})
 
-          const sourcePath = result.metafile?.outputs[output]?.entryPoint
-          if (!sourcePath) continue
+        await Promise.all(
+          outputs.map(async (output) => {
+            const absPath = path.resolve(output)
 
-          const banner = bannerMap.get(path.relative("./", sourcePath))
-          if (!banner) continue
+            const sourcePath = result.metafile?.outputs[output]?.entryPoint
+            if (!sourcePath) return
 
-          try {
-            const content = fs.readFileSync(absPath, "utf8")
-            fs.writeFileSync(absPath, `${banner}\n${content}`)
-            console.log(`📝 注释已注入: ${path.basename(absPath)}`)
-          } catch (e) {
-            console.warn(`⚠️ 注入失败: ${absPath}`, e)
-          }
-        }
+            const banner = bannerMap.get(path.relative("./", sourcePath))
+
+            if (!banner) return
+
+            try {
+              const content = await fs.readFile(absPath, "utf8")
+
+              await fs.writeFile(absPath, `${banner}\n${content}`)
+              console.log(`📝 注释已注入: ${path.basename(absPath)}`)
+            } catch (e) {
+              console.warn(`⚠️ 注入失败: ${absPath}`, e)
+            }
+          })
+        )
       })
     },
   }
@@ -77,7 +84,7 @@ function BannerInjectPlugin(bannerMap: Map<string, string>, outDir: string): esb
 
 const bannerMap = new Map<string, string>()
 for (const file of entryPoints) {
-  const content = fs.readFileSync(file, "utf8")
+  const content = fss.readFileSync(file, "utf8")
   const match = content.match(/\/\*!([\s\S]*?)\*\//)
   if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
 }
@@ -95,7 +102,7 @@ const baseOptions: esbuild.BuildOptions = {
   metafile: true,
   // charset: "utf8",
 
-  plugins: [TimingPlugin(), BannerInjectPlugin(bannerMap, outDir)],
+  plugins: [BannerInjectPlugin(bannerMap), TimingPlugin()],
   ...(!isDebug && { drop: ["console", "debugger"] }),
 
   ...(isMinify && {
