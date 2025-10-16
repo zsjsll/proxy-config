@@ -83,6 +83,18 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
 }
 
 const bannerMap = new Map<string, string>()
+await Promise.all(
+  entryPoints.map(async (file) => {
+    try {
+      const content = await fs.readFile(file, "utf8")
+      const match = content.match(/\/\*!([\s\S]*?)\*\//)
+      if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
+    } catch (err) {
+      console.warn(`⚠️ 读取失败: ${file}`, err)
+    }
+  })
+)
+
 for (const file of entryPoints) {
   const content = fss.readFileSync(file, "utf8")
   const match = content.match(/\/\*!([\s\S]*?)\*\//)
