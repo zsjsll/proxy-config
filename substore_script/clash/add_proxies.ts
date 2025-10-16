@@ -27,7 +27,7 @@ const pList = await produceArtifact({
   },
 })
 
-let content = ProxyUtils.yaml.safeLoad($files[0])
+let content: Config = ProxyUtils.yaml.safeLoad($content)
 
 let template: ProxyProvider = {
   url: "https://a.a.a/",
