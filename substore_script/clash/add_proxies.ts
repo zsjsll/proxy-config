@@ -9,9 +9,11 @@
 [urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 sutstore 的订阅将无效，并且启用 proxy-providers 的模式进行订阅
 */
 
-export {}
+import { fixBoolen } from "../tools/fixparms"
 
 let { name = "airport", fixEmoji = false, type = "subscription", urls } = $arguments
+
+fixEmoji = fixBoolen(fixEmoji)
 
 const pList = await produceArtifact({
   name: name,

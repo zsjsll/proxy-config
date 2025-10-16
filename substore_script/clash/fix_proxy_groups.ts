@@ -10,8 +10,12 @@
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
+import { fixBoolen } from "../tools/fixparms"
 
 let { isHidden = false, num = 1, aiExclude = "HK|RU", isExt = false } = $arguments
+
+isHidden = fixBoolen(isHidden)
+isExt = fixBoolen(isExt)
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
@@ -22,7 +26,7 @@ const template: ProxyGroup = {
   interval: 60,
   url: "https://www.gstatic.com/generate_204",
   "include-all": true,
-  hidden: Boolean(isHidden),
+  hidden: isHidden,
 }
 
 if (content.proxies === undefined) throw new Error("配置文件中没有 proxies, 请先导入")
@@ -79,7 +83,7 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 }
 
 // 附加到旧群组上
-if (!!isExt) content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
+if (isExt) content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
 const aiAreaList = fixAreaList.filter((area) => aiExclude.split(/[|, ]/).every((kw) => area.isoCode !== kw))
@@ -96,7 +100,7 @@ for (const proxyGroup of content["proxy-groups"]) {
   if (proxyGroup.name.includes("AI节点")) {
     proxyGroup.name = `${proxyGroup.name}(${String(aiSum)})`
     proxyGroup.filter = "(?i)" + aiRegExp
-    proxyGroup.hidden = Boolean(isHidden)
+    proxyGroup.hidden = isHidden
     if (proxyGroup["exclude-filter"]) delete proxyGroup["exclude-filter"]
     proxyGroup.url = template.url
   }
@@ -108,7 +112,7 @@ for (const proxyGroup of content["proxy-groups"]) {
 
   // 修改 自动选择 的隐藏属性
   if (proxyGroup.name.includes("自动选择")) {
-    proxyGroup.hidden = Boolean(isHidden)
+    proxyGroup.hidden = isHidden
   }
 
   // 修改含有 关键字 的代理群组的名字(添加节点总数)
@@ -122,9 +126,9 @@ for (const proxyGroup of content["proxy-groups"]) {
     if (["自动选择", "手动选择"].some((kw) => proxy.includes(kw))) proxyGroup.proxies![index] = `${proxy}(${String(sum)})`
   })
 
-  if (Boolean(!isExt)) continue
+  if (!isExt) continue
   // 在 proxies 中含有 手动选择 的代理群组的proxies中添加 自建代理群组
-  if (isExt && proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
+  if (proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
     proxyGroup.proxies?.push(...proxyGroupNameList)
   }
 }
