@@ -157,10 +157,10 @@ proxy-groups:
   - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
-  - { name: 🧱 海外!CN, type: select, proxies: [🚀 节点选择, ✔️ 直连, ✋ 手动选择] } # 域名
-  - { name: 🏠 国内CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
+  - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
+  - { name: 🏠 国内FB, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
   - { name: 🔐 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
-  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连, ✋ 手动选择] }
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连] }
   - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
@@ -169,8 +169,8 @@ proxy-groups:
 
 rules:
   # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
-  - RULE-SET,custom_proxy,🧱 海外!CN
-  - RULE-SET,custom_direct,🏠 国内CN
+  - RULE-SET,custom_proxy,🧱 海外FB
+  - RULE-SET,custom_direct,🏠 国内FB
   - RULE-SET,custom_reject,🚫 广告
   - RULE-SET,ads,🚫 广告
   - RULE-SET,networktest,📈 网络测试
@@ -183,11 +183,11 @@ rules:
   - RULE-SET,ai,🤖 AI!CN
   - RULE-SET,games,🕹️ 游戏!CN
   - RULE-SET,media,🌍 媒体!CN
-  - RULE-SET,tld_proxy,🧱 海外!CN
-  - RULE-SET,proxy,🧱 海外!CN
-  - RULE-SET,cn,🏠 国内CN
+  - RULE-SET,tld_proxy,🧱 海外FB
+  - RULE-SET,proxy,🧱 海外FB
+  - RULE-SET,cn,🏠 国内FB
   - RULE-SET,private_ip,🔐 私有网络,no-resolve
-  - RULE-SET,cn_ip,🏠 国内CN
+  - RULE-SET,cn_ip,🏠 国内FB
   - RULE-SET,media_ip,🌍 媒体!CN
   - RULE-SET,games_ip,🕹️ 游戏!CN
   - RULE-SET,telegram_ip,📲 电报!CN,no-resolve
