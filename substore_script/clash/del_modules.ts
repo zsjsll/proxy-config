@@ -7,14 +7,16 @@ https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-confi
 
 import { fixArray } from "../tools/fixparms"
 
-let { del = [""] } = $arguments
+let { del = [] as string[] } = $arguments
 
 del = fixArray(del)
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
-del.map((m) => {
-  if (content[m]) delete content[m]
-})
+if (del.length > 0) {
+  del.map((m) => {
+    if (content[m]) delete content[m]
+  })
+}
 
 $content = ProxyUtils.yaml.safeDump(content)

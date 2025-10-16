@@ -10,13 +10,14 @@
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
-import { fixArray, fixBoolen } from "../tools/fixparms"
+import { fixArray, fixBoolean, fixNumber } from "../tools/fixparms"
 
 let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], isExt = false } = $arguments
 
 aiExclude = fixArray(aiExclude)
-isHidden = fixBoolen(isHidden)
-isExt = fixBoolen(isExt)
+isHidden = fixBoolean(isHidden)
+isExt = fixBoolean(isExt)
+num = fixNumber(num)
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
@@ -57,7 +58,7 @@ if (areaList.at(-1)!.isoCode !== "") {
 
 // 过滤count小于阈值的节点，添加到其他节点中
 const fixAreaList = areaList.filter((area) => {
-  if (area.count < Number(num)) {
+  if (area.count < num) {
     areaList.at(-1)!.count = areaList.at(-1)!.count + area.count
     return false
   }
