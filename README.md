@@ -30,8 +30,5 @@ services:
 
 ## clash
 
-模板地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/convert_clash.js#isHide&name=free&ai=HK|JP|RU
-
-
-## singbox
+`https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/sub-store_file_tunnel.json`
+导入此脚本
