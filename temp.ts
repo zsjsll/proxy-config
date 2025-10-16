@@ -1,6 +1,4 @@
-const a="🏴‍☠️nihaosdnasdkasd".replace("🏴‍☠️", "❓")
-console.log(a)
+const a="true"
 
 
-const l=[1,2,3]
-l.push(4)
+if(a) console.log(!a)

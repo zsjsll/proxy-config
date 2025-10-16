@@ -38,7 +38,7 @@ let template: ProxyProvider = {
 }
 
 if (Boolean(fixEmoji)) {
-  pList.forEach((p) => {
+  pList.map((p) => {
     p.name = p.name.replace("🏴‍☠️", "❓")
   })
   console.log("🚀 ~ pList:", pList)

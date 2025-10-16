@@ -11,7 +11,7 @@ const modules = del.split(/[|, ]/)
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
-modules.forEach((m) => {
+modules.map((m) => {
   if (content[m]) delete content[m]
 })
 
