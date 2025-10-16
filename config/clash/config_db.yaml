@@ -190,7 +190,7 @@ rules:
   # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
   - RULE-SET,proxy,🧱 海外FB
   - RULE-SET,direct,🔗 国内FB
-  - RULE-SET,deny,🚫 广告
+  - RULE-SET,reject,🚫 广告
   - GEOSITE,ads,🚫 广告
   - GEOSITE,networktest,📈 网络测试
   - GEOSITE,private,🔐 私有网络
