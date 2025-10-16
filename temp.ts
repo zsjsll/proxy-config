@@ -1,4 +1,4 @@
-const a="true"
+const a=[]
 
 
-if(a) console.log(!a)
+console.log(typeof a)

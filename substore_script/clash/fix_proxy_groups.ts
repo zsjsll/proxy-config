@@ -4,16 +4,17 @@
 
 本脚本 可以传入参数：
 [isHidden]:boolen 隐藏所有自动选择的节点
-[aiExclude] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
+[aiExclude]:string[] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 [num] 最小成群数量，默认为1 表示1个都成群
 [isExt]:boolen 是否根据 proxies 进行节点分类， 比如 [美国节点] [日本节点] 等等
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
-import { fixBoolen } from "../tools/fixparms"
+import { fixArray, fixBoolen } from "../tools/fixparms"
 
-let { isHidden = false, num = 1, aiExclude = "HK|RU", isExt = false } = $arguments
+let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], isExt = false } = $arguments
 
+aiExclude = fixArray(aiExclude)
 isHidden = fixBoolen(isHidden)
 isExt = fixBoolen(isExt)
 
@@ -22,8 +23,8 @@ let content: Config = ProxyUtils.yaml.safeLoad($content)
 const template: ProxyGroup = {
   name: "template",
   type: "url-test",
-  tolerance: 20,
-  interval: 60,
+  tolerance: 50,
+  interval: 180,
   url: "https://www.gstatic.com/generate_204",
   "include-all": true,
   hidden: isHidden,
@@ -86,7 +87,7 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 if (isExt) content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
-const aiAreaList = fixAreaList.filter((area) => aiExclude.split(/[|, ]/).every((kw) => area.isoCode !== kw))
+const aiAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
 
 const aiRegExp = aiAreaList.map((area) => area.regExp).join("|")
 const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点

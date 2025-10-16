@@ -9,9 +9,11 @@
 [urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 sutstore 的订阅将无效，并且启用 proxy-providers 的模式进行订阅
 */
 
-import { fixBoolen } from "../tools/fixparms"
+import { fixArray, fixBoolen } from "../tools/fixparms"
 
-let { name = "airport", fixEmoji: isFixEmoji = false, type = "subscription", urls } = $arguments
+let { name = "airport", fixEmoji: isFixEmoji = false, type = "subscription", urls = [""] } = $arguments
+
+urls = fixArray(urls)
 
 isFixEmoji = fixBoolen(isFixEmoji)
 
@@ -34,7 +36,7 @@ let template: ProxyProvider = {
   "health-check": {
     enable: true,
     url: "https://www.gstatic.com/generate_204",
-    interval: 300,
+    interval: 180,
   },
   proxy: "DIRECT",
 }
@@ -46,10 +48,10 @@ if (isFixEmoji) {
   console.log("🚀 ~ pList:", pList)
 }
 
-if (urls) {
+if (urls.length > 0) {
   if (content["proxy-providers"]) throw new Error("请先删除 proxy-providers")
 
-  const proxyProviders = urls.split(/[|, ]/).reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
+  const proxyProviders = urls.reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
     const name = "airport" + index
     obj[name] = template
     obj[name].url = url

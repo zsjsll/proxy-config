@@ -5,13 +5,15 @@ https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-confi
 [modules] :string,'|' ',' ' ' 区分，比如 ai=tun|dns,proxies
 */
 
-let { del = "" } = $arguments
+import { fixArray } from "../tools/fixparms"
 
-const modules = del.split(/[|, ]/)
+let { del = [""] } = $arguments
+
+del = fixArray(del)
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
-modules.map((m) => {
+del.map((m) => {
   if (content[m]) delete content[m]
 })
 
