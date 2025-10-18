@@ -28,7 +28,7 @@ tcp-concurrent: true # 启用 TCP 并发连接，将会使用 dns 解析出的�
 log-level: silent
 find-process-mode: "off"
 global-client-fingerprint: chrome
-disable-keep-alive: false
+disable-keep-alive: false #移动端 一定要关闭心跳包的发送，减少耗电
 keep-alive-idle: 600
 keep-alive-interval: 15
 profile:
@@ -143,7 +143,7 @@ dns:
 auto_test: &auto_test { type: url-test, tolerance: 50, interval: 180, include-all: true, url: https://www.gstatic.com/generate_204 }
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✔️ 直连, ✋ 手动选择] }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名

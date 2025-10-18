@@ -28,7 +28,7 @@ tcp-concurrent: true # 启用 TCP 并发连接，将会使用 dns 解析出的�
 log-level: silent
 find-process-mode: "off"
 global-client-fingerprint: chrome
-disable-keep-alive: false
+disable-keep-alive: false #移动端 一定要关闭心跳包的发送，减少耗电
 keep-alive-idle: 600
 keep-alive-interval: 15
 profile:
@@ -150,7 +150,7 @@ geox-url:
   asn: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN-all.mmdb"
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✔️ 直连, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
@@ -172,8 +172,8 @@ proxy-groups:
   - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
 
   - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 50, interval: 180, include-all: true }
-
   - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
+
   - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)🇭🇰|港|hk|hong ?kong" }
   - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)🇹🇼|台|tw|tai ?wan" }
   # - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)🇰🇷|韩|kr|korean" }
