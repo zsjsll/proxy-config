@@ -251,9 +251,14 @@ class ProxyNameConvert {
   getIsoCode(serverName: string = ""): AreaList {
     let resoult = this.areaList.find((area) => {
       const keywords = area.regExp.split("|")
+
+      if (serverName === keywords.splice(1, 1)[0]) return true
+
       if (keywords.some((keyword) => serverName.includes(keyword))) return true
     })
-    if (resoult === undefined) resoult = { index: this.areaList.length, isoCode: "", flag: "❓", zhName: "其他", enName: "Other", regExp: "", count: 1 }
+
+    if (resoult === undefined)
+      resoult = { index: this.areaList.length, isoCode: "OTHER", flag: "❓", zhName: "其他", enName: "Other", regExp: "❓|🏴‍☠️|其他|Other", count: 1 }
     return resoult
   }
 }
@@ -262,6 +267,6 @@ export const nameConvert = new ProxyNameConvert(oriAreaList)
 // const t = new ProxyNameConvert(oriAreaList)
 
 // console.log(t.getIsoCode("ER"))
-// console.log(t.getIsoCode("中国香港"))
-// console.log(t.getIsoCode("er"))
-// console.log(t.getIsoCode())
+// console.log(t.getIsoCode("HK"))
+// // console.log(t.getIsoCode("er"))
+// console.log(t.getIsoCode("OTHER"))

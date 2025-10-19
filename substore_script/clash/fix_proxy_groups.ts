@@ -1,23 +1,25 @@
 /*!
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden&aiExclude=HK|RU|JP&num=1&isExt
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden&aiExclude=HK|RU|JP&num=1&aiFilerMode=exclude&showCount
 
 本脚本 可以传入参数：
 [isHidden]:boolen 隐藏所有自动选择的节点
+[showCount]:boolen 群组后面显示总数
 [aiExclude]:string[] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 [num] 最小成群数量，默认为1 表示1个都成群
-[isExt]:boolen 是否根据 proxies 进行节点分类， 比如 [美国节点] [日本节点] 等等
+[aiFilerMode]:'exclude'|'include' ai节点的过滤方式， 是通过排除 还是只包括
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
 import { fixArray, fixBoolean, fixNumber } from "../tools/fixparms"
 
-let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], isExt = false } = $arguments
+let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], aiFilerMode = "exclude", showCount = false } = $arguments
 
 aiExclude = fixArray(aiExclude)
 isHidden = fixBoolean(isHidden)
-isExt = fixBoolean(isExt)
+showCount = fixBoolean(showCount)
 num = fixNumber(num)
+if (!["exclude", "include"].includes(aiFilerMode)) throw new Error("必须给aiFilerMode 赋值 'exclude'|'include'")
 
 let content: Config = ProxyUtils.yaml.safeLoad($content)
 
@@ -51,7 +53,7 @@ const areaList: AreaList[] = Array.from(
 )
 
 // 在最后添加一个空的元素 用于统计过滤的节点信息
-if (areaList.at(-1)!.isoCode !== "") {
+if (areaList.at(-1)!.isoCode !== "OTHER") {
   areaList.push(nameConvert.getIsoCode())
   areaList.at(-1)!.count = 0
 }
@@ -67,15 +69,18 @@ const fixAreaList = areaList.filter((area) => {
 
 // 提取其他节点的过滤正则表达式
 const excludeFilter = fixAreaList
+  .filter((a) => a.isoCode !== "OTHER")
   .map((a) => a.regExp)
-  .filter((a) => a !== "")
   .join("|")
 
 // 生成新的代理群组
 const proxyGroups: ProxyGroup[] = fixAreaList.map((area) => {
+  let name = `${area.flag} ${area.zhName}节点`
+  if (showCount) name = name + `(${String(area.count)})`
+
   return {
     ...template,
-    name: `${area.flag} ${area.zhName}节点(${String(area.count)})`,
+    name,
     filter: "(?i)" + area.regExp,
   }
 })
@@ -85,13 +90,24 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 }
 
 // 附加到旧群组上
-if (isExt) content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
+content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
-const aiAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
+const aiIncludeAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
 
-const aiRegExp = aiAreaList.map((area) => area.regExp).join("|")
-const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
+const aiIncludeRegExp = aiIncludeAreaList.map((area) => area.regExp).join("|")
+
+const aiExcludeRegExp = aiExclude
+  .map((v) => nameConvert.getIsoCode(v))
+  .map((area) => area.regExp)
+  .join("|")
+
+const aiIncludeSum = aiIncludeAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
+const aiExcludeSum = fixAreaList.filter((area) => aiExclude.some((iso) => iso === area.isoCode)).reduce((prev, curr) => prev + curr.count, 0)
+
+const aiRegExp = aiFilerMode === "exclude" ? aiExcludeRegExp : aiIncludeRegExp
+
+const aiSum = aiFilerMode === "exclude" ? aiExcludeSum : aiIncludeSum
 
 // 获取新建的代理群组的所有名字，便于添加到符合条件的 proxies 中
 const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name)
@@ -100,35 +116,40 @@ const sum = fixAreaList.reduce((prev, curr) => prev + curr.count, 0)
 for (const proxyGroup of content["proxy-groups"]) {
   // 修改 AI节点 的名字(添加节点总数)
   if (proxyGroup.name.includes("AI节点")) {
-    proxyGroup.name = `${proxyGroup.name}(${String(aiSum)})`
-    proxyGroup.filter = "(?i)" + aiRegExp
-    proxyGroup.hidden = isHidden
     if (proxyGroup["exclude-filter"]) delete proxyGroup["exclude-filter"]
+    if (showCount) proxyGroup.name = `${proxyGroup.name}(${aiSum})`
+    if (aiFilerMode === "include") proxyGroup.filter = "(?i)" + aiRegExp
+    if (aiFilerMode === "exclude") proxyGroup["exclude-filter"] = "(?i)" + aiRegExp
+
+    // proxyGroup.hidden = isHidden
     proxyGroup.url = template.url
   }
 
   // 修改 proxies 中含有 AI节点 的代理群组
-  proxyGroup.proxies?.map((proxy, index) => {
-    if (proxy.includes("AI节点")) proxyGroup.proxies![index] = `${proxy}(${String(aiSum)})`
-  })
+  if (showCount) {
+    proxyGroup.proxies?.map((proxy, index) => {
+      if (proxy.includes("AI节点")) proxyGroup.proxies![index] = `${proxy}(${aiSum})`
+    })
+  }
 
   // 修改 自动选择 的隐藏属性
-  if (proxyGroup.name.includes("自动选择")) {
-    proxyGroup.hidden = isHidden
-  }
+  // if (proxyGroup.name.includes("自动选择")) {
+  //   proxyGroup.hidden = isHidden
+  // }
 
   // 修改含有 关键字 的代理群组的名字(添加节点总数)
   if (["自动选择", "手动选择"].some((kw) => proxyGroup.name.includes(kw))) {
-    proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
+    if (showCount) proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
     proxyGroup.url = template.url
   }
 
   // 修改 proxies 中含有 关键字 的代理群组
-  proxyGroup.proxies?.map((proxy, index) => {
-    if (["自动选择", "手动选择"].some((kw) => proxy.includes(kw))) proxyGroup.proxies![index] = `${proxy}(${String(sum)})`
-  })
+  if (showCount) {
+    proxyGroup.proxies?.map((proxy, index) => {
+      if (["自动选择", "手动选择"].some((kw) => proxy.includes(kw))) proxyGroup.proxies![index] = `${proxy}(${String(sum)})`
+    })
+  }
 
-  if (!isExt) continue
   // 在 proxies 中含有 手动选择 的代理群组的proxies中添加 自建代理群组
   if (proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
     proxyGroup.proxies?.push(...proxyGroupNameList)
