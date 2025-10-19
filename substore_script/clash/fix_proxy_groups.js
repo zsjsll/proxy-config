@@ -1,5 +1,5 @@
 /*!// 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden&aiExclude=HK|RU|JP&num=1&aiFilerMode=exclude&showCount
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden=true&aiExclude=HK|RU|JP|OTHER&num=1&aiFilerMode=exclude&showCount=true
 
 本脚本 可以传入参数：
 [isHidden]:boolen 隐藏所有自动选择的节点
