@@ -88,6 +88,8 @@ dns:
   enable: true
   listen: 0.0.0.0:1053
   ipv6: true
+  use-hosts: true
+  use-system-hosts: true
   respect-rules: true
   # 可选值 fake-ip/redir-host，默认redir-host
   enhanced-mode: fake-ip
@@ -106,21 +108,20 @@ dns:
 
   # 用于解析DNS服务器的域名
   default-nameserver:
-    - https://223.6.6.6/dns-query
-    - https://223.5.5.5/dns-query
-    - https://1.12.12.12/dns-query
-    - https://120.53.53.53/dns-query
-    # - quic://223.6.6.6:853
-    # - quic://223.5.5.5:853
+    - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
+
+    # - https://1.12.12.12/dns-query
+    # - https://120.53.53.53/dns-query
 
   # 代理节点域名解析服务器，仅用于解析代理节点的域名
   proxy-server-nameserver:
-    - https://223.6.6.6/dns-query
-    - https://223.5.5.5/dns-query
-    - https://1.12.12.12/dns-query
-    - https://120.53.53.53/dns-query
-    # - quic://223.6.6.6:853
-    # - quic://223.5.5.5:853
+    - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # - https://8.8.8.8/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # - https://doh.pub/dns-query#ecs=222.172.200.68/24&ecs-override=true
+
 
   # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
   # 用于 direct 出口域名解析的 DNS 服务器
@@ -140,29 +141,29 @@ dns:
     # - https://1.1.1.1/dns-query
     # - https://1.0.0.1/dns-query
 
-auto_test: &auto_test { type: url-test, tolerance: 50, interval: 180, include-all: true, url: https://www.gstatic.com/generate_204 }
+auto_test: &auto_test { type: url-test, tolerance: 30, interval: 180, include-all: true, url: https://www.gstatic.com/generate_204 }
 
 proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
-  - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
-  - { name: 🎮 游戏CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: Ⓜ️ 微软CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 🌈 谷歌CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 🍎 苹果CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 📋 BT下载, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
+  - { name: 🎮 游戏CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: Ⓜ️ 微软CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🌈 谷歌CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🍎 苹果CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📋 BT下载, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
   - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择] } # 域名
   - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
-  - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, ✔️ 直连] } # 域名
-  - { name: 🏠 国内FB, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
-  - { name: 🔐 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
-  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✔️ 直连] }
-  - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
-  - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
+  - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名
+  - { name: 🏠 国内FB, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
+  - { name: 🔐 私有网络, type: select, proxies: [🟢 直连], hidden: true } # 域名 + IP
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🟢 直连] }
+  - { name: 🟢 直连, type: select, proxies: [DIRECT], hidden: true }
+  - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
 
   - { <<: *auto_test, name: ♻️ 自动选择 }
   - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }

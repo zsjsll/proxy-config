@@ -153,23 +153,23 @@ proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
-  - { name: 🚫 广告, type: select, proxies: [❌ 拒绝, ✔️ 直连] } # 域名
-  - { name: 🎮 游戏CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: Ⓜ️ 微软CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 🌈 谷歌CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 🍎 苹果CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 📋 BT下载, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名
-  - { name: 📈 网络测试, type: select, proxies: [✔️ 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
+  - { name: 🎮 游戏CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: Ⓜ️ 微软CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🌈 谷歌CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🍎 苹果CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📋 BT下载, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
   - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择] } # 域名
   - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
   - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
-  - { name: 🧱 海外!CN, type: select, proxies: [🚀 节点选择, ✔️ 直连, ✋ 手动选择] } # 域名
-  - { name: 🏠 国内CN, type: select, proxies: [✔️ 直连, 🚀 节点选择] } # 域名 + IP
-  - { name: 🔐 私有网络, type: select, proxies: [✔️ 直连], hidden: true } # 域名 + IP
-  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✋ 手动选择, ✔️ 直连] }
-  - { name: ✔️ 直连, type: select, proxies: [DIRECT], hidden: true }
-  - { name: ❌ 拒绝, type: select, proxies: [REJECT], hidden: true }
+  - { name: 🧱 海外!CN, type: select, proxies: [🚀 节点选择, 🟢 直连, ✋ 手动选择] } # 域名
+  - { name: 🏠 国内CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
+  - { name: 🔐 私有网络, type: select, proxies: [🟢 直连], hidden: true } # 域名 + IP
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] }
+  - { name: 🟢 直连, type: select, proxies: [DIRECT], hidden: true }
+  - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
 
   - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 50, interval: 180, include-all: true }
   - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
