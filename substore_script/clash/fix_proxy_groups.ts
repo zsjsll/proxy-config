@@ -27,7 +27,7 @@ const template: ProxyGroup = {
   name: "template",
   type: "url-test",
   tolerance: 50,
-  interval: 180,
+  interval: 300,
   url: "https://www.gstatic.com/generate_204",
   "include-all": true,
   hidden: isHidden,
@@ -99,13 +99,11 @@ const aiIncludeRegExp = aiAreaList.map((area) => area.regExp).join("|")
 
 const aiExcludeRegExp = aiExclude.map((v) => nameConvert.getIsoCode(v).regExp).join("|")
 
-
 // const aiIncludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
 // const aiExcludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
 // console.log("🚀 ~ aiIncludeSum:", aiIncludeSum)
 // console.log("🚀 ~ aiExcludeSum:", aiExcludeSum)
-
 
 const aiRegExp = aiFilerMode === "exclude" ? aiExcludeRegExp : aiIncludeRegExp
 
@@ -141,9 +139,10 @@ for (const proxyGroup of content["proxy-groups"]) {
   // }
 
   // 修改含有 关键字 的代理群组的名字(添加节点总数)
-  if (["自动选择", "手动选择"].some((kw) => proxyGroup.name.includes(kw))) {
-    if (showCount) proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
-    proxyGroup.url = template.url
+  if (showCount) {
+    if (["自动选择", "手动选择"].some((kw) => proxyGroup.name.includes(kw))) {
+      proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
+    }
   }
 
   // 修改 proxies 中含有 关键字 的代理群组
