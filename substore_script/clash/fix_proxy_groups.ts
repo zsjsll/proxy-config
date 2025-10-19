@@ -93,21 +93,24 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
-const aiIncludeAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
+const aiAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
 
-const aiIncludeRegExp = aiIncludeAreaList.map((area) => area.regExp).join("|")
+const aiIncludeRegExp = aiAreaList.map((area) => area.regExp).join("|")
 
-const aiExcludeRegExp = aiExclude
-  .map((v) => nameConvert.getIsoCode(v))
-  .map((area) => area.regExp)
-  .join("|")
+const aiExcludeRegExp = aiExclude.map((v) => nameConvert.getIsoCode(v).regExp).join("|")
 
-const aiIncludeSum = aiIncludeAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
-const aiExcludeSum = fixAreaList.filter((area) => aiExclude.some((iso) => iso === area.isoCode)).reduce((prev, curr) => prev + curr.count, 0)
+
+// const aiIncludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
+// const aiExcludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
+
+// console.log("🚀 ~ aiIncludeSum:", aiIncludeSum)
+// console.log("🚀 ~ aiExcludeSum:", aiExcludeSum)
+
 
 const aiRegExp = aiFilerMode === "exclude" ? aiExcludeRegExp : aiIncludeRegExp
 
-const aiSum = aiFilerMode === "exclude" ? aiExcludeSum : aiIncludeSum
+// const aiSum = aiFilerMode === "exclude" ? aiExcludeSum : aiIncludeSum
+const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
 // 获取新建的代理群组的所有名字，便于添加到符合条件的 proxies 中
 const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name)
