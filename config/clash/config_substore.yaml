@@ -122,7 +122,6 @@ dns:
     # - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
     # - https://doh.pub/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
-
   # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
   # 用于 direct 出口域名解析的 DNS 服务器
   direct-nameserver:
@@ -147,6 +146,9 @@ proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
+  - { <<: *auto_test, name: ♻️ 自动选择 }
+  - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
+
   - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
   - { name: 🎮 游戏CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
   - { name: Ⓜ️ 微软CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
@@ -164,9 +166,6 @@ proxy-groups:
   - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🟢 直连] }
   - { name: 🟢 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
-
-  - { <<: *auto_test, name: ♻️ 自动选择 }
-  - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
 
 rules:
   # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
