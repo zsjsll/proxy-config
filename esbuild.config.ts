@@ -70,7 +70,7 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
             try {
               const content = await fs.readFile(absPath, "utf8")
 
-              await fs.writeFile(absPath, `${banner}\n${content}`)
+              await fs.writeFile(absPath, `${banner}\n\n${content}`)
               console.log(`📝 注释已注入: ${path.basename(absPath)}`)
             } catch (e) {
               console.warn(`⚠️ 注入失败: ${absPath}`, e)
