@@ -11,14 +11,14 @@
 
 import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
-let { name = undefined, isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
+let { name = "", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
 
 urls = fixArray(urls)
 isFixEmoji = fixBoolean(isFixEmoji)
 
 let content = getContent()
 
-if (urls.length > 0 && name) throw new Error("'name', 'url' 二选一")
+if (urls.length > 0 && name === "") throw new Error("'name', 'urls' 二选一")
 
 if (urls.length > 0) {
   let template: ProxyProvider = {
@@ -48,7 +48,7 @@ if (urls.length > 0) {
 }
 
 let pList: Proxies
-if (name) {
+if (name !== "") {
   pList = await produceArtifact({
     name: name,
     type: type as Type,
