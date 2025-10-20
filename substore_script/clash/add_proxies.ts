@@ -14,41 +14,25 @@ import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 let { name = "airport", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
 
 urls = fixArray(urls)
-
 isFixEmoji = fixBoolean(isFixEmoji)
-
-const pList = await produceArtifact({
-  name: name,
-  type: type as Type,
-  platform: "ClashMeta",
-  produceType: "internal",
-  produceOpts: {
-    "include-unsupported-proxy": true,
-  },
-})
 
 let content = getContent()
 
-let template: ProxyProvider = {
-  url: "https://a.a.a/",
-  type: "http",
-  interval: 43200,
-  "health-check": {
-    enable: true,
-    url: "https://www.gstatic.com/generate_204",
-    interval: 180,
-  },
-  proxy: "DIRECT",
-}
-
-if (isFixEmoji) {
-  pList.map((p) => {
-    p.name = p.name.replace("🏴‍☠️", "❓")
-  })
-  console.log("🚀 ~ pList:", pList)
-}
+if (urls.length > 0 && name) throw new Error("'name', 'url' 二选一")
 
 if (urls.length > 0) {
+  let template: ProxyProvider = {
+    url: "https://a.a.a/",
+    type: "http",
+    interval: 43200,
+    "health-check": {
+      enable: true,
+      url: "https://www.gstatic.com/generate_204",
+      interval: 180,
+    },
+    proxy: "DIRECT",
+  }
+
   if (content["proxy-providers"]?.airport) {
     const head = urls.shift()!
     content["proxy-providers"].airport.url = head
@@ -61,7 +45,26 @@ if (urls.length > 0) {
     return obj
   }, {})
   content["proxy-providers"] = { ...content["proxy-providers"], ...proxyProviders }
-} else {
+}
+
+let pList: Proxies
+if (name) {
+  pList = await produceArtifact({
+    name: name,
+    type: type as Type,
+    platform: "ClashMeta",
+    produceType: "internal",
+    produceOpts: {
+      "include-unsupported-proxy": true,
+    },
+  })
+
+  if (isFixEmoji) {
+    pList.map((p) => {
+      p.name = p.name.replace("🏴‍☠️", "❓")
+    })
+    console.log("🚀 ~ pList:", pList)
+  }
   content = { proxies: pList, ...content }
 }
 
