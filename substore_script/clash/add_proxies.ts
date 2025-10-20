@@ -49,7 +49,10 @@ if (isFixEmoji) {
 }
 
 if (urls.length > 0) {
-  if (content["proxy-providers"]) throw new Error("请先删除 proxy-providers")
+  if (content["proxy-providers"]?.airport) {
+    const head = urls.shift()!
+    content["proxy-providers"].airport.url = head
+  }
 
   const proxyProviders = urls.reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
     const name = "airport" + index
@@ -57,7 +60,7 @@ if (urls.length > 0) {
     obj[name].url = url
     return obj
   }, {})
-  content["proxy-providers"] = proxyProviders
+  content["proxy-providers"] = { ...content["proxy-providers"], ...proxyProviders }
 } else {
   content = { proxies: pList, ...content }
 }
