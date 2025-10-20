@@ -18,7 +18,7 @@ isFixEmoji = fixBoolean(isFixEmoji)
 
 let content = getContent()
 
-if (urls.length > 0 && name === "") throw new Error("'name', 'urls' 二选一")
+if (urls.length > 0 && name !== "") throw new Error("'name', 'urls' 二选一")
 
 if (urls.length > 0) {
   let template: ProxyProvider = {
