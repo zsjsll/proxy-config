@@ -11,7 +11,7 @@
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
-import { fixArray, fixBoolean, fixNumber } from "../tools/fixparms"
+import { fixArray, fixBoolean, fixNumber, getContent, saveContent } from "../tools/base"
 
 let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], aiFilerMode = "exclude", showCount = false } = $arguments
 
@@ -21,7 +21,7 @@ showCount = fixBoolean(showCount)
 num = fixNumber(num)
 if (!["exclude", "include"].includes(aiFilerMode)) throw new Error("必须给aiFilerMode 赋值 'exclude'|'include'")
 
-let content: Config = ProxyUtils.yaml.safeLoad($content)
+let content = getContent()
 
 const template: ProxyGroup = {
   name: "template",
@@ -159,4 +159,4 @@ for (const proxyGroup of content["proxy-groups"]) {
 }
 
 // 保存
-$content = ProxyUtils.yaml.safeDump(content)
+saveContent(content)

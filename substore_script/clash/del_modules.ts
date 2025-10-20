@@ -5,13 +5,13 @@ https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-confi
 [modules] :string,'|' ',' ' ' 区分，比如 ai=tun|dns,proxies
 */
 
-import { fixArray } from "../tools/fixparms"
+import { fixArray, getContent, saveContent } from "../tools/base"
 
 let { del = [] as string[] } = $arguments
 
 del = fixArray(del)
 
-let content: Config = ProxyUtils.yaml.safeLoad($content)
+let content: Config = getContent()
 
 if (del.length > 0) {
   del.map((m) => {
@@ -19,4 +19,4 @@ if (del.length > 0) {
   })
 }
 
-$content = ProxyUtils.yaml.safeDump(content)
+saveContent(content)

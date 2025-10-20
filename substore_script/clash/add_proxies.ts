@@ -9,7 +9,7 @@
 [urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 sutstore 的订阅将无效，并且启用 proxy-providers 的模式进行订阅
 */
 
-import { fixArray, fixBoolean } from "../tools/fixparms"
+import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
 let { name = "airport", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
 
@@ -27,7 +27,7 @@ const pList = await produceArtifact({
   },
 })
 
-let content: Config = ProxyUtils.yaml.safeLoad($content)
+let content = getContent()
 
 let template: ProxyProvider = {
   url: "https://a.a.a/",
@@ -62,4 +62,4 @@ if (urls.length > 0) {
   content = { proxies: pList, ...content }
 }
 
-$content = ProxyUtils.yaml.safeDump(content)
+saveContent(content)

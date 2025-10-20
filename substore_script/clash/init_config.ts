@@ -5,5 +5,7 @@ https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-confi
 方便后续的处理
 */
 
-const content = ProxyUtils.yaml.safeLoad($files[0])
+let content = ProxyUtils.yaml.safeLoad($content)
+if (Object.keys(content).length === 0) content = ProxyUtils.yaml.safeLoad($files[0])
+
 $content = ProxyUtils.yaml.safeDump(content)

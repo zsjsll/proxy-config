@@ -17,3 +17,14 @@ export function fixNumber(args: number | string): number {
 
   throw new Error(`传入参数错误，${args}应该为number`)
 }
+
+export function getContent() {
+  let content = ProxyUtils.yaml.safeLoad($content)
+  if (Object.keys(content).length === 0) content = ProxyUtils.yaml.safeLoad($files[0])
+
+  return content
+}
+
+export function saveContent(content: Config) {
+  $content = ProxyUtils.yaml.safeDump(content)
+}
