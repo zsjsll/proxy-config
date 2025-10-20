@@ -11,7 +11,7 @@
 
 import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
-let { name = "airport", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
+let { name = "", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
 
 urls = fixArray(urls)
 isFixEmoji = fixBoolean(isFixEmoji)
