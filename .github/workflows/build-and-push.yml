@@ -23,24 +23,18 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: 10.18.2
-          standalone: true
 
       - name: Verify pnpm installation
         run: |
           echo "PATH=$PATH"
           which pnpm
           pnpm --version
-        shell: bash
 
       - name: Install dependencies
         run: pnpm install
-        shell: bash
 
       - name: Build project
         run: pnpx build
-        shell: bash
 
       - name: Commit and push build artifacts
         run: |
@@ -49,4 +43,3 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "chore: update build artifacts [skip ci]"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:self
-        shell: bash
