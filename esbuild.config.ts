@@ -18,7 +18,7 @@ async function getEntryPointsr(entryDir: string, filterFiles: string[]) {
 const entryPoints = await getEntryPointsr(entryDir, ["clash"])
 console.log(entryPoints)
 
-const outDir = entryDir
+const outDir = "dist"
 
 function TimingPlugin(): esbuild.Plugin {
   return {
@@ -105,7 +105,7 @@ const baseOptions: esbuild.BuildOptions = {
   entryPoints: entryPoints,
   bundle: true,
   outdir: outDir,
-  outbase: outDir,
+  outbase: "./substore_script",
   format: "esm", // 输出 ES Module 格式
   sourcemap: false, // 生成 Source Map
   target: ["esnext"], // 目标环境
