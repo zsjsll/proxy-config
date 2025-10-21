@@ -61,7 +61,7 @@ jobs:
 
       - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
-          if git remote get-url origin > /dev/null 2>&1; then
+          if git remote | grep -w origin ; then
             git remote set-url origin ${{ env.REPO_URL }}
           else
             git remote add origin ${{ env.REPO_URL }}
