@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,19 +41,26 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Check branche and create
+      - name: Check target branch and create
         run: |
-          ARTIFACT_DIR="${{ env.ARTIFACT_DIR }}"
-          TARGET_BRANCH="${{ env.TARGET_BRANCH }}"
+          if ! git show-ref --verify --quiet refs/heads/${{ env.TARGET_BRANCH }}; then
+          echo "Branch ${{ env.TARGET_BRANCH }} does not exist. Creating it as an orphan branch."
 
-          if ! git show-ref --verify --quiet refs/heads/$TARGET_BRANCH; then
-          echo "Branch '$TARGET_BRANCH' does not exist. Creating it based on the current commit."
-
-          git checkout --orphan $TARGET_BRANCH
-          git rm -rf . # 清空索引
-          git commit --allow-empty -m "Initialize deployment branch" # 提交一个空提交作为起点
-          git checkout - # 切换回原来的分支
+          git checkout --orphan ${{ env.TARGET_BRANCH }}
+          git rm -rf .
+          git commit --allow-empty -m "Initialize deployment branch"
+          git push origin ${{ env.TARGET_BRANCH }}
+          git checkout ${{ github.ref_name }}
           fi
+
+      - name: Checkout target branch and clear
+        run: |
+          rm -rf ${{ env.ARTIFACT_DIR }}
+          git worktree prune
+          git worktree add ${{ env.ARTIFACT_DIR }} ${{ env.TARGET_BRANCH }}
+          cd ${{ env.ARTIFACT_DIR }}
+          rm -rf ./*
+          cd ..
 
       - name: Install dependencies
         run: pnpm install
@@ -69,13 +76,7 @@ jobs:
               exit 1
           fi
 
-          mkdir ../dist-branch
-          git worktree add ../dist-branch dist
-
-          cd ../dist-branch
-
-
-          git add -f -u dist
-          git add -f dist
-          git diff --cached --quiet || git commit -m "chore: update build artifacts [skip ci]"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:dist
+          cd ${{ env.ARTIFACT_DIR }}
+          git add -A
+          git diff --cached --quiet || git commit -m "Update file from commit ${{ github.sha }} [skip ci]"
+          git push origin HEAD:${{ env.TARGET_BRANCH }}
