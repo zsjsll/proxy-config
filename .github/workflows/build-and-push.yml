@@ -50,6 +50,9 @@ jobs:
       - name: Build project
         run: pnpm run build
 
+      - name: eeeeeee
+        run: pnpm store path
+
       - name: Create temp repository
         run: |
           if [ ! -d "$ARTIFACT_DIR" ]; then
