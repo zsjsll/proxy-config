@@ -57,11 +57,13 @@ jobs:
 
       - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
-          git remote add origin ${{ env.REPO_URL }}
+          if git remote get-url origin > /dev/null 2>&1; then
+            git remote set-url origin ${{ env.REPO_URL }}
+          else
+            git remote add origin ${{ env.REPO_URL }}
+          fi
           git fetch origin ${{ env.TARGET_BRANCH }} --depth=1 || true
-
           git add -A .
-
           if git diff --quiet --cached FETCH_HEAD -- . ; then
             echo "Artifact content is identical to the content on ${{ env.TARGET_BRANCH }}. Skipping commit and push."
             exit 0
