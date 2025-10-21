@@ -1,0 +1,45 @@
+name: Build and Push Mixed Artifacts
+
+on:
+  push:
+    branches:
+      - self
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false  # 禁用默认身份验证，手动控制 push
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpx build
+
+      - name: Commit and push build artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 添加所有变更（包括混合输出）
+          git add -A
+
+          # 如果没有变更则跳过提交
+          git diff --cached --quiet || git commit -m "chore: update build artifacts [skip ci]"
+
+          # 推送到 self 分支
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:self
