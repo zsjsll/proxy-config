@@ -21,15 +21,21 @@ jobs:
           node-version: 24.10.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          cache: true
+        uses: pnpm/action-setup@v4.2.0
 
-      # - name: Install dependencies
-      #   run: pnpm install
+      - name: Setup cache
+        uses: actions/cache@v4.3.0
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build project
-        run: pnpm build
+        run: pnpm run build
 
       - name: Commit and push build artifacts
         run: |
