@@ -30,14 +30,9 @@ jobs:
         with:
           version: 10.18.2
 
-      - name: Setup cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
+      - name: Get pnpm store path
+        id: store-path
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
 
       - name: Configure Global Git Identity
         run: |
@@ -50,8 +45,13 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      - name: eeeeeee
-        run: pnpm store path
+      - name: Setup cache
+        uses: actions/cache@v4.3.0
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Create temp repository
         run: |
