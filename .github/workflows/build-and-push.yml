@@ -11,6 +11,8 @@ jobs:
     env:
       ARTIFACT_DIR: dist # 变量 1: 产物目录名
       TARGET_BRANCH: dist # 变量 2: 目标分支名
+      COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
+      REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
 
     steps:
       - name: Checkout repository
@@ -41,24 +43,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Check target branch and create
+      - name: Create remote ${{ env.TARGET_BRANCH }} branch
         run: |
           if ! git ls-remote --exit-code origin refs/heads/${{ env.TARGET_BRANCH }}; then
-          echo "Branch ${{ env.TARGET_BRANCH }} does not exist. Creating it as an orphan branch."
+            echo "Branch ${{ env.TARGET_BRANCH }} does not exist. Creating it as an orphan branch."
 
-          git checkout --orphan ${{ env.TARGET_BRANCH }}
-          git rm -rf .
-          git commit --allow-empty -m "Initialize deployment branch"
-          git push origin ${{ env.TARGET_BRANCH }}
-          git checkout ${{ github.ref_name }}
+            git checkout --orphan ${{ env.TARGET_BRANCH }}
+            git rm -rf .
+            git commit --allow-empty -m "Initialize deployment branch"
+            git push origin ${{ env.TARGET_BRANCH }}
+            git checkout ${{ github.ref_name }}
           fi
-
-      - name: Checkout target branch and clear
-        run: |
-          git worktree add ${{ env.ARTIFACT_DIR }} ${{ env.TARGET_BRANCH }}
-          cd ${{ env.ARTIFACT_DIR }}
-          rm -rf ./*
-          cd ..
 
       - name: Install dependencies
         run: pnpm install
@@ -66,15 +61,21 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      - name: Commit and push build artifacts
+      - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
-
           if [ ! -d "$ARTIFACT_DIR" ]; then
-              echo "Error: Build output directory '$ARTIFACT_DIR' not found. Check build step."
+              echo "Error: Build output directory ${{ env.ARTIFACT_DIR }} not found. Check build step."
               exit 1
           fi
-
           cd ${{ env.ARTIFACT_DIR }}
-          git add -A
-          git diff --cached --quiet || git commit -m "Update file from commit ${{ github.sha }} [skip ci]"
-          git push origin HEAD:${{ env.TARGET_BRANCH }}
+          git init
+          git remote add origin ${{ env.REPO_URL }}
+          git fetch origin ${{ env.TARGET_BRANCH }} --depth=1 || true
+
+
+          git add -A .
+          git diff --quiet --cached FETCH_HEAD -- . && exit 0
+          git commit -m "${{ env.COMMIT_MESSAGE }}"
+          git push origin +HEAD:${{ env.TARGET_BRANCH }}
+
+          echo "Successfully deployed artifacts to branch ${{ env.TARGET_BRANCH }}"
