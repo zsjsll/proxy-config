@@ -34,7 +34,7 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        run: pnpx build
+        run: pnpm build
 
       - name: Commit and push build artifacts
         run: |
