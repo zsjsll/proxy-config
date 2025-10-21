@@ -38,24 +38,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Create remote ${{ env.TARGET_BRANCH }} branch
-        run: |
-          if ! git ls-remote --exit-code origin refs/heads/${{ env.TARGET_BRANCH }}; then
-            echo "Branch ${{ env.TARGET_BRANCH }} does not exist. Creating it as an orphan branch."
 
-            git checkout --orphan ${{ env.TARGET_BRANCH }}
-            git rm -rf .
-            git commit --allow-empty -m "Initialize deployment branch"
-            git push origin ${{ env.TARGET_BRANCH }}
-            git checkout ${{ github.ref_name }}
-          fi
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Build project
         run: pnpm run build
-
 
       - name: Create temp repository
         run: |
@@ -65,15 +54,11 @@ jobs:
           fi
           cd ${{ env.ARTIFACT_DIR }}
           git init
-
-      - name: Configure Git for Bot
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
-
           git remote add origin ${{ env.REPO_URL }}
           git fetch origin ${{ env.TARGET_BRANCH }} --depth=1 || true
 
