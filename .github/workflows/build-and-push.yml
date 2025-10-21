@@ -19,19 +19,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.10.0
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
 
-      - name: Verify pnpm installation
-        run: |
-          echo "PATH=$PATH"
-          which pnpm
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
       - name: Build project
         run: pnpm build
