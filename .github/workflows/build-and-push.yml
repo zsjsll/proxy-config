@@ -38,11 +38,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Configure Git for Bot
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Create remote ${{ env.TARGET_BRANCH }} branch
         run: |
           if ! git ls-remote --exit-code origin refs/heads/${{ env.TARGET_BRANCH }}; then
@@ -61,20 +56,34 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      - name: Deploy to ${{ env.TARGET_BRANCH }}
+
+      - name: Create temp repository
         run: |
           if [ ! -d "$ARTIFACT_DIR" ]; then
-              echo "Error: Build output directory ${{ env.ARTIFACT_DIR }} not found. Check build step."
-              exit 1
+            echo "Error: Build output directory ${{ env.ARTIFACT_DIR }} not found. Check build step."
+            exit 1
           fi
           cd ${{ env.ARTIFACT_DIR }}
           git init
+
+      - name: Configure Git for Bot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy to ${{ env.TARGET_BRANCH }}
+        run: |
+
           git remote add origin ${{ env.REPO_URL }}
           git fetch origin ${{ env.TARGET_BRANCH }} --depth=1 || true
 
-
           git add -A .
-          git diff --quiet --cached FETCH_HEAD -- . && exit 0
+
+          if git diff --quiet --cached FETCH_HEAD -- . ; then
+            echo "Artifact content is identical to the content on ${{ env.TARGET_BRANCH }}. Skipping commit and push."
+            exit 0
+          fi
+
           git commit -m "${{ env.COMMIT_MESSAGE }}"
           git push origin +HEAD:${{ env.TARGET_BRANCH }}
 
