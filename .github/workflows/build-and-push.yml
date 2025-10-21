@@ -43,7 +43,7 @@ jobs:
 
       - name: Check target branch and create
         run: |
-          if ! git show-ref --verify --quiet refs/heads/${{ env.TARGET_BRANCH }}; then
+          if ! git ls-remote --exit-code origin refs/heads/${{ env.TARGET_BRANCH }}; then
           echo "Branch ${{ env.TARGET_BRANCH }} does not exist. Creating it as an orphan branch."
 
           git checkout --orphan ${{ env.TARGET_BRANCH }}
