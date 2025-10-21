@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      ARTIFACT_DIR: dist # 变量 1: 产物目录名
+      TARGET_BRANCH: dist # 变量 2: 目标分支名
 
     steps:
       - name: Checkout repository
@@ -33,6 +36,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
+      - name: Configure Git for Bot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check branche and create
+        run: |
+          ARTIFACT_DIR="${{ env.ARTIFACT_DIR }}"
+          TARGET_BRANCH="${{ env.TARGET_BRANCH }}"
+
+          if ! git show-ref --verify --quiet refs/heads/$TARGET_BRANCH; then
+          echo "Branch '$TARGET_BRANCH' does not exist. Creating it based on the current commit."
+
+          git checkout --orphan $TARGET_BRANCH
+          git rm -rf . # 清空索引
+          git commit --allow-empty -m "Initialize deployment branch" # 提交一个空提交作为起点
+          git checkout - # 切换回原来的分支
+          fi
+
       - name: Install dependencies
         run: pnpm install
 
@@ -41,9 +63,19 @@ jobs:
 
       - name: Commit and push build artifacts
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -u dist
-          git add dist
+
+          if [ ! -d "$ARTIFACT_DIR" ]; then
+              echo "Error: Build output directory '$ARTIFACT_DIR' not found. Check build step."
+              exit 1
+          fi
+
+          mkdir ../dist-branch
+          git worktree add ../dist-branch dist
+
+          cd ../dist-branch
+
+
+          git add -f -u dist
+          git add -f dist
           git diff --cached --quiet || git commit -m "chore: update build artifacts [skip ci]"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:dist
