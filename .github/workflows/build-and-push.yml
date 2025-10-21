@@ -38,6 +38,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
+
+      - name: Configure Global Git Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Install dependencies
         run: pnpm install
 
@@ -52,8 +58,6 @@ jobs:
           fi
           cd ${{ env.ARTIFACT_DIR }}
           git init
-          export GIT_AUTHOR_NAME="github-actions[bot]"
-          export GIT_AUTHOR_EMAIL="github-actions[bot]@users.noreply.github.com"
 
       - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
