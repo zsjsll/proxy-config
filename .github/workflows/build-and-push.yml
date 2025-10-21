@@ -61,9 +61,12 @@ jobs:
 
       - name: Deploy to ${{ env.TARGET_BRANCH }}
         run: |
-
-
-
+          git remote
+          if git remote | grep -w origin ; then
+            git remote set-url origin ${{ env.REPO_URL }}
+          else
+            git remote add origin ${{ env.REPO_URL }}
+          fi
           git fetch origin ${{ env.TARGET_BRANCH }} --depth=1 || true
           git add -A .
           if git diff --quiet --cached FETCH_HEAD -- . ; then
