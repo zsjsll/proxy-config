@@ -55,8 +55,6 @@ jobs:
 
       - name: Checkout target branch and clear
         run: |
-          rm -rf ${{ env.ARTIFACT_DIR }}
-          git worktree prune
           git worktree add ${{ env.ARTIFACT_DIR }} ${{ env.TARGET_BRANCH }}
           cd ${{ env.ARTIFACT_DIR }}
           rm -rf ./*
