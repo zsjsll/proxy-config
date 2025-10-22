@@ -30,5 +30,5 @@ services:
 
 ## clash
 
-`https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/sub-store_file_tunnel.json`
+`https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json`
 导入此脚本

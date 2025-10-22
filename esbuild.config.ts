@@ -1,9 +1,9 @@
+import { copy } from "esbuild-plugin-copy"
 import esbuild from "esbuild"
 import fg from "fast-glob"
 import { performance } from "perf_hooks"
 import fs from "fs/promises"
 import path from "path"
-
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
@@ -82,11 +82,6 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
   }
 }
 
-interface CopyParms {
-  from: string[]
-  to: string[]
-}
-
 const bannerMap = new Map<string, string>()
 await Promise.all(
   entryPoints.map(async (file) => {
@@ -113,7 +108,21 @@ const baseOptions: esbuild.BuildOptions = {
   metafile: true,
   // charset: "utf8",
 
-  plugins: [BannerInjectPlugin(bannerMap), TimingPlugin()],
+  plugins: [
+    BannerInjectPlugin(bannerMap),
+    TimingPlugin(),
+    copy({ assets: { from: "./README.md", to: "./README.md" } }),
+    copy({ assets: { from: "./substore_script/sub-store_file_free.json", to: "./sub-store_file_free.json" } }),
+    copy({ assets: { from: "./config/**/*", to: "./config" } }),
+
+    // fileCopyPlugin({
+    //   globs: [
+    //     { from: "./config/**/*", to: "./dist/config" },
+    //     { from: "./substore_script/sub-store_file_free.json", to: "./dist/" },
+    //     { from: "./README.md", to: "./dist/" },
+    //   ],
+    // }),
+  ],
   ...(!isDebug && { drop: ["console", "debugger"] }),
 
   ...(isMinify && {
@@ -149,7 +158,7 @@ async function runEsbuild() {
       console.log(`🛠️ [BUILD MODE] 执行单次构建...`)
       await ctx.rebuild()
 
-      console.log(`📂 输出目录 ${entryDir}`)
+      console.log(`📂 输出目录 ${outDir}`)
     } catch (e) {
       console.error("❌ 构建出错:", e)
     } finally {
