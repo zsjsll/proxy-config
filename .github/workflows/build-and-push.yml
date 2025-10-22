@@ -58,7 +58,9 @@ jobs:
 
     steps:
       - name: List build output
-        run: ls -R
+        run: |
+          ls -R
+          pwd
 
       - name: Create temp repository
         run: |
