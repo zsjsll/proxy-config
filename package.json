@@ -18,6 +18,5 @@
     "esbuild": "latest",
     "fast-glob": "latest",
     "prettier": "latest"
-  },
-  "dependencies": {}
+  }
 }

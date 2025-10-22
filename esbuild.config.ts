@@ -2,20 +2,20 @@ import esbuild from "esbuild"
 import fg from "fast-glob"
 import { performance } from "perf_hooks"
 import fs from "fs/promises"
-import fss from "fs"
 import path from "path"
+
 
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./substore_script"
 
-async function getEntryPointsr(entryDir: string, filterFiles: string[]) {
+async function getEntryPoints(entryDir: string, filterFiles: string[]) {
   const entryPoints = await fg(`${entryDir}/**/*.ts`)
   filterFiles = filterFiles.map((v) => entryDir + "/" + v)
   return entryPoints.filter((point) => filterFiles.some((kw) => point.includes(kw)))
 }
-const entryPoints = await getEntryPointsr(entryDir, ["clash"])
+const entryPoints = await getEntryPoints(entryDir, ["clash"])
 console.log(entryPoints)
 
 const outDir = "dist"
@@ -82,6 +82,11 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
   }
 }
 
+interface CopyParms {
+  from: string[]
+  to: string[]
+}
+
 const bannerMap = new Map<string, string>()
 await Promise.all(
   entryPoints.map(async (file) => {
@@ -94,12 +99,6 @@ await Promise.all(
     }
   })
 )
-
-for (const file of entryPoints) {
-  const content = fss.readFileSync(file, "utf8")
-  const match = content.match(/\/\*!([\s\S]*?)\*\//)
-  if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
-}
 
 const baseOptions: esbuild.BuildOptions = {
   entryPoints: entryPoints,
