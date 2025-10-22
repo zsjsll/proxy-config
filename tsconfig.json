@@ -14,5 +14,5 @@
     "allowJs": true,
     "outDir": "./dist"
   },
-  "include": ["substore_script"]
+  "include": ["src"]
 }

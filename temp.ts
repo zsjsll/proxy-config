@@ -1,4 +1,5 @@
-const a ={a:1,b:2}
-const b ={}
+const a = ["1", "2", "3", "4"]
 
-if(b) console.log(123)
+const b = ["a", "b", "c", ...(false && a)]
+
+console.log(b)

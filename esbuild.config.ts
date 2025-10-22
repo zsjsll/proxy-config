@@ -99,7 +99,7 @@ const baseOptions: esbuild.BuildOptions = {
   entryPoints: entryPoints,
   bundle: true,
   outdir: outDir,
-  outbase: "./substore_script",
+  outbase: entryDir,
   format: "esm", // 输出 ES Module 格式
   sourcemap: false, // 生成 Source Map
   target: ["esnext"], // 目标环境
@@ -109,19 +109,16 @@ const baseOptions: esbuild.BuildOptions = {
   // charset: "utf8",
 
   plugins: [
-    BannerInjectPlugin(bannerMap),
     TimingPlugin(),
-    copy({ assets: { from: "./README.md", to: "./README.md" } }),
-    copy({ assets: { from: "./substore_script/sub-store_file_free.json", to: "./sub-store_file_free.json" } }),
-    copy({ assets: { from: "./config/**/*", to: "./config" } }),
-
-    // fileCopyPlugin({
-    //   globs: [
-    //     { from: "./config/**/*", to: "./dist/config" },
-    //     { from: "./substore_script/sub-store_file_free.json", to: "./dist/" },
-    //     { from: "./README.md", to: "./dist/" },
-    //   ],
-    // }),
+    ...(isWatchMode
+      ? []
+      : [
+          BannerInjectPlugin(bannerMap),
+          copy({ assets: { from: "./src/README.md", to: "./README.md" } }),
+          copy({ assets: { from: "./src/sub-store_file_free.json", to: "./sub-store_file_free.json" } }),
+          copy({ assets: { from: "./config/**/*", to: "./config" } }),
+          copy({ assets: { from: "./rules/**/*", to: "./rules" } }),
+        ]),
   ],
   ...(!isDebug && { drop: ["console", "debugger"] }),
 

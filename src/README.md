@@ -19,7 +19,18 @@ services:
     stdin_open: true
 ```
 
+# 目录结构
+
 ## clash
 
+各种substore 的脚本，具体用法可以导入此脚本
+
 `https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json`
-导入此脚本
+
+## config
+
+配置文件
+
+## rules
+
+自定义的规则集
