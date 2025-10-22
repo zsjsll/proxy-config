@@ -8,7 +8,7 @@ import path from "path"
 const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
 const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
-const entryDir = "./substore_script"
+const entryDir = "./src"
 
 async function getEntryPoints(entryDir: string, filterFiles: string[]) {
   const entryPoints = await fg(`${entryDir}/**/*.ts`)
@@ -18,7 +18,7 @@ async function getEntryPoints(entryDir: string, filterFiles: string[]) {
 const entryPoints = await getEntryPoints(entryDir, ["clash"])
 console.log(entryPoints)
 
-const outDir = "dist"
+const outDir = "./dist"
 
 function TimingPlugin(): esbuild.Plugin {
   return {
