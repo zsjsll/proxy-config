@@ -31,27 +31,27 @@ jobs:
           version: 10.18.2
 
       - name: Get pnpm store path
-        id: store-path
-        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+        id: store_path
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Configure Global Git Identity
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Setup cache
+        uses: actions/cache@v4.3.0
+        with:
+          path: ${{ steps.store_path.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Install dependencies
         run: pnpm install
 
       - name: Build project
         run: pnpm run build
-
-      - name: Setup cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
 
       - name: Create temp repository
         run: |
