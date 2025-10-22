@@ -1,4 +1,4 @@
-name: Build and Push Mixed Artifacts
+name: Build and push to dist branch
 
 on:
   push:
@@ -6,8 +6,14 @@ on:
       - self
 
 jobs:
-  Build:
+  works:
     runs-on: ubuntu-latest
+    env:
+      ARTIFACT_DIR: dist # 变量 1: 产物目录名
+      TARGET_BRANCH: dist # 变量 2: 目标分支名
+      COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
+      REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,21 +52,6 @@ jobs:
 
       - name: Build project
         run: pnpm run build
-
-  Push:
-    runs-on: ubuntu-latest
-    needs: Build
-    env:
-      ARTIFACT_DIR: dist # 变量 1: 产物目录名
-      TARGET_BRANCH: dist # 变量 2: 目标分支名
-      COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
-      REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-
-    steps:
-      - name: List build output
-        run: |
-          ls -R
-          pwd
 
       - name: Create temp repository
         run: |
