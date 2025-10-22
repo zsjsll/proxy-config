@@ -57,6 +57,9 @@ jobs:
       REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
 
     steps:
+      - name: List build output
+        run: ls -R
+
       - name: Create temp repository
         run: |
           if [ ! -d "${{ env.ARTIFACT_DIR }}" ]; then
