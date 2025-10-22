@@ -31,6 +31,7 @@ services:
 配置文件
 
 <a href="https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_substore.yaml" target="_blank" rel="noopener noreferrer">config_substore.yaml</a> **优先** 规则集通过mrs加载
+
 <a href="https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_db.yaml" target="_blank" rel="noopener noreferrer">config_db.yaml</a> 规则集通过db加载
 
 ## rules
@@ -38,5 +39,7 @@ services:
 自定义的规则集
 
 <a href="https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/proxy.yaml" target="_blank" rel="noopener noreferrer">proxy.yaml</a>
+
 <a href="https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/direct.yaml" target="_blank" rel="noopener noreferrer">direct.yaml</a>
+
 <a href="https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/reject.yaml" target="_blank" rel="noopener noreferrer">reject.yaml</a>
