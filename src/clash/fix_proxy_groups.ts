@@ -24,69 +24,67 @@ if (!["exclude", "include"].includes(aiFilerMode)) throw new Error("必须给aiF
 let content = getContent()
 
 const template: ProxyGroup = {
-  name: "template",
-  type: "url-test",
-  tolerance: 50,
-  interval: 300,
-  url: "https://www.gstatic.com/generate_204",
-  "include-all": true,
-  hidden: isHidden,
+        name: "template",
+        type: "url-test",
+        tolerance: 50,
+        interval: 300,
+        url: "https://www.gstatic.com/generate_204",
+        "include-all": true,
+        hidden: isHidden,
 }
 
 if (content.proxies === undefined) throw new Error("配置文件中没有 proxies, 请先导入")
 
 // 生成需要的信息
 const areaList: AreaList[] = Array.from(
-  content.proxies
-    .map((element) => nameConvert.getIsoCode(element.name))
-    .sort((a, b) => a.index - b.index) // 排序
-    .reduce((prev: Map<number, AreaList>, curr) => {
-      const key = curr.index
-      if (prev.has(key)) {
-        const obj = prev.get(key)!
-        obj.count = obj.count + 1
-      } else prev.set(key, curr)
-
-      return prev
-    }, new Map())
-    .values()
+        content.proxies
+                .map((element) => nameConvert.getIsoCode(element.name))
+                .sort((a, b) => a.index - b.index) // 排序
+                .reduce((prev: Map<number, AreaList>, curr) => {
+                        const key = curr.index
+                        if (prev.has(key)) {
+                                const obj = prev.get(key)!
+                                obj.count = obj.count + 1
+                        } else prev.set(key, curr)
+                        return prev
+                }, new Map())
+                .values()
 )
 
 // 在最后添加一个空的元素 用于统计过滤的节点信息
 if (areaList.at(-1)!.isoCode !== "OTHER") {
-  areaList.push(nameConvert.getIsoCode())
-  areaList.at(-1)!.count = 0
+        areaList.push(nameConvert.getIsoCode())
+        areaList.at(-1)!.count = 0
 }
 
 // 过滤count小于阈值的节点，添加到其他节点中
 const fixAreaList = areaList.filter((area) => {
-  if (area.count < num) {
-    areaList.at(-1)!.count = areaList.at(-1)!.count + area.count
-    return false
-  }
-  return true
+        if (area.count < num) {
+                areaList.at(-1)!.count = areaList.at(-1)!.count + area.count
+                return false
+        }
+        return true
 })
 
 // 提取其他节点的过滤正则表达式
 const excludeFilter = fixAreaList
-  .filter((a) => a.isoCode !== "OTHER")
-  .map((a) => a.regExp)
-  .join("|")
+        .filter((a) => a.isoCode !== "OTHER")
+        .map((a) => a.regExp)
+        .join("|")
 
 // 生成新的代理群组
 const proxyGroups: ProxyGroup[] = fixAreaList.map((area) => {
-  let name = `${area.flag} ${area.zhName}节点`
-  if (showCount) name = name + `(${String(area.count)})`
-
-  return {
-    ...template,
-    name,
-    filter: "(?i)" + area.regExp,
-  }
+        let name = `${area.flag} ${area.zhName}节点`
+        if (showCount) name = name + `(${String(area.count)})`
+        return {
+                ...template,
+                name,
+                filter: "(?i)" + area.regExp,
+        }
 })
 if (proxyGroups.at(-1)!.filter === "(?i)") {
-  delete proxyGroups.at(-1)!.filter
-  proxyGroups.at(-1)!["exclude-filter"] = "(?i)" + excludeFilter
+        delete proxyGroups.at(-1)!.filter
+        proxyGroups.at(-1)!["exclude-filter"] = "(?i)" + excludeFilter
 }
 
 // 附加到旧群组上
@@ -115,47 +113,48 @@ const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name
 const sum = fixAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
 for (const proxyGroup of content["proxy-groups"]) {
-  // 修改 AI节点 的名字(添加节点总数)
-  if (proxyGroup.name.includes("AI节点")) {
-    if (proxyGroup["exclude-filter"]) delete proxyGroup["exclude-filter"]
-    if (showCount) proxyGroup.name = `${proxyGroup.name}(${aiSum})`
-    if (aiFilerMode === "include") proxyGroup.filter = "(?i)" + aiRegExp
-    if (aiFilerMode === "exclude") proxyGroup["exclude-filter"] = "(?i)" + aiRegExp
+        // 修改 AI节点 的名字(添加节点总数)
+        if (proxyGroup.name.includes("AI节点")) {
+                if (proxyGroup["exclude-filter"]) delete proxyGroup["exclude-filter"]
+                if (showCount) proxyGroup.name = `${proxyGroup.name}(${aiSum})`
+                if (aiFilerMode === "include") proxyGroup.filter = "(?i)" + aiRegExp
+                if (aiFilerMode === "exclude") proxyGroup["exclude-filter"] = "(?i)" + aiRegExp
 
-    // proxyGroup.hidden = isHidden
-    proxyGroup.url = template.url
-  }
+                // proxyGroup.hidden = isHidden
+                proxyGroup.url = template.url
+        }
 
-  // 修改 proxies 中含有 AI节点 的代理群组
-  if (showCount) {
-    proxyGroup.proxies?.map((proxy, index) => {
-      if (proxy.includes("AI节点")) proxyGroup.proxies![index] = `${proxy}(${aiSum})`
-    })
-  }
+        // 修改 proxies 中含有 AI节点 的代理群组
+        if (showCount) {
+                proxyGroup.proxies?.map((proxy, index) => {
+                        if (proxy.includes("AI节点")) proxyGroup.proxies![index] = `${proxy}(${aiSum})`
+                })
+        }
 
-  // 修改 自动选择 的隐藏属性
-  // if (proxyGroup.name.includes("自动选择")) {
-  //   proxyGroup.hidden = isHidden
-  // }
+        // 修改 自动选择 的隐藏属性
+        // if (proxyGroup.name.includes("自动选择")) {
+        //   proxyGroup.hidden = isHidden
+        // }
 
-  // 修改含有 关键字 的代理群组的名字(添加节点总数)
-  if (showCount) {
-    if (["自动选择", "手动选择"].some((kw) => proxyGroup.name.includes(kw))) {
-      proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
-    }
-  }
+        // 修改含有 关键字 的代理群组的名字(添加节点总数)
+        if (showCount) {
+                if (["自动选择", "手动选择"].some((kw) => proxyGroup.name.includes(kw))) {
+                        proxyGroup.name = `${proxyGroup.name}(${String(sum)})`
+                }
+        }
 
-  // 修改 proxies 中含有 关键字 的代理群组
-  if (showCount) {
-    proxyGroup.proxies?.map((proxy, index) => {
-      if (["自动选择", "手动选择"].some((kw) => proxy.includes(kw))) proxyGroup.proxies![index] = `${proxy}(${String(sum)})`
-    })
-  }
+        // 修改 proxies 中含有 关键字 的代理群组
+        if (showCount) {
+                proxyGroup.proxies?.map((proxy, index) => {
+                        if (["自动选择", "手动选择"].some((kw) => proxy.includes(kw)))
+                                proxyGroup.proxies![index] = `${proxy}(${String(sum)})`
+                })
+        }
 
-  // 在 proxies 中含有 手动选择 的代理群组的proxies中添加 自建代理群组
-  if (proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
-    proxyGroup.proxies?.push(...proxyGroupNameList)
-  }
+        // 在 proxies 中含有 手动选择 的代理群组的proxies中添加 自建代理群组
+        if (proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
+                proxyGroup.proxies?.push(...proxyGroupNameList)
+        }
 }
 
 // 保存

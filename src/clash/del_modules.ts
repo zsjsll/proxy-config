@@ -14,9 +14,9 @@ del = fixArray(del)
 let content: Config = getContent()
 
 if (del.length > 0) {
-  del.map((m) => {
-    if (content[m]) delete content[m]
-  })
+        del.map((m) => {
+                if (content[m]) delete content[m]
+        })
 }
 
 saveContent(content)
