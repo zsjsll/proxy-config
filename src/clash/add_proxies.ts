@@ -11,7 +11,12 @@
 
 import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
-let { name = "", isFixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
+let {
+  name = "",
+  isFixEmoji = false,
+  type = "subscription",
+  urls = [] as string[],
+} = $arguments
 
 urls = fixArray(urls)
 isFixEmoji = fixBoolean(isFixEmoji)
@@ -21,51 +26,57 @@ let content = getContent()
 if (urls.length > 0 && name !== "") throw new Error("'name', 'urls' 二选一")
 
 if (urls.length > 0) {
-        let template: ProxyProvider = {
-                url: "https://a.a.a/",
-                type: "http",
-                interval: 43200,
-                "health-check": {
-                        enable: true,
-                        url: "https://www.gstatic.com/generate_204",
-                        interval: 180,
-                },
-                proxy: "DIRECT",
-        }
+  let template: ProxyProvider = {
+    url: "https://a.a.a/",
+    type: "http",
+    interval: 43200,
+    "health-check": {
+      enable: true,
+      url: "https://www.gstatic.com/generate_204",
+      interval: 180,
+    },
+    proxy: "DIRECT",
+  }
 
-        if (content["proxy-providers"]?.airport) {
-                const head = urls.shift()!
-                content["proxy-providers"].airport.url = head
-        }
+  if (content["proxy-providers"]?.airport) {
+    const head = urls.shift()!
+    content["proxy-providers"].airport.url = head
+  }
 
-        const proxyProviders = urls.reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
-                const name = "airport" + index
-                obj[name] = template
-                obj[name].url = url
-                return obj
-        }, {})
-        content["proxy-providers"] = { ...content["proxy-providers"], ...proxyProviders }
+  const proxyProviders = urls.reduce(
+    (obj: { [K: string]: ProxyProvider }, url, index) => {
+      const name = "airport" + index
+      obj[name] = template
+      obj[name].url = url
+      return obj
+    },
+    {}
+  )
+  content["proxy-providers"] = {
+    ...content["proxy-providers"],
+    ...proxyProviders,
+  }
 }
 
 let pList: Proxies
 if (name !== "") {
-        pList = await produceArtifact({
-                name: name,
-                type: type as Type,
-                platform: "ClashMeta",
-                produceType: "internal",
-                produceOpts: {
-                        "include-unsupported-proxy": true,
-                },
-        })
+  pList = await produceArtifact({
+    name: name,
+    type: type as Type,
+    platform: "ClashMeta",
+    produceType: "internal",
+    produceOpts: {
+      "include-unsupported-proxy": true,
+    },
+  })
 
-        if (isFixEmoji) {
-                pList.map((p) => {
-                        p.name = p.name.replace("🏴‍☠️", "❓")
-                })
-                console.log("🚀 ~ pList:", pList)
-        }
-        content = { proxies: pList, ...content }
+  if (isFixEmoji) {
+    pList.map((p) => {
+      p.name = p.name.replace("🏴‍☠️", "❓")
+    })
+    console.log("🚀 ~ pList:", pList)
+  }
+  content = { proxies: pList, ...content }
 }
 
 saveContent(content)

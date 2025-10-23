@@ -5,15 +5,19 @@ import { performance } from "perf_hooks"
 import fs from "fs/promises"
 import path from "path"
 
-const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
-const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
+const isWatchMode =
+  process.argv.includes("-w") || process.argv.includes("--watch")
+const isMinify =
+  process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./src"
 
 async function getEntryPoints(entryDir: string, filterFiles: string[]) {
   const entryPoints = await fg(`${entryDir}/**/*.ts`)
   filterFiles = filterFiles.map((v) => entryDir + "/" + v)
-  return entryPoints.filter((point) => filterFiles.some((kw) => point.includes(kw)))
+  return entryPoints.filter((point) =>
+    filterFiles.some((kw) => point.includes(kw))
+  )
 }
 const entryPoints = await getEntryPoints(entryDir, ["clash"])
 console.log(entryPoints)
@@ -23,7 +27,6 @@ const outDir = "./dist"
 function TimingPlugin(): esbuild.Plugin {
   return {
     name: "timing-and-alias-reporter",
-
     setup(build) {
       // 在 setup 作用域内声明一个变量来存储开始时间
       let startTime = 0
@@ -36,12 +39,14 @@ function TimingPlugin(): esbuild.Plugin {
       build.onEnd((result) => {
         // 在这里安全地计算耗时
         const duration = (performance.now() - startTime).toFixed(2)
-
-        if (result.errors.length > 0) {
-          console.error(`\n❌ 构建失败 (${duration}ms): ${result.errors.length} 个错误`)
-        } else {
-          console.log(`\n✅ 构建成功 (${duration}ms) - ${new Date().toLocaleTimeString()}`)
-        }
+        if (result.errors.length > 0)
+          console.error(
+            `\n❌ 构建失败 (${duration}ms): ${result.errors.length} 个错误`
+          )
+        else
+          console.log(
+            `\n✅ 构建成功 (${duration}ms) - ${new Date().toLocaleTimeString()}`
+          )
       })
     },
   }
@@ -53,23 +58,16 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
     setup(build) {
       build.onEnd(async (result) => {
         if (result.errors.length > 0) return
-
         const outputs = Object.keys(result.metafile?.outputs || {})
-
         await Promise.all(
           outputs.map(async (output) => {
             const absPath = path.resolve(output)
-
             const sourcePath = result.metafile?.outputs[output]?.entryPoint
             if (!sourcePath) return
-
             const banner = bannerMap.get(path.relative("./", sourcePath))
-
             if (!banner) return
-
             try {
               const content = await fs.readFile(absPath, "utf8")
-
               await fs.writeFile(absPath, `${banner}\n\n${content}`)
               console.log(`📝 注释已注入: ${path.basename(absPath)}`)
             } catch (e) {
@@ -88,7 +86,8 @@ await Promise.all(
     try {
       const content = await fs.readFile(file, "utf8")
       const match = content.match(/\/\*!([\s\S]*?)\*\//)
-      if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
+      if (match)
+        bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
     } catch (err) {
       console.warn(`⚠️ 读取失败: ${file}`, err)
     }
@@ -114,10 +113,15 @@ const baseOptions: esbuild.BuildOptions = {
       ? []
       : [
           BannerInjectPlugin(bannerMap),
-          copy({ assets: { from: "./src/README.md", to: "./README.md" } }),
-          copy({ assets: { from: "./src/sub-store_file_free.json", to: "./sub-store_file_free.json" } }),
           copy({ assets: { from: "./config/**/*", to: "./config" } }),
           copy({ assets: { from: "./rules/**/*", to: "./rules" } }),
+          copy({ assets: { from: "./src/README.md", to: "./README.md" } }),
+          copy({
+            assets: {
+              from: "./src/sub-store_file_free.json",
+              to: "./sub-store_file_free.json",
+            },
+          }),
         ]),
   ],
   ...(!isDebug && { drop: ["console", "debugger"] }),
