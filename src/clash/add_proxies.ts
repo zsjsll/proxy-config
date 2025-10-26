@@ -1,25 +1,28 @@
 /*!
 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/add_proxies.js#name=free&isFixEmoji=true&type=collection
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/add_proxies.js#name=free&fixEmoji=true&type=collection&disableAutoTest=false
 
 本脚本 可以传入参数：
 [name] 为 substore 的订阅组合订阅名字
-[isFixEmoji]:boolen 修改其他节点的emoji为❓
-[type]: "subscription"|"collection" 修改其他节点的emoji为❓
-[urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 sutstore 的订阅将无效，并且启用 proxy-providers 的模式进行订阅
+[fixEmoji]:boolen 修改其他节点的emoji为❓
+[type]: "subscription"|"collection"
+[urls]  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 [name] 将无效，并且启用 proxy-providers 的模式进行订阅
+[disableAutoTest] 是否进行节点检测，如果false，所有的test都会禁用，包括 proxy-group 的 url-test 都会删除
 */
 
 import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
 let {
   name = "",
-  isFixEmoji = false,
+  fixEmoji = false,
   type = "subscription",
   urls = [] as string[],
+  disableAutoTest = false,
 } = $arguments
 
 urls = fixArray(urls)
-isFixEmoji = fixBoolean(isFixEmoji)
+fixEmoji = fixBoolean(fixEmoji)
+disableAutoTest = fixBoolean(disableAutoTest)
 
 let content = getContent()
 
@@ -31,9 +34,9 @@ if (urls.length > 0) {
     type: "http",
     interval: 43200,
     "health-check": {
-      enable: true,
+      enable: !disableAutoTest,
       url: "https://www.gstatic.com/generate_204",
-      interval: 180,
+      interval: !disableAutoTest ? 180 : 99999999,
     },
     proxy: "DIRECT",
   }
@@ -41,6 +44,11 @@ if (urls.length > 0) {
   if (content["proxy-providers"]?.airport) {
     const head = urls.shift()!
     content["proxy-providers"].airport.url = head
+    content["proxy-providers"].airport["health-check"].enable = !disableAutoTest
+    content["proxy-providers"].airport["health-check"].interval =
+      !disableAutoTest
+        ? content["proxy-providers"].airport["health-check"].interval
+        : 99999999
   }
 
   const proxyProviders = urls.reduce(
@@ -70,13 +78,30 @@ if (name !== "") {
     },
   })
 
-  if (isFixEmoji) {
+  if (fixEmoji) {
     pList.map((p) => {
       p.name = p.name.replace("🏴‍☠️", "❓")
     })
     console.log("🚀 ~ pList:", pList)
   }
   content = { proxies: pList, ...content }
+}
+
+if (disableAutoTest) {
+  const names = content["proxy-groups"]
+    .filter((v, i) => {
+      if (v.type === "url-test") {
+        delete content["proxy-groups"][i]
+        return true
+      }
+      return false
+    })
+    .map((v) => v.name)
+
+  content["proxy-groups"].map((v, i) => {
+    if (names.some((name) => v.proxies?.includes(name)))
+      v.proxies = v.proxies?.filter((p) => !names.includes(p))
+  })
 }
 
 saveContent(content)
