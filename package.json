@@ -16,7 +16,7 @@
     "@types/lodash": "latest",
     "@types/node": "latest",
     "esbuild": "latest",
-    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-plugin-copy": "latest",
     "fast-glob": "latest",
     "prettier": "latest"
   }
