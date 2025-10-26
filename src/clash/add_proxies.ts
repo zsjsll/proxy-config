@@ -98,9 +98,11 @@ if (disableAutoTest) {
     })
     .map((v) => v.name)
 
-  content["proxy-groups"].map((v, i) => {
+  content["proxy-groups"] = content["proxy-groups"].filter((v) => {
+    if (v === undefined) return false
     if (names.some((name) => v.proxies?.includes(name)))
       v.proxies = v.proxies?.filter((p) => !names.includes(p))
+    return true
   })
 }
 
