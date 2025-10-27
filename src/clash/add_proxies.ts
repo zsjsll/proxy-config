@@ -87,7 +87,8 @@ if (name !== "") {
   content = { proxies: pList, ...content }
 }
 
-if (disableAutoTest) {
+// if (disableAutoTest) {
+if (false) {
   const names = content["proxy-groups"]
     .filter((v) => v.type === "url-test")
     .map((v) => v.name)
