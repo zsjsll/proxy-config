@@ -34,9 +34,9 @@ if (urls.length > 0) {
     type: "http",
     interval: 43200,
     "health-check": {
-      enable: !disableAutoTest,
+      enable: true,
       url: "https://www.gstatic.com/generate_204",
-      interval: !disableAutoTest ? 180 : 99999999,
+      interval: 180,
     },
     proxy: "DIRECT",
   }
@@ -44,11 +44,8 @@ if (urls.length > 0) {
   if (content["proxy-providers"]?.airport) {
     const head = urls.shift()!
     content["proxy-providers"].airport.url = head
-    content["proxy-providers"].airport["health-check"].enable = !disableAutoTest
-    content["proxy-providers"].airport["health-check"].interval =
-      !disableAutoTest
-        ? content["proxy-providers"].airport["health-check"].interval
-        : 99999999
+    content["proxy-providers"].airport["health-check"].enable = true
+    content["proxy-providers"].airport["health-check"].interval = 180
   }
 
   const proxyProviders = urls.reduce(
@@ -87,8 +84,7 @@ if (name !== "") {
   content = { proxies: pList, ...content }
 }
 
-// if (disableAutoTest) {
-if (false) {
+if (disableAutoTest) {
   const names = content["proxy-groups"]
     .filter((v) => v.type === "url-test")
     .map((v) => v.name)
