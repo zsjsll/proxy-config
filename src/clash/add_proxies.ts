@@ -89,20 +89,16 @@ if (name !== "") {
 
 if (disableAutoTest) {
   const names = content["proxy-groups"]
-    .filter((v, i) => {
-      if (v.type === "url-test") {
-        delete content["proxy-groups"][i]
-        return true
-      }
-      return false
-    })
+    .filter((v) => v.type === "url-test")
     .map((v) => v.name)
 
-  content["proxy-groups"] = content["proxy-groups"].filter((v) => {
-    if (v === undefined) return false
+  content["proxy-groups"] = content["proxy-groups"].filter(
+    (v) => v.type !== "url-test"
+  )
+
+  content["proxy-groups"].map((v) => {
     if (names.some((name) => v.proxies?.includes(name)))
       v.proxies = v.proxies?.filter((p) => !names.includes(p))
-    return true
   })
 }
 
