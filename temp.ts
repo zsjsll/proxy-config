@@ -1,5 +1,7 @@
-const a = ["1", "2", "3", "4"]
-
-const b = ["a", "b", "c", ...(false && a)]
-
-console.log(b)
+const a = undefined
+function fixArray(args: undefined | string): string[] {
+  if (args === "") return []
+  if (typeof args === "string") return args.split(/[|, ]/)
+  return []
+}
+console.log(fixArray(a))
