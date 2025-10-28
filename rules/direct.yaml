@@ -15,6 +15,7 @@ payload:
   - DOMAIN-SUFFIX,zsjsll.iask.in
 
   - DOMAIN-SUFFIX,cloudflare.com
+  - DOMAIN-SUFFIX,cloudflare-dns.com
   - DOMAIN-SUFFIX,nip.lfree.org
 
   # 匹配 192.168.31.200-192.168.31.250 的ip
