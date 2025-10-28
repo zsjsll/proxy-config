@@ -1,26 +1,34 @@
 /*!
 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/add_proxies.js#name=free&fixEmoji=true&type=collection&disableAutoTest=false
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/add_proxies.js#name=free&fixEmoji=true&type=collection&disableAutoTest=false&healthCheckInterval=300
 
 本脚本 可以传入参数：
 [name] 为 substore 的订阅组合订阅名字
 [fixEmoji] = false 修改其他节点的emoji为❓
 [type]: "subscription"|"collection" = subscription
 [urls]: string  机场链接   https://a.a.a  多个链接 用 '|' ',' ' ' 区分 如果存在这个参数 [name] 将无效，并且启用 proxy-providers 的模式进行订阅
-
+[healthCheckInterval] = 300 进行节点检测的间隔时间（s），如果为 0 ，所有的test都会禁用，包括 proxy-group 的 url-test 都会删除
 */
 
-import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
+import {
+  fixArray,
+  fixBoolean,
+  getContent,
+  saveContent,
+  fixNumber,
+} from "../tools/base"
 
 let {
   name = "",
   fixEmoji = false,
   type = "subscription",
   urls = [] as string[],
+  healthCheckInterval = 300,
 } = $arguments
 
 urls = fixArray(urls)
 fixEmoji = fixBoolean(fixEmoji)
+healthCheckInterval = fixNumber(healthCheckInterval)
 
 let content = getContent()
 
@@ -32,25 +40,35 @@ if (urls.length > 0) {
     type: "http",
     interval: 43200,
     "health-check": {
-      enable: true,
+      enable: healthCheckInterval !== 0,
       url: "https://www.gstatic.com/generate_204",
-      interval: 300,
+      interval: healthCheckInterval,
     },
     proxy: "DIRECT",
   }
 
+  if (content["proxy-providers"]?.airport) {
+    const head = urls.shift()!
+    content["proxy-providers"].airport.url = head
+    content["proxy-providers"].airport["health-check"].enable =
+      healthCheckInterval !== 0
+    content["proxy-providers"].airport["health-check"].interval =
+      healthCheckInterval
+  }
+
   const proxyProviders = urls.reduce(
     (obj: { [K: string]: ProxyProvider }, url, index) => {
-      let name: string = "airport"
-      if (index !== 0) name = name + index
+      const name = "airport" + index
       obj[name] = template
       obj[name].url = url
       return obj
     },
     {}
   )
-
-  content["proxy-providers"] = proxyProviders
+  content["proxy-providers"] = {
+    ...content["proxy-providers"],
+    ...proxyProviders,
+  }
 }
 
 let pList: Proxies
@@ -72,6 +90,25 @@ if (name !== "") {
     console.log("🚀 ~ pList:", pList)
   }
   content = { proxies: pList, ...content }
+}
+
+if (healthCheckInterval === 0) {
+  const names = content["proxy-groups"]
+    .filter((v) => v.type === "url-test")
+    .map((v) => v.name)
+
+  content["proxy-groups"] = content["proxy-groups"].filter(
+    (v) => v.type !== "url-test"
+  )
+
+  content["proxy-groups"].map((v) => {
+    if (names.some((name) => v.proxies?.includes(name)))
+      v.proxies = v.proxies?.filter((p) => !names.includes(p))
+  })
+} else {
+  content["proxy-groups"].map((v) => {
+    if (v.type === "url-test") v.interval = healthCheckInterval
+  })
 }
 
 saveContent(content)

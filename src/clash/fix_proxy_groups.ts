@@ -1,6 +1,6 @@
 /*!
 // 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden=true&aiExclude=HK|RU|JP|OTHER&num=1&aiFilerMode=exclude&showCount=true&healthCheckInterval=300
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/fix_proxy_groups.js#isHidden=true&aiExclude=HK|RU|JP|OTHER&num=1&aiFilerMode=exclude&showCount=true
 
 本脚本 可以传入参数：
 [isHidden]:boolen 隐藏所有自动选择的节点
@@ -8,7 +8,6 @@
 [aiExclude]:string[] 传入ISO,'|' ',' ' ' 区分，比如 ai=HK|RU JP,US
 [num] 最小成群数量，默认为1 表示1个都成群
 [aiFilerMode]:'exclude'|'include' ai节点的过滤方式， 是通过排除 还是只包括
-[healthCheckInterval] = 300 进行节点检测的间隔时间（s），如果为 0 ，所有的test都会禁用，包括 proxy-group 的 url-test 都会删除
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
@@ -26,15 +25,12 @@ let {
   aiExclude = ["HK", "RU"],
   aiFilerMode = "exclude",
   showCount = false,
-  healthCheckInterval = 300,
 } = $arguments
 
 aiExclude = fixArray(aiExclude)
 isHidden = fixBoolean(isHidden)
 showCount = fixBoolean(showCount)
 num = fixNumber(num)
-healthCheckInterval = fixNumber(healthCheckInterval)
-
 if (!["exclude", "include"].includes(aiFilerMode))
   throw new Error("必须给aiFilerMode 赋值 'exclude'|'include'")
 
@@ -44,7 +40,7 @@ const template: ProxyGroup = {
   name: "template",
   type: "url-test",
   tolerance: 50,
-  interval: healthCheckInterval,
+  interval: 300,
   url: "https://www.gstatic.com/generate_204",
   "include-all": true,
   hidden: isHidden,
@@ -119,6 +115,12 @@ const aiExcludeRegExp = aiExclude
   .map((v) => nameConvert.getIsoCode(v).regExp)
   .join("|")
 
+// const aiIncludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
+// const aiExcludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
+
+// console.log("🚀 ~ aiIncludeSum:", aiIncludeSum)
+// console.log("🚀 ~ aiExcludeSum:", aiExcludeSum)
+
 const aiRegExp = aiFilerMode === "exclude" ? aiExcludeRegExp : aiIncludeRegExp
 
 // const aiSum = aiFilerMode === "exclude" ? aiExcludeSum : aiIncludeSum
@@ -175,25 +177,6 @@ for (const proxyGroup of content["proxy-groups"]) {
   if (proxyGroup.proxies?.some((val) => val.includes("手动选择"))) {
     proxyGroup.proxies?.push(...proxyGroupNameList)
   }
-}
-
-if (healthCheckInterval === 0) {
-  const names = content["proxy-groups"]
-    .filter((v) => v.type === "url-test")
-    .map((v) => v.name)
-
-  content["proxy-groups"] = content["proxy-groups"].filter(
-    (v) => v.type !== "url-test"
-  )
-
-  content["proxy-groups"].map((v) => {
-    if (names.some((name) => v.proxies?.includes(name)))
-      v.proxies = v.proxies?.filter((p) => !names.includes(p))
-  })
-} else {
-  content["proxy-groups"].map((v) => {
-    if (v.type === "url-test") v.interval = healthCheckInterval
-  })
 }
 
 // 保存
