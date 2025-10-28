@@ -22,9 +22,19 @@ services:
 
 # 目录结构
 
-## clash
+## ./
 
-各种 substore 配置 clash 的脚本，具体用法可以导入此脚本 [sub-store_file_free.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json)
+各种 substore 配置 clash 的脚本，具体用法可以导入脚本
+
+文件管理：
+
+[sub-store_file_free.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json)
+
+[sub-store_file_tunnel.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_tunnel.json)
+
+组合订阅：
+
+[sub-store_collection_airport.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_collection_airport.json)
 
 ## config
 

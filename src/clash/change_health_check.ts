@@ -1,6 +1,6 @@
 /*!
 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/change_health_check.js#interval=43200&url=https://www.gstatic.com/generate_204&healthCheckInterval=300
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/clash/change_health_check.js#interval=43200&url=https://www.gstatic.com/generate_204&healthCheckInterval=300
 
 本脚本 可以传入参数：
 [interval] =43200 节点 provider 的更新间隔

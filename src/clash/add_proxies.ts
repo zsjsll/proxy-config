@@ -1,6 +1,6 @@
 /*!
 配合的模板 https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/config/clash/config_substore.yaml
-脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/self/substore_script/clash/add_proxies.js#name=free&fixEmoji=true&type=collection&disableAutoTest=false
+脚本地址 https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/clash/add_proxies.js#name=free&fixEmoji=true&type=collection&disableAutoTest=false
 
 本脚本 可以传入参数：
 [name] 为 substore 的订阅组合订阅名字

@@ -118,8 +118,8 @@ const baseOptions: esbuild.BuildOptions = {
           copy({ assets: { from: "./src/README.md", to: "./README.md" } }),
           copy({
             assets: {
-              from: "./src/sub-store_file_free.json",
-              to: "./sub-store_file_free.json",
+              from: "./src/**/*.json",
+              to: "./",
             },
           }),
         ]),
