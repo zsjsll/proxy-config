@@ -29,7 +29,7 @@ declare global {
     interval: number
     "health-check": {
       enable: boolean
-      url: "https://cp.cloudflare.com" | "https://www.gstatic.com/generate_204"
+      url: string
       interval: number
     }
     proxy: "DIRECT" | string
