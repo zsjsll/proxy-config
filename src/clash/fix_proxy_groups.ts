@@ -11,28 +11,15 @@
 */
 
 import { nameConvert, AreaList } from "../tools/i18n"
-import {
-  fixArray,
-  fixBoolean,
-  fixNumber,
-  getContent,
-  saveContent,
-} from "../tools/base"
+import { fixArray, fixBoolean, fixNumber, getContent, saveContent } from "../tools/base"
 
-let {
-  isHidden = false,
-  num = 1,
-  aiExclude = ["HK", "RU"],
-  aiFilerMode = "exclude",
-  showCount = false,
-} = $arguments
+let { isHidden = false, num = 1, aiExclude = ["HK", "RU"], aiFilerMode = "exclude", showCount = false } = $arguments
 
 aiExclude = fixArray(aiExclude)
 isHidden = fixBoolean(isHidden)
 showCount = fixBoolean(showCount)
 num = fixNumber(num)
-if (!["exclude", "include"].includes(aiFilerMode))
-  throw new Error("必须给aiFilerMode 赋值 'exclude'|'include'")
+if (!["exclude", "include"].includes(aiFilerMode)) throw new Error("必须给aiFilerMode 赋值 'exclude'|'include'")
 
 let content = getContent()
 
@@ -46,8 +33,7 @@ const template: ProxyGroup = {
   hidden: isHidden,
 }
 
-if (content.proxies === undefined)
-  throw new Error("配置文件中没有 proxies, 请先导入")
+if (content.proxies === undefined) throw new Error("配置文件中没有 proxies, 请先导入")
 
 // 生成需要的信息
 const areaList: AreaList[] = Array.from(
@@ -62,7 +48,7 @@ const areaList: AreaList[] = Array.from(
       } else prev.set(key, curr)
       return prev
     }, new Map())
-    .values()
+    .values(),
 )
 
 // 在最后添加一个空的元素 用于统计过滤的节点信息
@@ -105,15 +91,11 @@ if (proxyGroups.at(-1)!.filter === "(?i)") {
 content["proxy-groups"] = [...content["proxy-groups"], ...proxyGroups]
 
 // 获取 修改AI节点相关的信息
-const aiAreaList = fixAreaList.filter((area) =>
-  aiExclude.every((kw) => area.isoCode !== kw)
-)
+const aiAreaList = fixAreaList.filter((area) => aiExclude.every((kw) => area.isoCode !== kw))
 
 const aiIncludeRegExp = aiAreaList.map((area) => area.regExp).join("|")
 
-const aiExcludeRegExp = aiExclude
-  .map((v) => nameConvert.getIsoCode(v).regExp)
-  .join("|")
+const aiExcludeRegExp = aiExclude.map((v) => nameConvert.getIsoCode(v).regExp).join("|")
 
 // const aiIncludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0) - (fixAreaList.at(-1)!.isoCode === "OTHER" ? fixAreaList.at(-1)!.count : 0) //过滤其他节点
 // const aiExcludeSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
@@ -127,9 +109,7 @@ const aiRegExp = aiFilerMode === "exclude" ? aiExcludeRegExp : aiIncludeRegExp
 const aiSum = aiAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
 // 获取新建的代理群组的所有名字，便于添加到符合条件的 proxies 中
-const proxyGroupNameList = proxyGroups.map(
-  (newProxyGroup) => newProxyGroup.name
-)
+const proxyGroupNameList = proxyGroups.map((newProxyGroup) => newProxyGroup.name)
 const sum = fixAreaList.reduce((prev, curr) => prev + curr.count, 0)
 
 for (const proxyGroup of content["proxy-groups"]) {
@@ -138,8 +118,7 @@ for (const proxyGroup of content["proxy-groups"]) {
     if (proxyGroup["exclude-filter"]) delete proxyGroup["exclude-filter"]
     if (showCount) proxyGroup.name = `${proxyGroup.name}(${aiSum})`
     if (aiFilerMode === "include") proxyGroup.filter = "(?i)" + aiRegExp
-    if (aiFilerMode === "exclude")
-      proxyGroup["exclude-filter"] = "(?i)" + aiRegExp
+    if (aiFilerMode === "exclude") proxyGroup["exclude-filter"] = "(?i)" + aiRegExp
 
     // proxyGroup.hidden = isHidden
     proxyGroup.url = template.url
@@ -148,8 +127,7 @@ for (const proxyGroup of content["proxy-groups"]) {
   // 修改 proxies 中含有 AI节点 的代理群组
   if (showCount) {
     proxyGroup.proxies?.map((proxy, index) => {
-      if (proxy.includes("AI节点"))
-        proxyGroup.proxies![index] = `${proxy}(${aiSum})`
+      if (proxy.includes("AI节点")) proxyGroup.proxies![index] = `${proxy}(${aiSum})`
     })
   }
 

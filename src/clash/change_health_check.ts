@@ -10,11 +10,7 @@
 
 import { getContent, saveContent, fixNumber } from "../tools/base"
 
-let {
-  interval = 43200,
-  url = "https://www.gstatic.com/generate_204",
-  healthCheckInterval = 300,
-} = $arguments
+let { interval = 43200, url = "https://www.gstatic.com/generate_204", healthCheckInterval = 300 } = $arguments
 
 healthCheckInterval = fixNumber(healthCheckInterval)
 interval = fixNumber(interval)
@@ -35,17 +31,12 @@ content["proxy-groups"].map((v) => {
   if (v.type === "url-test") v.interval = healthCheckInterval
 })
 if (healthCheckInterval === 0) {
-  const names = content["proxy-groups"]
-    .filter((v) => v.type === "url-test")
-    .map((v) => v.name)
+  const names = content["proxy-groups"].filter((v) => v.type === "url-test").map((v) => v.name)
 
-  content["proxy-groups"] = content["proxy-groups"].filter(
-    (v) => v.type !== "url-test"
-  )
+  content["proxy-groups"] = content["proxy-groups"].filter((v) => v.type !== "url-test")
 
   content["proxy-groups"].map((v) => {
-    if (names.some((name) => v.proxies?.includes(name)))
-      v.proxies = v.proxies?.filter((p) => !names.includes(p))
+    if (names.some((name) => v.proxies?.includes(name))) v.proxies = v.proxies?.filter((p) => !names.includes(p))
   })
 }
 

@@ -5,19 +5,15 @@ import { performance } from "perf_hooks"
 import fs from "fs/promises"
 import path from "path"
 
-const isWatchMode =
-  process.argv.includes("-w") || process.argv.includes("--watch")
-const isMinify =
-  process.argv.includes("-m") || process.argv.includes("--minify")
+const isWatchMode = process.argv.includes("-w") || process.argv.includes("--watch")
+const isMinify = process.argv.includes("-m") || process.argv.includes("--minify")
 const isDebug = process.argv.includes("--debug")
 const entryDir = "./src"
 
 async function getEntryPoints(entryDir: string, filterFiles: string[]) {
   const entryPoints = await fg(`${entryDir}/**/*.ts`)
   filterFiles = filterFiles.map((v) => entryDir + "/" + v)
-  return entryPoints.filter((point) =>
-    filterFiles.some((kw) => point.includes(kw))
-  )
+  return entryPoints.filter((point) => filterFiles.some((kw) => point.includes(kw)))
 }
 const entryPoints = await getEntryPoints(entryDir, ["clash"])
 console.log(entryPoints)
@@ -39,14 +35,8 @@ function TimingPlugin(): esbuild.Plugin {
       build.onEnd((result) => {
         // 在这里安全地计算耗时
         const duration = (performance.now() - startTime).toFixed(2)
-        if (result.errors.length > 0)
-          console.error(
-            `\n❌ 构建失败 (${duration}ms): ${result.errors.length} 个错误`
-          )
-        else
-          console.log(
-            `\n✅ 构建成功 (${duration}ms) - ${new Date().toLocaleTimeString()}`
-          )
+        if (result.errors.length > 0) console.error(`\n❌ 构建失败 (${duration}ms): ${result.errors.length} 个错误`)
+        else console.log(`\n✅ 构建成功 (${duration}ms) - ${new Date().toLocaleTimeString()}`)
       })
     },
   }
@@ -73,7 +63,7 @@ function BannerInjectPlugin(bannerMap: Map<string, string>): esbuild.Plugin {
             } catch (e) {
               console.warn(`⚠️ 注入失败: ${absPath}`, e)
             }
-          })
+          }),
         )
       })
     },
@@ -86,12 +76,11 @@ await Promise.all(
     try {
       const content = await fs.readFile(file, "utf8")
       const match = content.match(/\/\*!([\s\S]*?)\*\//)
-      if (match)
-        bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
+      if (match) bannerMap.set(path.relative("./", file), `/*!${match[1].trim()}*/`)
     } catch (err) {
       console.warn(`⚠️ 读取失败: ${file}`, err)
     }
-  })
+  }),
 )
 
 const baseOptions: esbuild.BuildOptions = {

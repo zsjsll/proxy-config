@@ -12,12 +12,7 @@
 
 import { fixArray, fixBoolean, getContent, saveContent } from "../tools/base"
 
-let {
-  name = "",
-  fixEmoji = false,
-  type = "subscription",
-  urls = [] as string[],
-} = $arguments
+let { name = "", fixEmoji = false, type = "subscription", urls = [] as string[] } = $arguments
 
 urls = fixArray(urls)
 fixEmoji = fixBoolean(fixEmoji)
@@ -39,16 +34,13 @@ if (urls.length > 0) {
     proxy: "DIRECT",
   }
 
-  const proxyProviders = urls.reduce(
-    (obj: { [K: string]: ProxyProvider }, url, index) => {
-      let name: string = "airport"
-      if (index !== 0) name = name + index
-      obj[name] = template
-      obj[name].url = url
-      return obj
-    },
-    {}
-  )
+  const proxyProviders = urls.reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
+    let name: string = "airport"
+    if (index !== 0) name = name + index
+    obj[name] = template
+    obj[name].url = url
+    return obj
+  }, {})
 
   content["proxy-providers"] = proxyProviders
 }
