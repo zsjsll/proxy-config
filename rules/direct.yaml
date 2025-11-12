@@ -25,4 +25,7 @@ payload:
   - SRC-IP-CIDR,192.168.31.240/29
   - SRC-IP-CIDR,192.168.31.248/31
   - SRC-IP-CIDR,192.168.31.250/32
-  # - AND,((SRC-IP-CIDR,192.168.31.11/32),(SRC-PORT,8888))
+
+  # intel
+  - DOMAIN-SUFFIX,intel.com
+  - DOMAIN-SUFFIX,intel.cn
