@@ -156,10 +156,10 @@ proxy-groups:
   - { name: 🍎 苹果CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
   - { name: 📋 BT下载, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
   - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
-  - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择] } # 域名
-  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
-  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
-  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
+  - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
+  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
+  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连], hidden: true } # IP
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名
   - { name: 🏠 国内FB, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
   - { name: 🔐 私有网络, type: select, proxies: [🟢 直连], hidden: true } # 域名 + IP
