@@ -106,11 +106,13 @@ dns:
     "rule-set:ads,custom_reject":
       - rcode://success
 
-    "rule-set:custom_direct,networktest,private,trackerslist,microsoft_cn,apple_cn,google_cn,games_cn,cn":
+    "rule-set:private,cn":
       - 222.172.200.68
       - 61.166.150.123
-      - 223.6.6.6
-      - 223.5.5.5
+
+    "rule-set:custom_direct,networktest,trackerslist,microsoft_cn,apple_cn,google_cn,games_cn":
+      - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
+      - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
   # 用于解析DNS服务器的域名
   default-nameserver:
@@ -130,8 +132,12 @@ dns:
 
   # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
   # 用于 direct 出口域名解析的 DNS 服务器
-  # direct-nameserver:
-  #   - system
+  direct-nameserver:
+    - system
+    - 222.172.200.68
+    - 61.166.150.123
+    - 223.6.6.6
+    - 223.5.5.5
 
   # 不要用 fallback ，在解析的时候会同时使用 nameserver 和 fallback ，造成DNS泄露
   nameserver:
