@@ -37,8 +37,7 @@ if (urls.length > 0) {
   const proxyProviders = urls.reduce((obj: { [K: string]: ProxyProvider }, url, index) => {
     let name: string = "airport"
     if (index !== 0) name = name + index
-    obj[name] = template
-    obj[name].url = url
+    obj[name] = { ...template, url }
     return obj
   }, {})
 
@@ -61,6 +60,7 @@ if (name !== "") {
     pList.map((p) => {
       p.name = p.name.replace("🏴‍☠️", "❓")
     })
+
     console.log("🚀 ~ pList:", pList)
   }
   content = { proxies: pList, ...content }
