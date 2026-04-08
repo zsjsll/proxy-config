@@ -18,6 +18,8 @@ payload:
   - DOMAIN-SUFFIX,cloudflare-dns.com
   - DOMAIN-SUFFIX,nip.lfree.org
 
+  - DOMAIN-SUFFIX,ftqq.com
+
   # 匹配 192.168.31.200-192.168.31.250 的ip
   - SRC-IP-CIDR,192.168.31.200/29
   - SRC-IP-CIDR,192.168.31.208/28
