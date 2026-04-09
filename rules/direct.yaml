@@ -19,6 +19,8 @@ payload:
   - DOMAIN-SUFFIX,nip.lfree.org
 
   - DOMAIN-SUFFIX,ftqq.com
+  - DOMAIN,cdn.tailwindcss.com
+
 
   # 匹配 192.168.31.200-192.168.31.250 的ip
   - SRC-IP-CIDR,192.168.31.200/29
@@ -33,11 +35,11 @@ payload:
   - DOMAIN-SUFFIX,intel.cn
 
   # github 代理
-  - DOMAIN-SUFFIX,github.boki.moe
   - DOMAIN-SUFFIX,gh-proxy.com
   - DOMAIN-SUFFIX,ghfast.top
+  - DOMAIN,github.boki.moe
 
   # docker 代理
   - DOMAIN-SUFFIX,1ms.run
-  - DOMAIN-SUFFIX,docker.1panel.live
-  - DOMAIN-SUFFIX,05f073ad3c0010ea0f4bc00b7105ec20.mirror.swr.myhuaweicloud.com
+  - DOMAIN,docker.1panel.live
+  - DOMAIN,05f073ad3c0010ea0f4bc00b7105ec20.mirror.swr.myhuaweicloud.com
