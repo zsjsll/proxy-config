@@ -9,6 +9,10 @@ payload:
   # - DST-PORT,80
   # - SRC-PORT,7777
 
+  # google DNS
+  - IP-CIDR,8.8.8.8/32
+  - IP-CIDR,8.8.4.4/32
+
   # DNS泄露测试网站
   - DOMAIN-SUFFIX,browserscan.net
   - DOMAIN-SUFFIX,browserleaks.com
