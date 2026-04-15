@@ -9,6 +9,9 @@ payload:
   # - DST-PORT,80
   # - SRC-PORT,7777
 
+  # 禁用QUIC
+  # - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT
+
   # 电视广告
   - DOMAIN-SUFFIX,update.qvb.qcloud.com
   - DOMAIN-SUFFIX,cedock.com

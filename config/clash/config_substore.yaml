@@ -99,20 +99,23 @@ dns:
     - "rule-set:fakeip_filter,cn,private,custom_direct"
 
   nameserver-policy:
-    # 用于广告拦截，一旦这样设置
-    # 就不能开启 direct-nameserver-follow-policy: true
-    # 让 direct-nameserver 的优先级高于 nameserver-policy
+    # 用于广告拦截，的话就不能开启 direct-nameserver-follow-policy: true
+    # 如果开启, direct-nameserver 的优先级就会低于 nameserver-policy
+    # 这样的话, 不论如何设置广告的路由, 都会导致优先匹配nameserver-policy, 也就是说 广告会一直过滤, 导致开关无效
 
     "rule-set:ads,custom_reject":
       - rcode://success
 
-    "rule-set:private,cn":
-      - 222.172.200.68
-      - 61.166.150.123
+    # direct-nameserver-follow-policy: true 不开启的话, 下面这个2个规则其实都没有什么用了,都会优先走 direct-nameserver
+    # 可以注释掉
 
-    "rule-set:custom_direct,networktest,trackerslist,microsoft_cn,apple_cn,google_cn,games_cn":
-      - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
-      - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # "rule-set:private,cn":
+    #   - 222.172.200.68
+    #   - 61.166.150.123
+
+    # "rule-set:custom_direct,networktest,trackerslist,microsoft_cn,apple_cn,google_cn,games_cn":
+    #   - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    #   - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
   # 用于解析DNS服务器的域名
   default-nameserver:
@@ -130,7 +133,7 @@ dns:
     # - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
     # - https://doh.pub/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
-  # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
+  # direct-nameserver-follow-policy: true  # 如果开启这个配置 direct-nameserver 的优先级会低于 nameserver-policy
   # 用于 direct 出口域名解析的 DNS 服务器
   direct-nameserver:
     - system
