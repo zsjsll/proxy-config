@@ -103,6 +103,7 @@ dns:
     # 如果开启, direct-nameserver 的优先级就会低于 nameserver-policy
     # 这样的话, 不论如何设置广告的路由, 都会导致优先匹配nameserver-policy, 也就是说 广告会一直过滤, 导致开关无效
 
+    # 为了不触发某些应用的 fallback 机制, 所以返回 rcode://success
     "rule-set:ads,custom_reject":
       - rcode://success
 
