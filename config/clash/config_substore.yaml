@@ -172,9 +172,9 @@ proxy-groups:
   - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
 
   - { name: 🤖 AI!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名
-  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
-  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # IP
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
+  # - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # IP
 
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名
   - { name: 🏠 国内FB, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
@@ -205,7 +205,7 @@ rules:
   - RULE-SET,geoip-private,🔐 私有网络,no-resolve
   - RULE-SET,geoip-cn,🏠 国内FB
   - RULE-SET,geoip-media,🌍 媒体!CN
-  - RULE-SET,geoip-telegram,📲 电报,no-resolve
+  - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve
   - MATCH,🐟 漏网之鱼
 
 rule-anchor:
