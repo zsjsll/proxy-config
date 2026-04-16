@@ -155,7 +155,7 @@ dns:
 auto_test: &auto_test { type: url-test, tolerance: 30, interval: 600, timeout: 1000, include-all: true, url: https://www.gstatic.com/generate_204 }
 
 proxy-groups:
-  - { name: 🚀 节点选择, type: select, include-all: true, proxies: [♻️ 自动选择, ✋ 手动选择] }
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
   - { <<: *auto_test, name: ♻️ 自动选择 }
@@ -172,9 +172,9 @@ proxy-groups:
   - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
 
   - { name: 🤖 AI!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名
-  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
-  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名 + IP
-  # - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # IP
+  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名 + IP
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名 + IP
+  # - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择,  🟢 直连] } # IP
 
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名
   - { name: 🏠 国内FB, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
@@ -184,7 +184,6 @@ proxy-groups:
   - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
 
 rules:
-  # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
   - RULE-SET,custom-proxy,🧱 海外FB
   - RULE-SET,custom-direct,🏠 国内FB
   - RULE-SET,custom-reject,🚫 广告

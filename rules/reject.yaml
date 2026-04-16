@@ -12,6 +12,9 @@ payload:
   # 禁用QUIC
   # - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT
 
+  # 屏蔽国外的QUIC连接
+  # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT
+
   # 电视广告
   - DOMAIN-SUFFIX,update.qvb.qcloud.com
   - DOMAIN-SUFFIX,cedock.com
