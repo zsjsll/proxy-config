@@ -196,16 +196,16 @@ rules:
   - RULE-SET,geosite-apple_cn,🍎 苹果CN
   - RULE-SET,geosite-google_cn,🌈 谷歌CN
   - RULE-SET,geosite-games_cn,🎮 游戏CN
-  - RULE-SET,geosite-ai,🤖 海外AI!CN
-  - RULE-SET,geosite-games,🕹️ 海外游戏!CN
-  - RULE-SET,geosite-media,🌍 海外媒体!CN
+  - RULE-SET,geosite-ai,🤖 AI!CN
+  - RULE-SET,geosite-games,🕹️ 游戏!CN
+  - RULE-SET,geosite-media,🌍 媒体!CN
   - RULE-SET,geosite-tld_proxy,🧱 海外FB
   - RULE-SET,geosite-proxy,🧱 海外FB
   - RULE-SET,geosite-cn,🏠 国内FB
   - RULE-SET,geoip-private,🔐 私有网络,no-resolve
   - RULE-SET,geoip-cn,🏠 国内FB
-  - RULE-SET,geoip-media,🌍 海外媒体!CN
-  - RULE-SET,geoip-telegram,📲 海外电报,no-resolve
+  - RULE-SET,geoip-media,🌍 媒体!CN
+  - RULE-SET,geoip-telegram,📲 电报,no-resolve
   - MATCH,🐟 漏网之鱼
 
 rule-anchor:
