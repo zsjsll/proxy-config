@@ -174,12 +174,11 @@ proxy-groups:
   - { name: 🤖 AI!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] } # 域名
   - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名 + IP
   - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名 + IP
-  # - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择,  🟢 直连] } # IP
 
   - { name: 🧱 海外FB, type: select, proxies: [🚀 节点选择, 🟢 直连] } # 域名
   - { name: 🏠 国内FB, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
-  - { name: 🔐 私有网络, type: select, proxies: [🟢 直连], hidden: true } # 域名 + IP
   - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🟢 直连] }
+
   - { name: 🟢 直连, type: select, proxies: [DIRECT], hidden: true }
   - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
 
@@ -188,7 +187,7 @@ rules:
   - RULE-SET,custom-direct,🏠 国内FB
   - RULE-SET,custom-reject,🚫 广告
   - RULE-SET,geosite-ads,🚫 广告
-  - RULE-SET,geosite-private,🔐 私有网络
+  - RULE-SET,geosite-private,DIRECT #🔐 私有网络
   - RULE-SET,geosite-networktest,📈 网络测试
   - RULE-SET,geosite-trackerslist,📋 BT下载
   - RULE-SET,geosite-microsoft_cn,Ⓜ️ 微软CN
@@ -201,10 +200,10 @@ rules:
   - RULE-SET,geosite-tld_proxy,🧱 海外FB
   - RULE-SET,geosite-proxy,🧱 海外FB
   - RULE-SET,geosite-cn,🏠 国内FB
-  - RULE-SET,geoip-private,🔐 私有网络,no-resolve
+  - RULE-SET,geoip-private,DIRECT,no-resolve #🔐 私有网络
   - RULE-SET,geoip-cn,🏠 国内FB
   - RULE-SET,geoip-media,🌍 媒体!CN
-  - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve
+  - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve #📲 电报!CN
   - MATCH,🐟 漏网之鱼
 
 rule-anchor:
