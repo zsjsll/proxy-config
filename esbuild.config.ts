@@ -105,12 +105,7 @@ const baseOptions: esbuild.BuildOptions = {
           copy({ assets: { from: "./config/**/*", to: "../config" } }),
           copy({ assets: { from: "./rules/**/*", to: "../rules" } }),
           copy({ assets: { from: "./src/README.md", to: "../README.md" } }),
-          copy({
-            assets: {
-              from: "./src/**/*.json",
-              to: "./",
-            },
-          }),
+          copy({ assets: { from: "./src/**/*.json", to: "../" } }),
         ]),
   ],
   ...(!isDebug && { drop: ["console", "debugger"] }),
