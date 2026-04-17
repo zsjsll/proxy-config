@@ -28,28 +28,28 @@ services:
 
 文件管理：
 
-[sub-store_file_free.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json)
+[sub-store_file_free.json](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_free.json)
 
-[sub-store_file_tunnel.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_tunnel.json)
+[sub-store_file_tunnel.json](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_file_tunnel.json)
 
 组合订阅：
 
-[sub-store_collection_airport.json](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_collection_airport.json)
+[sub-store_collection_airport.json](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/sub-store_collection_airport.json)
 
 ## config
 
 配置文件
 
-[config_substore.yaml](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_substore.yaml) **优先** 规则集通过mrs加载
+[config_substore.yaml](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_substore.yaml) **优先** 规则集通过mrs加载
 
-[config_db.yaml](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_db.yaml) 规则集通过db加载
+[config_db.yaml](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/config/clash/config_db.yaml) 规则集通过db加载
 
 ## rules
 
 自定义的规则集
 
-[proxy.yaml](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/proxy.yaml)
+[proxy.yaml](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/proxy.yaml)
 
-[direct.yaml](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/direct.yaml)
+[direct.yaml](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/direct.yaml)
 
-[reject.yaml](https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/reject.yaml)
+[reject.yaml](https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/reject.yaml)

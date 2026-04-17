@@ -5,19 +5,21 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "pnpx tsx esbuild.config.ts --minify",
-    "watch": "pnpx tsx esbuild.config.ts -w --debug"
+    "build": "pnpm tsx esbuild.config.ts --minify",
+    "watch": "pnpm tsx esbuild.config.ts -w --debug"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.28.0",
+    "esbuild-plugin-copy": "^2.1.1",
+    "fast-glob": "^3.3.3",
+    "tsx": "^4.21.0"
+  },
   "devDependencies": {
-    "@black-duty/sing-box-schema": "latest",
-    "@types/lodash": "latest",
-    "@types/node": "latest",
-    "esbuild": "latest",
-    "esbuild-plugin-copy": "latest",
-    "fast-glob": "latest",
-    "prettier": "latest"
+    "@types/lodash": "^4.17.24",
+    "@types/node": "^24.1.0",
+    "prettier": "^3.8.3"
   }
 }
