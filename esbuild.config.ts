@@ -102,9 +102,9 @@ const baseOptions: esbuild.BuildOptions = {
       ? []
       : [
           BannerInjectPlugin(bannerMap),
-          copy({ assets: { from: "./config/**/*", to: "./config" } }),
-          copy({ assets: { from: "./rules/**/*", to: "./rules" } }),
-          copy({ assets: { from: "./src/README.md", to: "./README.md" } }),
+          copy({ assets: { from: "./config/**/*", to: "../config" } }),
+          copy({ assets: { from: "./rules/**/*", to: "../rules" } }),
+          copy({ assets: { from: "./src/README.md", to: "../README.md" } }),
           copy({
             assets: {
               from: "./src/**/*.json",
