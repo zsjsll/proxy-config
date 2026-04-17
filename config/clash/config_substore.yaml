@@ -231,6 +231,6 @@ rule-providers:
   geoip-cn: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
   geoip-media: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/mediaip.mrs" }
   geoip-telegram: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
-  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/proxy.yaml" }
-  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/direct.yaml" }
-  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/reject.yaml" }
+  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/proxy.yaml" }
+  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/direct.yaml" }
+  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/reject.yaml" }
