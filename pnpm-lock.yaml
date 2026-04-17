@@ -9,26 +9,26 @@ importers:
   .:
     dependencies:
       esbuild:
-        specifier: 0.28.0
+        specifier: ^0.28.0
         version: 0.28.0
       esbuild-plugin-copy:
-        specifier: 2.1.1
+        specifier: ^2.1.1
         version: 2.1.1(esbuild@0.28.0)
       fast-glob:
-        specifier: 3.3.3
+        specifier: ^3.3.3
         version: 3.3.3
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
     devDependencies:
       '@types/lodash':
-        specifier: 4.17.24
+        specifier: ^4.17.24
         version: 4.17.24
       '@types/node':
-        specifier: 24.1.0
+        specifier: ^24.1.0
         version: 24.1.0
       prettier:
-        specifier: 3.8.3
+        specifier: ^3.8.3
         version: 3.8.3
 
 packages:
