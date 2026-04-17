@@ -10,9 +10,9 @@
       "fileMatch": ["config/singbox/**/*.json"],
       // "url": "https://gist.githubusercontent.com/malikshi/a13ba46d42a26975002e4dd4747a434b/raw/sing-box.schema.json"
       // "url": "https://kenxx.github.io/sing-box.json/sing-box-config-schema.json"
-      // "url": "https://unpkg.com/@black-duty/sing-box-schema@latest/schema.zh.json"
+      "url": "https://unpkg.com/@black-duty/sing-box-schema@latest/schema.zh.json"
       // "url": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.zh.json"
-      "url": "https://artiga033.github.io/sing-box-schema/config.schema.json"
+      // "url": "https://artiga033.github.io/sing-box-schema/config.schema.json"
     }
   ]
 }

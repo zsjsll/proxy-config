@@ -15,10 +15,10 @@ async function getEntryPoints(entryDir: string, filterFiles: string[]) {
   filterFiles = filterFiles.map((v) => entryDir + "/" + v)
   return entryPoints.filter((point) => filterFiles.some((kw) => point.includes(kw)))
 }
-const entryPoints = await getEntryPoints(entryDir, ["clash"])
+const entryPoints = await getEntryPoints(entryDir, ["clash", "singbox"])
 console.log(entryPoints)
 
-const outDir = "./dist"
+const outDir = "./dist/substore"
 
 function TimingPlugin(): esbuild.Plugin {
   return {
