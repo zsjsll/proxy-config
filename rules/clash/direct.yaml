@@ -20,7 +20,8 @@ payload:
 
   - DOMAIN-SUFFIX,ftqq.com
   - DOMAIN,cdn.tailwindcss.com
-
+    # docker steam 验证码
+  - DOMAIN-SUFFIX,hcaptcha.com
 
   # 匹配 192.168.31.200-192.168.31.250 的ip
   - SRC-IP-CIDR,192.168.31.200/29
