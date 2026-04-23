@@ -1,0 +1,46 @@
+payload:
+  # 示例
+  # - DOMAIN-SUFFIX,google.com
+  # - DOMAIN-KEYWORD,google
+  # - DOMAIN,ad.com
+  # - SRC-IP-CIDR,192.168.1.201/32
+  # - IP-CIDR,127.0.0.0/8
+  # - GEOIP,CN
+  # - DST-PORT,80
+  # - SRC-PORT,7777
+
+  - DOMAIN-SUFFIX,1l1.fun
+  - DOMAIN-SUFFIX,bigpig.online
+  - DOMAIN-SUFFIX,zsjsll.pp.ua
+  - DOMAIN-SUFFIX,zsjsll.iask.in
+
+  - DOMAIN-SUFFIX,cloudflare.com
+  - DOMAIN-SUFFIX,cloudflare-dns.com
+  - DOMAIN-SUFFIX,nip.lfree.org
+
+  - DOMAIN-SUFFIX,ftqq.com
+  - DOMAIN,cdn.tailwindcss.com
+    # steam 验证码
+  - DOMAIN-SUFFIX,hcaptcha.com
+
+  # 匹配 192.168.31.200-192.168.31.250 的ip
+  - SRC-IP-CIDR,192.168.31.200/29
+  - SRC-IP-CIDR,192.168.31.208/28
+  - SRC-IP-CIDR,192.168.31.224/28
+  - SRC-IP-CIDR,192.168.31.240/29
+  - SRC-IP-CIDR,192.168.31.248/31
+  - SRC-IP-CIDR,192.168.31.250/32
+
+  # intel
+  - DOMAIN-SUFFIX,intel.com
+  - DOMAIN-SUFFIX,intel.cn
+
+  # github 代理
+  - DOMAIN-SUFFIX,gh-proxy.com
+  - DOMAIN-SUFFIX,ghfast.top
+  - DOMAIN,github.boki.moe
+
+  # docker 代理
+  - DOMAIN-SUFFIX,1ms.run
+  - DOMAIN,docker.1panel.live
+  - DOMAIN,05f073ad3c0010ea0f4bc00b7105ec20.mirror.swr.myhuaweicloud.com

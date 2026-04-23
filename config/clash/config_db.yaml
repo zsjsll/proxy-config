@@ -1,0 +1,223 @@
+# 机场订阅
+proxy-providers:
+  airport:
+    url: https://a.a.a/
+    type: http
+    interval: 43200
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 180
+    proxy: DIRECT
+
+# 全局配置
+mixed-port: 7890
+socks-port: 7891
+port: 7892
+redir-port: 7893
+tproxy-port: 7894
+external-controller: 127.0.0.1:9999
+secret: ""
+allow-lan: true
+bind-address: "*"
+ipv6: true
+unified-delay: true # 开启统一延迟，也就是看起来好看一点，没什么实际作用
+tcp-concurrent: true # 启用 TCP 并发连接，将会使用 dns 解析出的所有 IP 地址进行连接，使用第一个成功的连接
+# interface-name: enp6s18
+# routing-mark: 6666 # 标记出内核的流量
+log-level: silent
+find-process-mode: "off"
+global-client-fingerprint: chrome
+disable-keep-alive: false #移动端 一定要关闭心跳包的发送，减少耗电
+keep-alive-idle: 600
+keep-alive-interval: 15
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# 入站
+tun:
+  enable: true
+  # system/gvisor/mixed
+  stack: mixed
+  device: utun
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+  #使用nikki，混入全部不修改的情况，开启接口指定为nikki
+  #使用仅内核自行修改下面三项为true
+  #device: nikki
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  strict-route: true
+  # 设置绕过clash的流量
+  # route-exclude-address-set:
+  #   - fakeip-filter
+  #   - cn
+  #   - private
+
+# 嗅探
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+  skip-domain:
+    - "+.apple.com"
+    - "Mijia Cloud"
+    - "dlg.io.mi.com"
+    - "+.oray.com"
+    - "+.sunlogin.net"
+    - "+.push.apple.com"
+
+# DNS模块
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: true
+  respect-rules: true
+  # 可选值 fake-ip/redir-host，默认redir-host
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - "geosite:fakeip-filter,cn,private"
+    - "rule-set:direct"
+    # - "geosite:apple-cn,games-cn,microsoft-cn,google-cn"
+
+  nameserver-policy:
+    # 用于广告拦截，但是一旦这样设置
+    # 就不能开启 direct-nameserver-follow-policy: true
+    # 让 direct-nameserver 的优先级高于 nameserver-policy
+    "rule-set:reject":
+      - rcode://success
+    "geosite:ads":
+      - rcode://success
+
+  # 用于解析DNS服务器的域名
+  default-nameserver:
+    - https://223.6.6.6/dns-query
+    - https://223.5.5.5/dns-query
+    - https://1.12.12.12/dns-query
+    - https://120.53.53.53/dns-query
+
+  # 代理节点域名解析服务器，仅用于解析代理节点的域名
+  proxy-server-nameserver:
+    - https://223.6.6.6/dns-query
+    - https://223.5.5.5/dns-query
+    - https://1.12.12.12/dns-query
+    - https://120.53.53.53/dns-query
+
+  # direct-nameserver-follow-policy: true  # 如果不开启这个配置 direct-nameserver 的优先级会高于 nameserver-policy
+  # 用于 direct 出口域名解析的 DNS 服务器
+  direct-nameserver:
+    - system
+    - 222.172.200.68
+    - 61.166.150.123
+    - 223.6.6.6
+    - 223.5.5.5
+
+  # 不要用 fallback ，在解析的时候会同时使用 nameserver 和 fallback ，造成DNS泄露
+  nameserver:
+    - https://8.8.8.8/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
+    # - https://101.101.101.101/dns-query
+    # - https://101.102.103.104/dns-query
+    # - https://1.1.1.1/dns-query
+    # - https://1.0.0.1/dns-query
+
+# GEO相关设置
+geodata-loader: memconservative
+geo-auto-update: true
+geo-update-interval: 24
+geox-url:
+  geosite: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
+  geoip: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.metadb"
+  mmdb: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb"
+  asn: "https://accel.bigpig.online/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN-all.mmdb"
+
+proxy-groups:
+  - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点] }
+  - { name: ✋ 手动选择, type: select, include-all: true }
+
+  - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
+  - { name: 🎮 游戏CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: Ⓜ️ 微软CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🌈 谷歌CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 🍎 苹果CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📋 BT下载, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名
+  - { name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🤖 AI!CN, type: select, proxies: [💡 AI节点, 🚀 节点选择, ✋ 手动选择] } # 域名
+  - { name: 🌍 媒体!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
+  - { name: 🕹️ 游戏!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择] } # 域名 + IP
+  - { name: 📲 电报!CN, type: select, proxies: [🚀 节点选择, ✋ 手动选择], hidden: true } # IP
+  - { name: 🧱 海外!CN, type: select, proxies: [🚀 节点选择, 🟢 直连, ✋ 手动选择] } # 域名
+  - { name: 🏠 国内CN, type: select, proxies: [🟢 直连, 🚀 节点选择] } # 域名 + IP
+  - { name: 🔐 私有网络, type: select, proxies: [🟢 直连], hidden: true } # 域名 + IP
+  - { name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, ✋ 手动选择, 🟢 直连] }
+  - { name: 🟢 直连, type: select, proxies: [DIRECT], hidden: true }
+  - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
+
+  - &auto_test { name: ♻️ 自动选择, type: url-test, tolerance: 50, interval: 180, include-all: true }
+  - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
+
+  - { <<: *auto_test, name: 🇭🇰 香港节点, filter: "(?i)🇭🇰|港|hk|hong ?kong" }
+  - { <<: *auto_test, name: 🇹🇼 台湾节点, filter: "(?i)🇹🇼|台|tw|tai ?wan" }
+  # - { <<: *auto_test, name: 🇰🇷 韩国节点, filter: "(?i)🇰🇷|韩|kr|korean" }
+  - { <<: *auto_test, name: 🇯🇵 日本节点, filter: "(?i)🇯🇵|日|jp|japan" }
+  - { <<: *auto_test, name: 🇸🇬 新加坡节点, filter: "(?i)🇸🇬|新加坡|狮城|sg|singapore" }
+  - { <<: *auto_test, name: 🇺🇸 美国节点, filter: "(?i)🇺🇸|美|us|united ?states" }
+  - {
+      <<: *auto_test,
+      name: ❓ 其他节点,
+      exclude-filter: "(?i)🇭🇰|港|hk|hong ?kong|🇹🇼|台|tw|tai ?wan|🇯🇵|日|jp|japan|🇸🇬|新加坡|狮城|sg|singapore|🇺🇸|美|us|united ?states",
+    }
+
+rules:
+  # - AND,((DST-PORT,443),(NETWORK,UDP)),(NOT,(RULE-SET,cn)),REJECT # 屏蔽国外的QUIC连接
+  - RULE-SET,proxy,🧱 海外!CN
+  - RULE-SET,direct,🏠 国内CN
+  - RULE-SET,reject,🚫 广告
+  - GEOSITE,ads,🚫 广告
+  - GEOSITE,networktest,📈 网络测试
+  - GEOSITE,private,🔐 私有网络
+  - GEOSITE,trackerslist,📋 BT下载
+  - GEOSITE,microsoft-cn,Ⓜ️ 微软CN
+  - GEOSITE,apple-cn,🍎 苹果CN
+  - GEOSITE,google-cn,🌈 谷歌CN
+  - GEOSITE,games-cn,🎮 游戏CN
+  - GEOSITE,ai,🤖 AI!CN
+  - GEOSITE,media,🌍 媒体!CN
+  - GEOSITE,games,🕹️ 游戏!CN
+  - GEOSITE,tld-proxy,🧱 海外!CN
+  - GEOSITE,proxy,🧱 海外!CN
+  - GEOSITE,cn,🏠 国内CN
+  - GEOIP,privateip,🔐 私有网络,no-resolve
+  - GEOIP,cn,🏠 国内CN
+  - GEOIP,media,🌍 媒体!CN
+  - GEOIP,games,🕹️ 游戏!CN
+  - GEOIP,telegram,📲 电报!CN,no-resolve
+  - MATCH,🐟 漏网之鱼
+
+rule-anchor:
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
+  class: &class { type: http, interval: 86400, behavior: classical, format: yaml }
+
+rule-providers:
+  proxy: { <<: *class, url: "https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/proxy.yaml" }
+  direct: { <<: *class, url: "https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/direct.yaml" }
+  reject: { <<: *class, url: "https://accel.bigpig.online/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/reject.yaml" }
