@@ -39,7 +39,7 @@ if (content.proxies === undefined) throw new Error("配置文件中没有 proxie
 const areaList: AreaList[] = Array.from(
   content.proxies
     .map((element) => nameConvert.getIsoCode(element.name))
-    .sort((a, b) => a.index - b.index) // 排序
+    .toSorted((a, b) => a.index - b.index) // 排序
     .reduce((prev: Map<number, AreaList>, curr) => {
       const key = curr.index
       if (prev.has(key)) {
