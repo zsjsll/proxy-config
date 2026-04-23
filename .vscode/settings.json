@@ -14,5 +14,12 @@
       // "url": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.zh.json"
       // "url": "https://artiga033.github.io/sing-box-schema/config.schema.json"
     }
-  ]
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  }
 }
