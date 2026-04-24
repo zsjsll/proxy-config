@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs"
+import { file, write } from "bun"
 import { parse } from "yaml"
 
 const inputPath = "./data.yaml"
