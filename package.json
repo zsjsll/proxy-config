@@ -1,26 +1,16 @@
 {
   "name": "proxy-config",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "build": "pnpm tsx esbuild.config.ts --minify",
-    "watch": "pnpm tsx esbuild.config.ts -w --debug"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "esbuild": "^0.28.0",
-    "esbuild-plugin-copy": "^2.1.1",
-    "fast-glob": "^3.3.3",
-    "tsx": "^4.21.0"
-  },
+  "private": true,
   "devDependencies": {
-    "@types/lodash": "^4.17.24",
-    "@types/node": "^24.1.0",
+    "@types/bun": "latest",
+    "ox": "^0.14.20",
     "oxfmt": "^0.46.0",
     "oxlint": "^1.61.0"
+  },
+  "peerDependencies": {
+    "typescript": "^6"
+  },
+  "dependencies": {
+    "yaml": "^2.8.3"
   }
 }

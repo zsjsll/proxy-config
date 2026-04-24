@@ -5,11 +5,11 @@
   "categories": {
     "correctness": "error",
     "perf": "error",
-    "suspicious": "error"
-    // "style":"warn",
-    // "pedantic":"warn",
-    // "restriction": "warn",
-    // "nursery": "warn"
+    "suspicious": "error",
+    "style": "warn",
+    "pedantic": "warn",
+    "restriction": "warn",
+    "nursery": "warn"
   },
   "rules": {},
   "env": {

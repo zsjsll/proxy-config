@@ -1,12 +1,12 @@
 name: Build and push to dist branch
 
-on:
-  push:
-    branches:
-      - self
-
 # on:
-#   workflow_dispatch:
+#   push:
+#     branches:
+#       - self
+
+on:
+  workflow_dispatch:
 
 jobs:
   works:
