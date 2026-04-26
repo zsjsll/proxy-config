@@ -1,11 +1,11 @@
-const a = undefined
+const a = undefined;
 function fixArray(args: undefined | string): string[] {
   if (args === "") {
-    return []
+    return [];
   }
+
   if (typeof args === "string") {
-    return args.split(/[|, ]/)
+    return args.split(/[|, ]/);
   }
-  return []
+  return [];
 }
-console.log(fixArray(a))

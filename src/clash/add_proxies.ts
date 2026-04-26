@@ -60,8 +60,6 @@ if (name !== "") {
     pList.map((p) => {
       p.name = p.name.replace("🏴‍☠️", "❓")
     })
-
-    console.log("🚀 ~ pList:", pList)
   }
   content = { proxies: pList, ...content }
 }

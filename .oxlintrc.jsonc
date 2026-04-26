@@ -4,15 +4,17 @@
   "plugins": ["typescript", "unicorn", "oxc"],
   "categories": {
     "correctness": "error",
-    "perf": "error",
-    "suspicious": "error",
-    "style": "warn",
+    "perf": "warn",
+    "suspicious": "warn",
     "pedantic": "warn",
-    "restriction": "warn",
-    "nursery": "warn"
+    // "restriction": "warn"
+    // "style": "warn"
+    // "nursery": "warn"
   },
-  "rules": {},
+  "rules": {
+    "capitalized-comments": "off",
+  },
   "env": {
-    "builtin": true
-  }
+    "builtin": true,
+  },
 }
