@@ -106,7 +106,6 @@ dns:
     # 为了不触发某些应用的 fallback 机制, 所以返回 rcode://success
     "rule-set:geosite-ads,custom-reject":
       - rcode://success
-
     # direct-nameserver-follow-policy: true 不开启的话, 下面这个2个规则其实都没有什么用了,都会优先走 direct-nameserver
     # 可以注释掉
 
@@ -118,15 +117,14 @@ dns:
     #   - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
     #   - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
-  # 用于解析DNS服务器的域名
+    # 用于解析DNS服务器的域名
   default-nameserver:
     - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
     - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
-
     # - https://1.12.12.12/dns-query
     # - https://120.53.53.53/dns-query
 
-  # 代理节点域名解析服务器，仅用于解析代理节点的域名
+    # 代理节点域名解析服务器，仅用于解析代理节点的域名
   proxy-server-nameserver:
     - https://223.5.5.5/dns-query#ecs=222.172.200.68/24&ecs-override=true
     - https://223.6.6.6/dns-query#ecs=222.172.200.68/24&ecs-override=true
@@ -134,8 +132,8 @@ dns:
     # - https://8.8.4.4/dns-query#ecs=222.172.200.68/24&ecs-override=true
     # - https://doh.pub/dns-query#ecs=222.172.200.68/24&ecs-override=true
 
-  # direct-nameserver-follow-policy: true  # 如果开启这个配置 direct-nameserver 的优先级会低于 nameserver-policy
-  # 用于 direct 出口域名解析的 DNS 服务器
+    # direct-nameserver-follow-policy: true  # 如果开启这个配置 direct-nameserver 的优先级会低于 nameserver-policy
+    # 用于 direct 出口域名解析的 DNS 服务器
   direct-nameserver:
     - system
     - 222.172.200.68
@@ -212,25 +210,47 @@ rule-anchor:
   class: &class { type: http, interval: 86400, behavior: classical, format: yaml }
 
 rule-providers:
-  geosite-fakeip_filter: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" }
-  geosite-private: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
-  geosite-ads: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ads.mrs" }
-  geosite-trackerslist: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/trackerslist.mrs" }
-  geosite-microsoft_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
-  geosite-apple_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs" }
-  geosite-google_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs" }
-  geosite-games_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs" }
-  geosite-media: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/media.mrs" }
-  geosite-games: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games.mrs" }
-  geosite-ai: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs" }
-  geosite-networktest: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/networktest.mrs" }
-  geosite-tld_proxy: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
-  geosite-proxy: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
-  geosite-cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs" }
-  geoip-private: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs" }
-  geoip-cn: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
-  geoip-media: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/mediaip.mrs" }
-  geoip-telegram: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
-  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/proxy.yaml" }
-  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/direct.yaml" }
-  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/dist/rules/clash/reject.yaml" }
+  geosite-fakeip_filter: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/fakeip-filter.mrs" }
+  geosite-private: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/private.mrs" }
+  geosite-ads: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/ads.mrs" }
+  geosite-trackerslist: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/trackerslist.mrs" }
+  geosite-microsoft_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/microsoft-cn.mrs" }
+  geosite-apple_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/apple-cn.mrs" }
+  geosite-google_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/google-cn.mrs" }
+  geosite-games_cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/games-cn.mrs" }
+  geosite-media: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/media.mrs" }
+  geosite-games: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/games.mrs" }
+  geosite-ai: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/ai.mrs" }
+  geosite-networktest: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/networktest.mrs" }
+  geosite-tld_proxy: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/tld-proxy.mrs" }
+  geosite-proxy: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/proxy.mrs" }
+  geosite-cn: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/cn.mrs" }
+  geoip-private: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/privateip.mrs" }
+  geoip-cn: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/cnip.mrs" }
+  geoip-media: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/mediaip.mrs" }
+  geoip-telegram: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
+        ases/download/mihomo-ruleset/telegramip.mrs" }
+  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
+        nfig/refs/heads/dist/rules/clash/proxy.yaml" }
+  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
+        nfig/refs/heads/dist/rules/clash/direct.yaml" }
+  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
+        nfig/refs/heads/dist/rules/clash/reject.yaml" }

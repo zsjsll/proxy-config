@@ -8,36 +8,36 @@
 [healthCheckInterval] = 300 进行节点检测的间隔时间（s），如果为 0 ，所有的test都会禁用，包括 proxy-group 的 url-test 都会删除
 */
 
-import { getContent, saveContent, fixNumber } from "../tools/base"
+import { fixNumber, getContent, saveContent } from "../tools/base";
 
-let { interval = 43200, url = "https://www.gstatic.com/generate_204", healthCheckInterval = 300 } = $arguments
+let { interval = 43200, url = "https://www.gstatic.com/generate_204", healthCheckInterval = 300 } = $arguments;
 
-healthCheckInterval = fixNumber(healthCheckInterval)
-interval = fixNumber(interval)
+healthCheckInterval = fixNumber(healthCheckInterval);
+interval = fixNumber(interval);
 
-let content = getContent()
+let content = getContent();
 // 修改 providers
 if (content["proxy-providers"]) {
-  Object.values(content["proxy-providers"]).map((val) => {
-    val.interval = interval
-    val["health-check"].enable = healthCheckInterval !== 0
-    val["health-check"].url = url
-    val["health-check"].interval = healthCheckInterval
-  })
+  Object.values(content["proxy-providers"]).forEach((val) => {
+    val.interval = interval;
+    val["health-check"].enable = healthCheckInterval !== 0;
+    val["health-check"].url = url;
+    val["health-check"].interval = healthCheckInterval;
+  });
 }
 
 // 修改 groups
-content["proxy-groups"].map((v) => {
-  if (v.type === "url-test") v.interval = healthCheckInterval
-})
+content["proxy-groups"].forEach((v) => {
+  if (v.type === "url-test") v.interval = healthCheckInterval;
+});
 if (healthCheckInterval === 0) {
-  const names = content["proxy-groups"].filter((v) => v.type === "url-test").map((v) => v.name)
+  const names = content["proxy-groups"].filter((v) => v.type === "url-test").map((v) => v.name);
 
-  content["proxy-groups"] = content["proxy-groups"].filter((v) => v.type !== "url-test")
+  content["proxy-groups"] = content["proxy-groups"].filter((v) => v.type !== "url-test");
 
-  content["proxy-groups"].map((v) => {
-    if (names.some((name) => v.proxies?.includes(name))) v.proxies = v.proxies?.filter((p) => !names.includes(p))
-  })
+  content["proxy-groups"].forEach((v) => {
+    if (names.some((name) => v.proxies?.includes(name))) v.proxies = v.proxies?.filter((p) => !names.includes(p));
+  });
 }
 
-saveContent(content)
+saveContent(content);

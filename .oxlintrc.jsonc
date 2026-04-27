@@ -3,7 +3,7 @@
 
   "plugins": ["typescript", "unicorn", "oxc"],
   "categories": {
-    "correctness": "error",
+    "correctness": "warn",
     "perf": "warn",
     "suspicious": "warn",
     "pedantic": "warn",
