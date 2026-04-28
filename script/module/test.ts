@@ -12,6 +12,9 @@ console.log(t)
 
 const doc = parseDocument(d)
 
+parse(d,{})
+
+
 function changeConfig(proxyUrls: string[]) {
   visit(doc, {
     Pair(_, node, path) {
