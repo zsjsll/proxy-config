@@ -1,5 +1,7 @@
 import clash from "./module/changeclashconfig"
 
-const c = new clash("config/clash.yaml", "123")
+const c = new clash("../config/clash.yaml", "123.yaml")
 
-c.load()
+const k = await c.load()
+
+c.save()
