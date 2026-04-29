@@ -2,6 +2,8 @@
   "name": "proxy-config",
   "private": true,
   "dependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.1",
     "yaml": "^2.8.3"
   },
   "devDependencies": {

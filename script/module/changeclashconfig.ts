@@ -1,40 +1,41 @@
 import { basename, extname } from "node:path"
 
 export default class ChangeClashConfig {
-  // private readonly metaPath: string = process.argv[1] ?? process.cwd()
-  private readonly metaPath: string = Bun.main
-  private fileName: string = "config.yaml"
+  private fileName: string
   private inputPath: string
   private outputPath: string
-  private doc: unknown = ""
+  private doc: Config = {} as Config
 
-  constructor(inputPath: string, outputPath: string) {
+  constructor(inputPath: string, outputPath: string, doc?: Config) {
     this.inputPath = inputPath
     this.outputPath = outputPath
+    this.fileName = basename(inputPath)
+    if (doc === undefined) console.warn("use load() to load *.yaml")
+    else this.doc = doc
   }
 
   async load() {
-    const fileUrl = new URL(this.inputPath, Bun.pathToFileURL(this.metaPath))
+    const fileUrl = new URL(this.inputPath, Bun.pathToFileURL(Bun.main))
     const bunFile = Bun.file(fileUrl)
+
 
     try {
       if ((await bunFile.exists()) && bunFile.type === "text/yaml") {
-        this.fileName = basename(fileUrl.pathname)
-        return bunFile.text()
-      }
-      throw new Error("inputPath not a *.yaml path")
+        // this.doc = Bun.YAML.parse(await bunFile.text()) as Config
+        this.doc = await import(fileUrl.href)
+      } else throw new Error("inputPath not a *.yaml path")
     } catch (error) {
       console.error(error)
     }
   }
 
   async save() {
-    const fileUrl = new URL(this.outputPath, Bun.pathToFileURL(this.metaPath))
+    const fileUrl = new URL(this.outputPath, Bun.pathToFileURL(Bun.main))
 
-    console.log()
-
-    if ([".yaml", ".yml"].includes(extname(fileUrl.pathname))) {
-      Bun.write(fileUrl, this.doc)
+    if (extname(fileUrl.pathname).startsWith(".")) {
+    } else {
+      fileUrl.pathname = `${fileUrl.pathname}/${this.fileName}`
     }
+    await Bun.write(fileUrl, Bun.YAML.stringify(this.doc))
   }
 }
