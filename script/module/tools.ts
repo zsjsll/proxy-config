@@ -1,5 +1,3 @@
-
-
 import yaml from "yaml"
 import ccc from "../../config/clash.yaml"
 

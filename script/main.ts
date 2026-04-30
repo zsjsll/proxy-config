@@ -1,10 +1,9 @@
-import clash from "./module/changeclashconfig"
+import Clash from "./module/change-config"
 
-const c = new clash("../config/clash.yaml", "../dist")
+const cc = new Clash("../config/clash.yaml", "../dist")
 
-const k = await c.load()
+const k = await cc.load()
 
-c.save()
+cc.deleteModules(["rule-providers-anchor"])
 
-const absolutePath = Bun.resolveSync("../config/clash.yaml", import.meta.dirname)
-console.log("🚀 ~ absolutePath:", absolutePath)
+cc.save()
