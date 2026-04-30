@@ -6,4 +6,6 @@ const k = await cc.load()
 
 cc.deleteModules(["rule-providers-anchor"])
 
-cc.save()
+console.log(
+  cc.search("rule-providers.*.url", (k,v) => 12312124),
+)

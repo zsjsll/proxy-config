@@ -3,21 +3,21 @@
 
   "plugins": ["typescript", "unicorn", "oxc"],
   "categories": {
-    "correctness": "error",
+    "correctness": "warn",
     "perf": "warn",
     "suspicious": "warn",
     "pedantic": "warn",
     // "restriction": "warn",
-    "style": "warn",
+    // "style": "warn",
     // "nursery": "warn"
   },
   "rules": {
     "capitalized-comments": "off",
     "no-magic-numbers": "off",
     "no-async-await": "off",
-    "explicit-module-boundary-types": "off",
-    "explicit-function-return-type": "off",
-    "eslint(id-length)": "off",
+    // "explicit-module-boundary-types": "off",
+    // "explicit-function-return-type": "off",
+    "id-length": "off",
   },
   "env": {
     "builtin": true,

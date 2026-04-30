@@ -1,5 +1,3 @@
-import YAML from "yaml"
-
 // 读取一个较大的 YAML 文件作为测试数据
 
 // 1. 使用 parse() 直接解析成 JS 对象
@@ -14,15 +12,15 @@ import YAML from "yaml"
 // const doc = YAML.parseDocument(source)
 // console.timeEnd("parseDocument")
 
-console.time("Bun.YAML")
-
 const source = await Bun.file("./config/clash.yaml").text()
 const a = Bun.YAML.parse(source)
-console.timeEnd("Bun.YAML")
 
+function getByPath(path: string) {
+  const patharr = path.split(".")
 
-console.time("improt")
-const i=await import("./config/clash.yaml")
-console.timeEnd("improt")
+  return patharr.reduce((prev, curr) => {
+    return prev[curr]
+  }, a)
+}
 
-// console.log(a)
+console.log(getByPath("tun"))
