@@ -1,11 +1,14 @@
 import { basename, dirname, extname, resolve } from "node:path"
+import clashConfig from "../../config/clash.yaml"
+
+type ClashConfig = typeof clashConfig
 
 export default class ChangeConfig {
   private readonly runningScriptPath = dirname(Bun.main)
   private fileName = "clash.yaml"
   private inputPath: string
   private outputPath: string
-  private doc: Config = {} as Config
+  private doc: ClashConfig = {} as ClashConfig
 
   public constructor(input: string, output: string) {
     this.inputPath = input
@@ -15,7 +18,7 @@ export default class ChangeConfig {
   public async load() {
     const filePath = await Bun.resolve(this.inputPath, this.runningScriptPath)
     this.fileName = basename(filePath)
-    this.doc = Bun.YAML.parse(await Bun.file(filePath).text()) as Config
+    this.doc = Bun.YAML.parse(await Bun.file(filePath).text()) as ClashConfig
   }
 
   public async save() {
@@ -36,25 +39,18 @@ export default class ChangeConfig {
     }
   }
 
-  public search(path: string, fn: (key: string, val: any) => any) {
-    const keys = path.split(".")
+  public search(path: string) {
+    // const keys = path.split(".")
 
-    return keys.reduce(
-      (acc, key) =>
-        acc.reduce((nextAcc, currentObj) => {
-          if (key === "*") {
-            const children = Array.isArray(currentObj) ? currentObj : Object.values(currentObj)
-            // 合并到下一层候选池
-            return [...nextAcc, ...children]
-          }
-          if (currentObj[key] !== null) {
-            const f = fn(key, currentObj[key])
-            currentObj[key] = f
-            return [...nextAcc, currentObj[key]]
-          }
-          return currentObj[key]
-        }, []),
-      [this.doc],
-    )
+    let result = this.doc
+    let parents = []
+    path.split(".").forEach((value, index, arr) => {
+      if (index === arr.length - 1) {
+        result[value] = 123
+      }
+      result = result[value]
+    })
+
+    return result
   }
 }

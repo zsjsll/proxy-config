@@ -18,6 +18,7 @@
     // "explicit-module-boundary-types": "off",
     // "explicit-function-return-type": "off",
     "id-length": "off",
+    "no-inline-comments": "off",
   },
   "env": {
     "builtin": true,

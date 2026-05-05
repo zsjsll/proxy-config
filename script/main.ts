@@ -6,6 +6,5 @@ const k = await cc.load()
 
 cc.deleteModules(["rule-providers-anchor"])
 
-console.log(
-  cc.search("rule-providers.*.url", (k,v) => 12312124),
-)
+console.log(cc.search("tun.enable", (v) => (v = 123)))
+// console.log(cc.search("rule-providers.*.url"))

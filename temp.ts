@@ -1,26 +1,21 @@
-// 读取一个较大的 YAML 文件作为测试数据
+const o = { a: { b: { c: 1 } }, d: 2 }
 
-// 1. 使用 parse() 直接解析成 JS 对象
+let a = o.a.b
 
-// console.time("parse")
-// const obj = YAML.parse(source)
-// console.timeEnd("parse")
+a.c = 2222
 
-// // 2. 使用 parseDocument() + visit() 遍历 AST
+console.log(o)
 
-// console.time("parseDocument")
-// const doc = YAML.parseDocument(source)
-// console.timeEnd("parseDocument")
+type Method = "GET" | "POST" | "PUT" | "DELETE"
 
-const source = await Bun.file("./config/clash.yaml").text()
-const a = Bun.YAML.parse(source)
-
-function getByPath(path: string) {
-  const patharr = path.split(".")
-
-  return patharr.reduce((prev, curr) => {
-    return prev[curr]
-  }, a)
+const apiConfig = {
+  url: "https://api.example.com",
+  method: "POST" as Method,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
 }
 
-console.log(getByPath("tun"))
+type Config = typeof apiConfig
+// Config.method 是 'GET' | 'POST' | 'PUT' | 'DELETE'
