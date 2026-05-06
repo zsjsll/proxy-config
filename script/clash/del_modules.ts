@@ -11,7 +11,7 @@ let { del = [] as string[] } = $arguments
 
 del = fixArray(del)
 
-let content: Config = getContent()
+const content: Config = getContent()
 
 if (del.length > 0) {
   del.map((m) => {

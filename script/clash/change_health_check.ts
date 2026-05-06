@@ -15,7 +15,7 @@ let { interval = 43200, url = "https://www.gstatic.com/generate_204", healthChec
 healthCheckInterval = fixNumber(healthCheckInterval);
 interval = fixNumber(interval);
 
-let content = getContent();
+const content = getContent();
 // 修改 providers
 if (content["proxy-providers"]) {
   Object.values(content["proxy-providers"]).forEach((val) => {

@@ -22,7 +22,7 @@ let content = getContent()
 if (urls.length > 0 && name !== "") throw new Error("'name', 'urls' 二选一")
 
 if (urls.length > 0) {
-  let template: ProxyProvider = {
+  const template: ProxyProvider = {
     url: "https://a.a.a/",
     type: "http",
     interval: 43200,
@@ -57,7 +57,7 @@ if (name !== "") {
   })
 
   if (fixEmoji) {
-    pList.map((p) => {
+    pList.forEach((p) => {
       p.name = p.name.replace("🏴‍☠️", "❓")
     })
   }
