@@ -1,11 +1,11 @@
 {
   "name": "proxy-config",
   "private": true,
-  "dependencies": {
-    "@types/js-yaml": "^4.0.9",
-    "js-yaml": "^4.1.1",
-    "yaml": "^2.8.4"
+  "scripts": {
+    "build": "bun run ./script/cli.ts",
+    "debug": "bun run ./script/cli.ts -f"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
     "oxfmt": "latest",

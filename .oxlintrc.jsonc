@@ -15,8 +15,6 @@
     "capitalized-comments": "off",
     "no-magic-numbers": "off",
     "no-async-await": "off",
-    // "explicit-module-boundary-types": "off",
-    // "explicit-function-return-type": "off",
     "id-length": "off",
     "no-inline-comments": "off",
   },
