@@ -12,11 +12,8 @@
     // "nursery": "warn"
   },
   "rules": {
-    "capitalized-comments": "off",
-    "no-magic-numbers": "off",
-    "no-async-await": "off",
-    "id-length": "off",
     "no-inline-comments": "off",
+    "prefer-const": "warn",
   },
   "env": {
     "builtin": true,

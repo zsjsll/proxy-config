@@ -25,7 +25,7 @@ export default class ChangeConfig {
     if (!extname(filePath).startsWith(".")) {
       filePath = resolve(filePath, this.fileName)
     }
-    let space = format ? 2 : 0
+    const space = format ? 2 : 0
 
     await Bun.write(filePath, Bun.YAML.stringify(this.doc, undefined, space))
   }
@@ -40,7 +40,7 @@ export default class ChangeConfig {
     while (paths.length > 0) {
       const currentPath = paths.shift()!
       const keys = currentPath.split(".")
-      let queue: Queue[] = [{ node: this.doc, parent: undefined, key: undefined, level: 0 }]
+      const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
 
       while (queue.length > 0) {
         const currentQueue = queue.shift()!
@@ -48,31 +48,34 @@ export default class ChangeConfig {
 
         if (level === keys.length) {
           if (parent !== undefined && key !== undefined) {
-            results.push({ value: node, parent, key })
+            results.push({ key, parent, value: node })
           }
-          continue // 继续处理队列中的其他任务
+          // 继续处理队列中的其他任务
+          continue
         }
 
-        if (node === undefined || typeof node !== "object") continue
-
+        if (node === undefined || typeof node !== "object") {
+          continue
+        }
         // 获取当前层级的路径键名
         const currentKey = keys[level]
         const nextLevel = level + 1
-
         if (currentKey === "*") {
           // 通配符：将所有子节点加入队列
           const entries = Array.isArray(node) ? node.map((v, i) => ({ k: i, v })) : Object.entries(node).map(([k, v]) => ({ k, v }))
           for (const entry of entries) {
-            queue.push({ node: entry.v, parent: node, key: entry.k, level: nextLevel })
+            queue.push({ key: entry.k, level: nextLevel, node: entry.v, parent: node })
           }
-        } else if (currentKey !== undefined && Object.prototype.hasOwnProperty.call(node, currentKey)) {
+        } else if (currentKey !== undefined && Object.hasOwn(node, currentKey)) {
           // 普通键：将指定子节点加入队列
-          queue.push({ node: node[currentKey], parent: node, key: currentKey, level: nextLevel })
+          queue.push({ key: currentKey, level: nextLevel, node: node[currentKey], parent: node })
         }
       }
     }
 
-    if (results.length === 0) throw new Error("not find node")
+    if (results.length === 0) {
+      throw new Error("not find node")
+    }
     return results
   }
 
