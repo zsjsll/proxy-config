@@ -19,7 +19,7 @@ export default class ChangeConfig {
   }
 
   public async save(format = false) {
-    // const fileUrl = new URL(this.output, Bun.pathToFileURL(Bun.main))
+    // Const fileUrl = new URL(this.output, Bun.pathToFileURL(Bun.main))
     let filePath = resolve(this.runningScriptPath, this.outputPath)
 
     if (!extname(filePath).startsWith(".")) {
@@ -37,9 +37,8 @@ export default class ChangeConfig {
 
     const results: nodeHandle[] = []
 
-    while (paths.length > 0) {
-      const currentPath = paths.shift()!
-      const keys = currentPath.split(".")
+    for (const [pathIndex, pathValue] of paths.entries()) {
+      const keys = pathValue.split(".")
       const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
 
       while (queue.length > 0) {
@@ -53,8 +52,9 @@ export default class ChangeConfig {
           // 继续处理队列中的其他任务
           continue
         }
-        if (node === undefined || node === null || typeof node !== "object") continue
-
+        if (node === undefined || node === null || typeof node !== "object") {
+          continue
+        }
         // 获取当前层级的路径键名
         const currentKey = keys[level]
         const nextLevel = level + 1
@@ -67,7 +67,15 @@ export default class ChangeConfig {
         } else if (currentKey !== undefined && Object.hasOwn(node, currentKey)) {
           // 普通键：将指定子节点加入队列
           queue.push({ key: currentKey, level: nextLevel, node: node[currentKey], parent: node })
-        } else throw new TypeError(`❌ not find node, in params ${Bun.inspect(paths,{colors:true})} spell error ?`)
+        } else {
+          throw new TypeError(
+            `⚠️  not find node, in params path:
+           ${Bun.inspect(paths, { colors: true })}
+           -> ${Bun.inspect(paths.at(pathIndex), { colors: true })}
+           -> ${Bun.inspect(currentKey)} ❌
+           spell error ?`,
+          )
+        }
       }
     }
     return results
