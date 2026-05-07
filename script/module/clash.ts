@@ -32,7 +32,7 @@ export default class ChangeConfig {
 
   public find(paths: string[]) {
     if (this.doc === undefined) {
-      throw new Error("not read file !")
+      throw new ReferenceError("not read file !")
     }
 
     const results: nodeHandle[] = []
@@ -53,10 +53,8 @@ export default class ChangeConfig {
           // 继续处理队列中的其他任务
           continue
         }
+        if (node === undefined || node === null || typeof node !== "object") continue
 
-        if (node === undefined || typeof node !== "object") {
-          continue
-        }
         // 获取当前层级的路径键名
         const currentKey = keys[level]
         const nextLevel = level + 1
@@ -69,12 +67,8 @@ export default class ChangeConfig {
         } else if (currentKey !== undefined && Object.hasOwn(node, currentKey)) {
           // 普通键：将指定子节点加入队列
           queue.push({ key: currentKey, level: nextLevel, node: node[currentKey], parent: node })
-        }
+        } else throw new TypeError(`❌ not find node, in params ${Bun.inspect(paths,{colors:true})} spell error ?`)
       }
-    }
-
-    if (results.length === 0) {
-      throw new Error("not find node")
     }
     return results
   }

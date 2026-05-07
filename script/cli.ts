@@ -17,6 +17,8 @@ await clash.load()
 
 // cc.change(find, 9999999)
 
-clash.delete(clash.find(["proxy-groups-anchor", "rule-providers-anchor", "tun"]))
+// clash.delete(clash.find(["proxy-groups-anchor", "rule-providers-anchor", "tun"]))
+clash.delete(clash.find(["proxy-groups-anchor.sd", "rule-providers-anchor", "tun"]))
+
 
 await clash.save(format)
