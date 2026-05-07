@@ -16,18 +16,28 @@ export default class ChangeConfig {
     const filePath = await Bun.resolve(this.inputPath, this.runningScriptPath)
     this.fileName = basename(filePath)
     this.doc = Bun.YAML.parse(await Bun.file(filePath).text()) as object
+    return this.doc
   }
 
-  public async save(format = false) {
-    // Const fileUrl = new URL(this.output, Bun.pathToFileURL(Bun.main))
-    let filePath = resolve(this.runningScriptPath, this.outputPath)
+  public async save(format = false, doc: object | string | undefined = this.doc, path = "") {
+    // const fileUrl = new URL(this.output, Bun.pathToFileURL(Bun.main))
 
-    if (!extname(filePath).startsWith(".")) {
-      filePath = resolve(filePath, this.fileName)
-    }
+    if (doc === undefined) throw new TypeError("doc is undefined")
+
+    let filePath = path === "" ? resolve(this.runningScriptPath, this.outputPath) : path
+
+    if (!extname(filePath).startsWith(".")) filePath = resolve(filePath, this.fileName)
+
     const space = format ? 2 : 0
-
-    await Bun.write(filePath, Bun.YAML.stringify(this.doc, undefined, space))
+    const endFix = extname(filePath)
+    if ([".json", ".jsonc"].includes(endFix)) {
+      await Bun.write(filePath, JSON.stringify(doc, undefined, space))
+    } else if ([".ts", ".d.ts", ".mts"].includes(endFix)) {
+      await Bun.write(filePath, doc.toString())
+    } else {
+      await Bun.write(filePath, Bun.YAML.stringify(doc, undefined, space))
+    }
+    console.log(`save to: ${[filePath]}`)
   }
 
   public find(paths: string[]) {
@@ -39,8 +49,7 @@ export default class ChangeConfig {
       const keys = pathValue.split(".")
       const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
 
-      for (const currentQueue of queue) {
-        const { node, parent, key, level } = currentQueue
+      for (const { node, parent, key, level } of queue) {
         if (level === keys.length && parent !== undefined && key !== undefined) {
           results.push({ key, parent, value: node })
           continue

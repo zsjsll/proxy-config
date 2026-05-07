@@ -21,8 +21,11 @@
     "no-magic-numbers": "off",
     "no-continue": "off",
     "sort-keys": "off",
+    "capitalized-comments": "off",
+    "numeric-separators-style": "off",
   },
   "env": {
     "builtin": true,
   },
+  "ignorePatterns": ["script/@types/clashConfig.ts"],
 }

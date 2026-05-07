@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": [],
+  "ignorePatterns": ["script/@types/clashConfig.ts"],
   "semi": false,
   "trailingComma": "all",
   "tabWidth": 2,
