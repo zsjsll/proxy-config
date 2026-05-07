@@ -7,13 +7,20 @@
     "perf": "warn",
     "suspicious": "warn",
     "pedantic": "warn",
+    "style": "warn",
     // "restriction": "warn",
-    // "style": "warn",
     // "nursery": "warn"
   },
   "rules": {
     "no-inline-comments": "off",
     "prefer-const": "warn",
+    "no-ternary": "off",
+    "id-length": "off",
+    "curly": "off",
+    "max-statements": "off",
+    "no-magic-numbers": "off",
+    "no-continue": "off",
+    "sort-keys": "off",
   },
   "env": {
     "builtin": true,

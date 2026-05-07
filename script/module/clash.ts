@@ -31,9 +31,7 @@ export default class ChangeConfig {
   }
 
   public find(paths: string[]) {
-    if (this.doc === undefined) {
-      throw new ReferenceError("not read file !")
-    }
+    if (this.doc === undefined) throw new ReferenceError("not read file !")
 
     const results: nodeHandle[] = []
 
@@ -41,20 +39,14 @@ export default class ChangeConfig {
       const keys = pathValue.split(".")
       const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
 
-      while (queue.length > 0) {
-        const currentQueue = queue.shift()!
+      for (const currentQueue of queue) {
         const { node, parent, key, level } = currentQueue
+        if (level === keys.length && parent !== undefined && key !== undefined) {
+          results.push({ key, parent, value: node })
+          continue
+        }
+        if (node === undefined || node === null || typeof node !== "object") continue
 
-        if (level === keys.length) {
-          if (parent !== undefined && key !== undefined) {
-            results.push({ key, parent, value: node })
-          }
-          // 继续处理队列中的其他任务
-          continue
-        }
-        if (node === undefined || node === null || typeof node !== "object") {
-          continue
-        }
         // 获取当前层级的路径键名
         const currentKey = keys[level]
         const nextLevel = level + 1
@@ -62,19 +54,17 @@ export default class ChangeConfig {
           // 通配符：将所有子节点加入队列
           const entries = Array.isArray(node) ? node.map((v, i) => ({ k: i, v })) : Object.entries(node).map(([k, v]) => ({ k, v }))
           for (const entry of entries) {
-            queue.push({ key: entry.k, level: nextLevel, node: entry.v, parent: node })
+            queue.push({ node: entry.v, parent: node, key: entry.k, level: nextLevel })
           }
-        } else if (currentKey !== undefined && Object.hasOwn(node, currentKey)) {
+        } else if (currentKey !== undefined && !Array.isArray(node) && Object.hasOwn(node, currentKey)) {
           // 普通键：将指定子节点加入队列
-          queue.push({ key: currentKey, level: nextLevel, node: node[currentKey], parent: node })
+          queue.push({ node: node[currentKey], parent: node, key: currentKey, level: nextLevel })
         } else {
-          throw new TypeError(
-            `⚠️  not find node, in params path:
-           ${Bun.inspect(paths, { colors: true })}
-           -> ${Bun.inspect(paths.at(pathIndex), { colors: true })}
+          throw new SyntaxError(`⚠️  not find node, in params path:
+           ${Bun.inspect(paths)}
+           -> ${Bun.inspect(paths.at(pathIndex))}
            -> ${Bun.inspect(currentKey)} ❌
-           spell error ?`,
-          )
+           spell error ?`)
         }
       }
     }
