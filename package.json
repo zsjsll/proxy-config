@@ -2,16 +2,16 @@
   "name": "proxy-config",
   "private": true,
   "scripts": {
-    "yaml2ts": "bun run script/yaml2type.ts",
-    "build": "bun run script/cli.ts"
+    "yaml2ts": "bun run script/yaml2ts.ts",
+    "cli": "bun run script/cli.ts"
   },
   "dependencies": {},
   "devDependencies": {
+    "@hacxy/json2ts": "latest",
     "@types/bun": "latest",
-    "json-to-typescript": "^1.0.1",
     "oxfmt": "latest",
     "oxlint": "latest",
-    "quicktype-core": "^23.2.6"
+    "quicktype-core": "latest"
   },
   "peerDependencies": {
     "typescript": "latest"

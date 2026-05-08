@@ -40,7 +40,7 @@ export default class ChangeConfig {
     console.log(`save to: ${[filePath]}`)
   }
 
-  public find(paths: string[]) {
+  public search(paths: string[]) {
     if (this.doc === undefined) throw new ReferenceError("not read file !")
 
     const results: nodeHandle[] = []

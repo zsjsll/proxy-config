@@ -23,9 +23,10 @@
     "sort-keys": "off",
     "capitalized-comments": "off",
     "numeric-separators-style": "off",
+    "sort-imports": "off",
   },
   "env": {
     "builtin": true,
   },
-  "ignorePatterns": ["script/@types/clashConfig.ts"],
+  "ignorePatterns": ["script/@types"],
 }
