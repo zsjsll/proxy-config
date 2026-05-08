@@ -6,8 +6,6 @@ declare module "./clash-config.d.ts" {
   }
 }
 
-declare global {
-  type ProxyProviders = ClashConfig.ProxyProviders
-}
-
-export {}
+// declare global {
+//   type ProxyProviders = ClashConfig.ProxyProviders
+// }

@@ -1,4 +1,5 @@
-import Clash from "./module/clash"
+import type { Airport } from "./@types/clash-config"
+import Clash, { type AddNode } from "./module/clash"
 
 const input = "../config/clash.yaml"
 const output = "../dist"
@@ -8,11 +9,10 @@ const PROVIDERS_URL: string[] = JSON.parse(Bun.env.PROVIDERS_URL!)
 
 const HEALTH_CHECK_URL: string = Bun.env.HEALTH_CHECK_URL!
 
-const PROVIDERS_INTERVAL: string = Bun.env.PROVIDERS_INTERVAL!
-const HEALTH_CHECK_INTERVAL: number = JSON.parse(Bun.env.HEALTH_CHECK_INTERVAL!)
+const formatStringToNumber = (val: string) => (val.includes("*") ? val.split("*").reduce((prev, curr) => (prev *= Number(curr)), 1) : Number(val))
+const PROVIDERS_INTERVAL: number = formatStringToNumber(Bun.env.PROVIDERS_INTERVAL!)
+const HEALTH_CHECK_INTERVAL: number = formatStringToNumber(Bun.env.HEALTH_CHECK_INTERVAL!)
 
-// const argv = Bun.argv.slice(2)
-// const format = Boolean(argv.some((v) => v === "-f"))
 const format = true
 
 const clash = new Clash(input, output)
@@ -21,15 +21,31 @@ await clash.load()
 // 删除不需要的模块
 clash.delete(clash.search(DELETE_PROPERTY))
 
-clash.change(clash.search(["proxy-providers"]), (proxyProviders: ProxyProviders) => {
+// clash.change(clash.search(["proxy-providers"]), (proxyProviders: ProxyProviders) => {
+//   for (const [i, v] of PROVIDERS_URL.entries()) {
+//     const key = `airport${i.toString()}`
+//     proxyProviders[key] = { ...proxyProviders.airport, url: v }
+//   }
+//   proxyProviders.airport = undefined!
+//   return proxyProviders
+// })
+
+// 添加订阅 并把模板删除
+const s = clash.search(["proxy-providers.airport"])
+clash.add(s, (airport: Airport) => {
+  const addNodes: AddNode[] = []
   for (const [i, v] of PROVIDERS_URL.entries()) {
     const key = `airport${i.toString()}`
-    proxyProviders[key] = { ...proxyProviders.airport }
-    proxyProviders[key].url = v
+    const value = { ...airport, url: v }
+    addNodes.push({ key, value })
   }
-  proxyProviders.airport = undefined!
-
-  return proxyProviders
+  return addNodes
 })
+clash.delete(s)
+
+// 修改部分参数
+clash.change(clash.search(["proxy-providers.*.health-check.url", "proxy-groups.*.url"]), HEALTH_CHECK_URL)
+clash.change(clash.search(["proxy-providers.*.interval"]), PROVIDERS_INTERVAL)
+clash.change(clash.search(["proxy-providers.*.health-check.interval", "proxy-groups.*.interval"]), HEALTH_CHECK_INTERVAL)
 
 await clash.save(format)

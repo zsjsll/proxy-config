@@ -10,8 +10,7 @@
     "@hacxy/json2ts": "latest",
     "@types/bun": "latest",
     "oxfmt": "latest",
-    "oxlint": "latest",
-    "quicktype-core": "latest"
+    "oxlint": "latest"
   },
   "peerDependencies": {
     "typescript": "latest"

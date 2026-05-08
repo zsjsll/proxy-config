@@ -1,7 +1,7 @@
 import { basename, dirname, extname, resolve } from "node:path"
 
 export default class ChangeConfig {
-  private readonly runningScriptPath = dirname(Bun.main)
+  private readonly mainDir = dirname(Bun.main)
   private fileName = "clash.yaml"
   private inputPath: string
   private outputPath: string
@@ -13,7 +13,7 @@ export default class ChangeConfig {
   }
 
   public async load() {
-    const filePath = await Bun.resolve(this.inputPath, this.runningScriptPath)
+    const filePath = await Bun.resolve(this.inputPath, this.mainDir)
     this.fileName = basename(filePath)
     this.doc = Bun.YAML.parse(await Bun.file(filePath).text()) as object
     return this.doc
@@ -24,7 +24,7 @@ export default class ChangeConfig {
 
     if (doc === undefined) throw new TypeError("doc is undefined")
 
-    let filePath = path === "" ? resolve(this.runningScriptPath, this.outputPath) : path
+    let filePath = path === "" ? resolve(this.mainDir, this.outputPath) : path
 
     if (!extname(filePath).startsWith(".")) filePath = resolve(filePath, this.fileName)
 
@@ -68,13 +68,14 @@ export default class ChangeConfig {
         } else if (currentKey !== undefined && !Array.isArray(node) && Object.hasOwn(node, currentKey)) {
           // 普通键：将指定子节点加入队列
           queue.push({ node: node[currentKey], parent: node, key: currentKey, level: nextLevel })
-        } else {
-          throw new SyntaxError(`⚠️  not find node, in params path:
-           ${Bun.inspect(paths)}
-           -> ${Bun.inspect(paths.at(pathIndex))}
-           -> ${Bun.inspect(currentKey)} ❌
-           spell error ?`)
         }
+        // else {
+        //   throw new SyntaxError(`⚠️  not find node, in params path:
+        //    ${Bun.inspect(paths)}
+        //    -> ${Bun.inspect(paths.at(pathIndex))}
+        //    -> ${Bun.inspect(currentKey)} ❌
+        //    spell error ?`)
+        // }
       }
     }
     return results
@@ -92,10 +93,10 @@ export default class ChangeConfig {
     })
   }
 
-  public add(nodes: nodeHandle[], addNode: AddNode | ((val: any) => AddNode)) {
+  public add(nodes: nodeHandle[], addNodes: AddNode[] | ((val: any) => AddNode[])) {
     nodes.forEach((node) => {
-      const newNode = typeof addNode === "function" ? addNode(node.value) : addNode
-      node.parent[newNode.key] = newNode.value
+      const newNodes = typeof addNodes === "function" ? addNodes(node.value) : addNodes
+      newNodes.forEach((newNode) => (node.parent[newNode.key] = newNode.value))
     })
   }
 }
@@ -113,7 +114,7 @@ interface Queue {
   level: number
 }
 
-interface AddNode {
+export interface AddNode {
   key: string | number
   value: any
 }

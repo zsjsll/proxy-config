@@ -24,6 +24,7 @@
     "capitalized-comments": "off",
     "numeric-separators-style": "off",
     "sort-imports": "off",
+    "func-style": ["off", "declaration"],
   },
   "env": {
     "builtin": true,

@@ -1,5 +1,4 @@
 import json2ts from "@hacxy/json2ts"
-// import { InputData, jsonInputForTargetLanguage, quicktype } from "quicktype-core"
 import Clash from "./module/clash"
 
 const inputPath = "../config/clash.yaml"
