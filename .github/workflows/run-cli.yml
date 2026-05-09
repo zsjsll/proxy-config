@@ -1,12 +1,26 @@
 name: Run CLI
 
-on:
-  push:
-    branches:
-      - clash
-
 # on:
-#   workflow_dispatch:
+#   push:
+#     branches:
+#       - clash
+
+on:
+  workflow_dispatch:
+    inputs: # (可选) 定义手动输入的参数
+      environment:
+        description: "选择部署环境"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      debug_mode:
+        description: "开启调试模式?"
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
