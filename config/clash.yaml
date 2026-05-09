@@ -4,7 +4,6 @@ global_anchor:
 
   rule-providers:
     default: &default { type: http, interval: 43200 }
-
     domain: &domain { <<: *default, behavior: domain, format: mrs }
     ip: &ip { <<: *default, behavior: ipcidr, format: mrs }
     class: &class { <<: *default, behavior: classical, format: yaml }
