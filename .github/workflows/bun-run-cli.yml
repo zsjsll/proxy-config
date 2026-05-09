@@ -36,5 +36,4 @@ jobs:
 
       - name: Install dependencies
         shell: bash
-        run: |
-          echo "$IS_FORMAT"
+        run: echo "$IS_FORMAT"
