@@ -36,3 +36,5 @@ if (env.CHECK_INTERVAL !== undefined) clash.change(clash.search(["proxy-groups.*
 if (env.PROVIDERS_INTERVAL !== undefined) clash.change(clash.search(["proxy-providers.*.interval"]), env.PROVIDERS_INTERVAL)
 
 await clash.save(env.IS_FORMAT)
+
+console.log(env.IS_FORMAT, 11111111111)
