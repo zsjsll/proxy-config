@@ -14,23 +14,25 @@ const envSchema = v.object({
   DELETE_PROPERTY: v.optional(
     v.pipe(
       v.string(),
-      v.startsWith("[", "miss '[' with start"),
-      v.endsWith("]", "miss ']' with end"),
-      v.transform((s) => (s === "[]" ? undefined : JSON.parse(s))),
+      v.transform((s) => {
+        if (s.startsWith("[") && s.endsWith("]")) return JSON.parse(s)
+        return s.trim().split(",")
+      }),
       v.array(v.string()),
     ),
-    "[]",
+    "",
   ),
 
   PROVIDER_URLS: v.optional(
     v.pipe(
       v.string(),
-      v.startsWith("[", "miss '[' with start"),
-      v.endsWith("]", "miss ']' with end"),
-      v.transform((s) => (s === "[]" ? undefined : JSON.parse(s))),
+      v.transform((s) => {
+        if (s.startsWith("[") && s.endsWith("]")) return JSON.parse(s)
+        return s.trim().split(",")
+      }),
       v.array(v.string()),
     ),
-    "[]",
+    "",
   ),
 
   CHECK_URL: v.optional(

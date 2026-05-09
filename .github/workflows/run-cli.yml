@@ -28,8 +28,7 @@ jobs:
     env:
       IS_FORMAT: ${{ vars.IS_FORMAT }}
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
-      DELETE_PROPERTY: |
-        ["global_anchor"]
+      DELETE_PROPERTY: '["global_anchor"]'
 
       COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
       REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
