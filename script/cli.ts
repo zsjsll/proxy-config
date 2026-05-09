@@ -38,3 +38,4 @@ if (env.PROVIDERS_INTERVAL !== undefined) clash.change(clash.search(["proxy-prov
 await clash.save(env.IS_FORMAT)
 
 console.log(env.IS_FORMAT, 11111111111)
+console.log(env.DELETE_PROPERTY, 11111111111)
