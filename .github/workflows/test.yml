@@ -1,0 +1,11 @@
+name: 🔧 Debug Manual Action
+
+on:
+  workflow_dispatch: # 确保这里只有这一行触发器，排除其他干扰
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if it works
+        run: echo "Success!"
