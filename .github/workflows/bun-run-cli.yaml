@@ -1,0 +1,40 @@
+name: bun run cli
+
+# on:
+#   push:
+#     branches:
+#       - clash
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
+      COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
+      REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          echo "$IS_FORMAT"

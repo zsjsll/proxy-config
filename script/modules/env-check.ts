@@ -2,7 +2,7 @@ import { Parser } from "expr-eval"
 import * as v from "valibot"
 
 const envSchema = v.object({
-  FORMAT: v.optional(
+  IS_FORMAT: v.optional(
     v.pipe(
       v.string(),
       v.transform((s) => s.toLowerCase().trim() === "true"),

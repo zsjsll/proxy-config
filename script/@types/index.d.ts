@@ -1,4 +1,4 @@
-import type ClashConfig from "./clash-config"
+// import type ClashConfig from "./clash-config"
 
 declare module "./clash-config.d.ts" {
   interface ProxyProviders {
