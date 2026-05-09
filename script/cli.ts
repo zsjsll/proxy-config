@@ -44,8 +44,8 @@ clash.add(s, (airport: Airport) => {
 clash.delete(s)
 
 // 修改部分参数
-clash.change(clash.search(["proxy-providers.*.health-check.url", "proxy-groups.*.url"]), HEALTH_CHECK_URL)
-clash.change(clash.search(["proxy-providers.*.interval"]), PROVIDERS_INTERVAL)
-clash.change(clash.search(["proxy-providers.*.health-check.interval", "proxy-groups.*.interval"]), HEALTH_CHECK_INTERVAL)
+// clash.change(clash.search(["proxy-providers.*.health-check.url", "proxy-groups.*.url"]), HEALTH_CHECK_URL)
+// clash.change(clash.search(["proxy-providers.*.interval"]), PROVIDERS_INTERVAL)
+// clash.change(clash.search(["proxy-providers.*.health-check.interval", "proxy-groups.*.interval"]), HEALTH_CHECK_INTERVAL)
 
 await clash.save(format)

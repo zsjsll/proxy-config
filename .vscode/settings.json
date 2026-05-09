@@ -1,8 +1,6 @@
 {
   "yaml.schemas": {
-    "https://github.boki.moe/https://raw.githubusercontent.com/dongchengjie/meta-json-schema/main/schemas/meta-json-schema.json": [
-      "config/clash/**/*.{yaml,yml}"
-    ]
+    "https://github.boki.moe/https://raw.githubusercontent.com/dongchengjie/meta-json-schema/main/schemas/meta-json-schema.json": ["config/**/*.{yaml,yml}"]
   },
 
   "json.schemas": [

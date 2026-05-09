@@ -24,10 +24,10 @@
     "capitalized-comments": "off",
     "numeric-separators-style": "off",
     "sort-imports": "off",
-    "func-style": ["off", "declaration"],
+    "func-style": "off",
   },
   "env": {
     "builtin": true,
   },
-  "ignorePatterns": ["script/@types"],
+  "ignorePatterns": ["script/@types/**/*.{d.ts,ts}"],
 }

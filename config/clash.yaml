@@ -1,14 +1,20 @@
+global_anchor:
+  proxy-groups:
+    auto_test: &auto_test { type: url-test, tolerance: 30, include-all: true, interval: 86400, timeout: 1000, url: https://www.gstatic.com/generate_204 }
+
+  rule-providers:
+    default: &default { type: http, interval: 43200 }
+
+    domain: &domain { <<: *default, behavior: domain, format: mrs }
+    ip: &ip { <<: *default, behavior: ipcidr, format: mrs }
+    class: &class { <<: *default, behavior: classical, format: yaml }
+
 # 机场订阅
 proxy-providers:
   airport:
     url: https://a.a.a/
     type: http
     interval: 43200
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 300
-      timeout: 1000
     proxy: DIRECT
 
 # 全局配置
@@ -150,14 +156,11 @@ dns:
     # - https://1.1.1.1/dns-query
     # - https://1.0.0.1/dns-query
 
-proxy-groups-anchor:
-  auto_test: &auto_test { type: url-test, tolerance: 30, interval: 600, timeout: 1000, include-all: true, url: https://www.gstatic.com/generate_204 }
-
 proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
-  - { <<: *auto_test, name: ♻️ 自动选择 }
+  - { name: ♻️ 自动选择, <<: *auto_test }
   # - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
 
   - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
@@ -204,11 +207,6 @@ rules:
   - RULE-SET,geoip-media,🌍 媒体!CN
   - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve #📲 电报!CN
   - MATCH,🐟 漏网之鱼
-
-rule-providers-anchor:
-  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
-  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
-  class: &class { type: http, interval: 86400, behavior: classical, format: yaml }
 
 rule-providers:
   geosite-fakeip_filter: { <<: *domain, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\

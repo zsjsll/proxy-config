@@ -45,6 +45,7 @@ export default class ChangeConfig {
 
     const results: nodeHandle[] = []
 
+    let previousResultsLength = results.length
     for (const [pathIndex, pathValue] of paths.entries()) {
       const keys = pathValue.split(".")
       const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
@@ -70,13 +71,18 @@ export default class ChangeConfig {
           queue.push({ node: node[currentKey], parent: node, key: currentKey, level: nextLevel })
         }
         // else {
-        //   throw new SyntaxError(`⚠️  not find node, in params path:
-        //    ${Bun.inspect(paths)}
-        //    -> ${Bun.inspect(paths.at(pathIndex))}
-        //    -> ${Bun.inspect(currentKey)} ❌
-        //    spell error ?`)
+
         // }
       }
+      const nowResultsLength = results.length
+      if (previousResultsLength === nowResultsLength) {
+        throw new Error(`⚠️  not find node, in params path:
+           ${Bun.inspect(paths)}
+           -> ${Bun.inspect(paths.at(pathIndex))}
+           -> ${Bun.inspect(keys[queue.at(-1)!.level])} ❌
+           spell error ?`)
+      }
+      previousResultsLength = nowResultsLength
     }
     return results
   }
