@@ -24,7 +24,8 @@
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "[dotenv]": {
     "editor.defaultFormatter": "xqvvu.shell-tidy-vscode"
-  }
+  },
+  "github-actions.workflows.pinned.workflows": []
 
   // "editor.defaultFormatter": "biomejs.biome"
   // "editor.defaultFormatter": "denoland.vscode-deno"
