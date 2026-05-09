@@ -1,12 +1,12 @@
 name: bun run cli
 
-# on:
-#   push:
-#     branches:
-#       - clash
-
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - clash
+
+# on:
+#   workflow_dispatch:
 
 jobs:
   build:
