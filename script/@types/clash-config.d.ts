@@ -1,16 +1,46 @@
-export interface HealthCheck {
-  enable:   boolean;
-  url:      string;
+export interface AutoTest {
+  type:          AutoTestType;
+  tolerance:     number;
+  "include-all": boolean;
+  interval:      number;
+  timeout:       number;
+  url:           string;
+}
+
+export interface ProxyGroups {
+  auto_test: AutoTest;
+}
+
+export interface Default {
+  type:     RuleProviderType;
   interval: number;
-  timeout:  number;
+}
+
+export interface RuleProvider {
+  interval: number;
+  type:     RuleProviderType;
+  behavior: Behavior;
+  format:   Format;
+  url?:     string;
+}
+
+export interface RuleProviders {
+  default: Default;
+  domain:  RuleProvider;
+  ip:      RuleProvider;
+  class:   RuleProvider;
+}
+
+export interface GlobalAnchor {
+  "proxy-groups":   ProxyGroups;
+  "rule-providers": RuleProviders;
 }
 
 export interface Airport {
-  url:            string;
-  type:           AirportType;
-  interval:       number;
-  "health-check": HealthCheck;
-  proxy:          string;
+  url:      string;
+  type:     RuleProviderType;
+  interval: number;
+  proxy:    string;
 }
 
 export interface ProxyProviders {
@@ -79,22 +109,9 @@ export interface DNS {
   nameserver:                string[];
 }
 
-export interface AutoTest {
-  type:          ProxyGroupType;
-  tolerance:     number;
-  interval:      number;
-  timeout:       number;
-  "include-all": boolean;
-  url:           string;
-}
-
-export interface ProxyGroupsAnchor {
-  auto_test: AutoTest;
-}
-
 export interface ProxyGroup {
   name:           string;
-  type:           ProxyGroupType;
+  type:           AutoTestType;
   proxies?:       string[];
   "include-all"?: boolean;
   url?:           string;
@@ -104,59 +121,40 @@ export interface ProxyGroup {
   hidden?:        boolean;
 }
 
-export interface RuleProvider {
-  format:   Format;
-  behavior: Behavior;
-  interval: number;
-  type:     AirportType;
-  url?:     string;
-}
-
-export interface RuleProvidersAnchor {
-  domain: RuleProvider;
-  ip:     RuleProvider;
-  class:  RuleProvider;
-}
-
 export interface DefaultConfig {
-  "proxy-providers":       ProxyProviders;
-  "mixed-port":            number;
-  "socks-port":            number;
-  port:                    number;
-  "redir-port":            number;
-  "tproxy-port":           number;
-  "external-controller":   string;
-  secret:                  string;
-  "allow-lan":             boolean;
-  "bind-address":          string;
-  ipv6:                    boolean;
-  "unified-delay":         boolean;
-  "tcp-concurrent":        boolean;
-  "log-level":             string;
-  "find-process-mode":     string;
-  "disable-keep-alive":    boolean;
-  "keep-alive-idle":       number;
-  "keep-alive-interval":   number;
-  profile:                 Profile;
-  tun:                     Tun;
-  sniffer:                 Sniffer;
-  dns:                     DNS;
-  "proxy-groups-anchor":   ProxyGroupsAnchor;
-  "proxy-groups":          ProxyGroup[];
-  rules:                   string[];
-  "rule-providers-anchor": RuleProvidersAnchor;
-  "rule-providers":        { [key: string]: RuleProvider };
+  global_anchor:         GlobalAnchor;
+  "proxy-providers":     ProxyProviders;
+  "mixed-port":          number;
+  "socks-port":          number;
+  port:                  number;
+  "redir-port":          number;
+  "tproxy-port":         number;
+  "external-controller": string;
+  secret:                string;
+  "allow-lan":           boolean;
+  "bind-address":        string;
+  ipv6:                  boolean;
+  "unified-delay":       boolean;
+  "tcp-concurrent":      boolean;
+  "log-level":           string;
+  "find-process-mode":   string;
+  "disable-keep-alive":  boolean;
+  "keep-alive-idle":     number;
+  "keep-alive-interval": number;
+  profile:               Profile;
+  tun:                   Tun;
+  sniffer:               Sniffer;
+  dns:                   DNS;
+  "proxy-groups":        ProxyGroup[];
+  rules:                 string[];
+  "rule-providers":      { [key: string]: RuleProvider };
 }
 
 
 
-export enum ProxyGroupType {
+export enum AutoTestType {
   Select = "select",
   URLTest = "url-test",
-}
-
-export enum AirportType {
-  HTTP = "http",
 }
 
 export enum Behavior {
@@ -168,4 +166,8 @@ export enum Behavior {
 export enum Format {
   Mrs = "mrs",
   YAML = "yaml",
+}
+
+export enum RuleProviderType {
+  HTTP = "http",
 }

@@ -1,5 +1,5 @@
 import type { Airport } from "./@types/clash-config"
-import Clash, { type AddNode } from "./module/clash"
+import Yaml2Json, { type AddNode } from "./modules/yaml2json"
 
 const input = "../config/clash.yaml"
 const output = "../dist"
@@ -15,7 +15,7 @@ const CHECK_INTERVAL: number = formatStringToNumber(Bun.env.CHECK_INTERVAL!)
 
 const format = true
 
-const clash = new Clash(input, output)
+const clash = new Yaml2Json(input, output)
 await clash.load()
 
 // 删除不需要的模块

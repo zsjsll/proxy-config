@@ -1,6 +1,6 @@
 import { basename, dirname, extname, resolve } from "node:path"
 
-export default class ChangeConfig {
+export default class Yaml2Json {
   private readonly mainDir = dirname(Bun.main)
   private fileName = "clash.yaml"
   private inputPath: string
@@ -43,7 +43,7 @@ export default class ChangeConfig {
   public search(paths: string[]) {
     if (this.doc === undefined) throw new ReferenceError("not read file !")
 
-    const results: nodeHandle[] = []
+    const results: NodeHandle[] = []
 
     let previousResultsLength = results.length
     for (const [pathIndex, pathValue] of paths.entries()) {
@@ -87,19 +87,19 @@ export default class ChangeConfig {
     return results
   }
 
-  public delete(nodes: nodeHandle[]) {
+  public delete(nodes: NodeHandle[]) {
     nodes.forEach((node) => {
       node.parent[node.key] = undefined
     })
   }
 
-  public change(nodes: nodeHandle[], setValue: any | ((val: any) => any)) {
+  public change(nodes: NodeHandle[], setValue: any | ((val: any) => any)) {
     nodes.forEach((node) => {
       node.parent[node.key] = typeof setValue === "function" ? setValue(node.value) : setValue
     })
   }
 
-  public add(nodes: nodeHandle[], addNodes: AddNode[] | ((val: any) => AddNode[])) {
+  public add(nodes: NodeHandle[], addNodes: AddNode[] | ((val: any) => AddNode[])) {
     nodes.forEach((node) => {
       const newNodes = typeof addNodes === "function" ? addNodes(node.value) : addNodes
       newNodes.forEach((newNode) => (node.parent[newNode.key] = newNode.value))
@@ -107,7 +107,7 @@ export default class ChangeConfig {
   }
 }
 
-interface nodeHandle {
+interface NodeHandle {
   value: any
   parent: any
   key: string | number

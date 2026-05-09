@@ -1,9 +1,9 @@
 import json2ts from "@hacxy/json2ts"
-import Clash from "./module/clash"
+import Yaml2Json from "./modules/yaml2json"
 
 const inputPath = "../config/clash.yaml"
 const outputPath = "./@types/clash-config.d.ts"
-const clash = new Clash(inputPath, outputPath)
+const clash = new Yaml2Json(inputPath, outputPath)
 const clashJson = await clash.load()
 
 const result = await json2ts(JSON.stringify(clashJson), "DefaultConfig")

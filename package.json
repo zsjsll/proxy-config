@@ -2,10 +2,13 @@
   "name": "proxy-config",
   "private": true,
   "scripts": {
-    "yaml2ts": "bun run script/yaml2ts.ts",
+    "yaml2ts": "bun run script/generate-types.ts",
     "cli": "bun run script/cli.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "expr-eval": "^2.0.2",
+    "valibot": "^1.4.0"
+  },
   "devDependencies": {
     "@hacxy/json2ts": "latest",
     "@types/bun": "latest",
