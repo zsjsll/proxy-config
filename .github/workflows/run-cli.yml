@@ -1,4 +1,4 @@
-name: bun run cli
+name: Run CLI
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
-      - name: Install dependencies
-        shell: bash
+      - name: Build project
+        shell: sh
         run: |
-          echo "$IS_FORMAT"
+          bun run cli
