@@ -1,4 +1,4 @@
-name: 🔧 Run CLI push to gist
+name: 🔧 Run CLI and deploy to gist
 
 on:
   push:
@@ -13,9 +13,6 @@ jobs:
       IS_FORMAT: false
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
       DELETE_PROPERTY: '["tun","global_anchor"]'
-
-      COMMIT_MESSAGE: "Deploy artifacts from ${{ github.sha }} [skip ci]"
-      REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
 
     steps:
       - name: Checkout repository
@@ -41,12 +38,9 @@ jobs:
         run: |
           bun run cli
 
-      - name: Push to gist
-        uses: gorgbus/gist-actions@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIST_TOKEN }}
+      - name: Deploy to gist
+        uses: exuanbo/actions-deploy-gist@v1
         with:
-          action: update
+          token: ${{ secrets.GIST_TOKEN }}
           gist_id: ec4b27f6ee5736e3d60da5d2dc0dbcad
-          file_name: dist
-          content: test
+          file_path: dist
