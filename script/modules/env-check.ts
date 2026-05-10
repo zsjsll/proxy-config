@@ -1,5 +1,4 @@
 import { Parser } from "expr-eval"
-import { isArray } from "node:util"
 import * as v from "valibot"
 
 const booleanSchema = v.pipe(

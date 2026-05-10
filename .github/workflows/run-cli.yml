@@ -39,8 +39,8 @@ jobs:
           bun run cli
 
       - name: Deploy to gist
-        uses: exuanbo/actions-deploy-gist@v1
+        uses: stellarhub/push-gist-action@v1
         with:
           token: ${{ secrets.GIST_TOKEN }}
           gist_id: ec4b27f6ee5736e3d60da5d2dc0dbcad
-          file_path: dist
+          file_path: dist/clash.yaml
