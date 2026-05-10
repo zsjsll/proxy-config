@@ -1,4 +1,4 @@
-name: 🔧 Run CLI and deploy to gist
+name: 🔧 Run CLI
 
 on:
   push:
@@ -33,14 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
-      - name: Build clash config
+      - name: Run CLI
         shell: sh
         run: |
           bun run cli
-
-      - name: Deploy to gist
-        uses: stellarhub/push-gist-action@v1
-        with:
-          token: ${{ secrets.GIST_TOKEN }}
-          gist_id: ec4b27f6ee5736e3d60da5d2dc0dbcad
-          file_path: dist/clash.yaml

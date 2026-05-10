@@ -43,6 +43,10 @@ const envSchema = v.object({
   CHECK_URL: v.optional(urlSchema),
   PROVIDERS_INTERVAL: v.optional(mathExprSchema),
   CHECK_INTERVAL: v.optional(mathExprSchema),
+
+  GIST_TOKEN: v.optional(v.string()),
+  GIST_ID: v.optional(v.string()),
+  IS_DEPLOY: v.optional(booleanSchema, "false"),
 })
 
 export function parseEnv() {

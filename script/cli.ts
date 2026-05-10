@@ -1,4 +1,5 @@
 import type { Airport } from "./@types/clash-config"
+import { DeployGist } from "./modules/deploy-gist"
 import { parseEnv } from "./modules/env-check"
 import Yaml2Json, { type AddNode } from "./modules/yaml2json"
 
@@ -35,4 +36,9 @@ if (env.CHECK_URL !== undefined) clash.change(clash.search(["proxy-groups.*.url"
 if (env.CHECK_INTERVAL !== undefined) clash.change(clash.search(["proxy-groups.*.interval"]), env.CHECK_INTERVAL)
 if (env.PROVIDERS_INTERVAL !== undefined) clash.change(clash.search(["proxy-providers.*.interval"]), env.PROVIDERS_INTERVAL)
 
-await clash.save(env.IS_FORMAT)
+if (!env.IS_DEPLOY) await clash.save(env.IS_FORMAT)
+
+if (env.GIST_ID && env.GIST_TOKEN && env.IS_DEPLOY) {
+  const deployGist = new DeployGist(env.GIST_ID, env.GIST_TOKEN)
+  deployGist.pushToGist(clash.fileName, JSON.stringify(clash.doc))
+}

@@ -1,54 +1,56 @@
 import { basename, dirname, extname, resolve } from "node:path"
 
 export default class Yaml2Json {
-  private readonly mainDir = dirname(Bun.main)
-  private fileName = "clash.yaml"
-  private inputPath: string
-  private outputPath: string
-  private doc: object | undefined = undefined
+  #fileName: string
+  #inputPath: string
+  #outputPath: string
+  #doc: object | undefined = undefined
 
-  public constructor(input: string, output: string) {
-    this.inputPath = input
-    this.outputPath = output
+  constructor(input: string, output: string) {
+    const hasFileName = extname(output).startsWith(".")
+    const runMainDir = dirname(Bun.main)
+    this.#fileName = hasFileName ? basename(output) : basename(input)
+    this.#inputPath = Bun.resolveSync(input, runMainDir)
+    this.#outputPath = hasFileName ? resolve(runMainDir, output) : resolve(runMainDir, output, this.#fileName)
   }
 
-  public async load() {
-    const filePath = await Bun.resolve(this.inputPath, this.mainDir)
-    this.fileName = basename(filePath)
-    this.doc = Bun.YAML.parse(await Bun.file(filePath).text()) as object
-    return this.doc
+  get fileName(): string {
+    return this.#fileName
   }
 
-  public async save(format = false, doc: object | string | undefined = this.doc, path = "") {
-    // const fileUrl = new URL(this.output, Bun.pathToFileURL(Bun.main))
+  get doc() {
+    return this.#doc
+  }
 
+  async load() {
+    console.log(this.#inputPath)
+    this.#doc = Bun.YAML.parse(await Bun.file(this.#inputPath).text()) as object
+    return this.#doc
+  }
+
+  async save(format = false, doc: object | string | undefined = this.#doc) {
     if (doc === undefined) throw new TypeError("doc is undefined")
-
-    let filePath = path === "" ? resolve(this.mainDir, this.outputPath) : path
-
-    if (!extname(filePath).startsWith(".")) filePath = resolve(filePath, this.fileName)
-
     const space = format ? 2 : 0
-    const endFix = extname(filePath)
+    const endFix = extname(this.#outputPath)
     if ([".json", ".jsonc"].includes(endFix)) {
-      await Bun.write(filePath, JSON.stringify(doc, undefined, space))
+      await Bun.write(this.#outputPath, JSON.stringify(doc, undefined, space))
     } else if ([".ts", ".d.ts", ".mts"].includes(endFix)) {
-      await Bun.write(filePath, doc.toString())
+      await Bun.write(this.#outputPath, doc.toString())
     } else {
-      await Bun.write(filePath, Bun.YAML.stringify(doc, undefined, space))
+      await Bun.write(this.#outputPath, Bun.YAML.stringify(doc, undefined, space))
     }
-    console.log(`save to: ${[filePath]}`)
+    console.log(`save to: ${[this.#outputPath]}`)
   }
 
-  public search(paths: string[]) {
-    if (this.doc === undefined) throw new ReferenceError("not read file !")
+  search(paths: string[]) {
+    if (this.#doc === undefined) throw new ReferenceError("not read file !")
 
     const results: NodeHandle[] = []
 
     let previousResultsLength = results.length
     for (const [pathIndex, pathValue] of paths.entries()) {
       const keys = pathValue.split(".")
-      const queue: Queue[] = [{ key: undefined, level: 0, node: this.doc, parent: undefined }]
+      const queue: Queue[] = [{ key: undefined, level: 0, node: this.#doc, parent: undefined }]
 
       for (const { node, parent, key, level } of queue) {
         if (level === keys.length && parent !== undefined && key !== undefined) {
@@ -84,19 +86,19 @@ export default class Yaml2Json {
     return results
   }
 
-  public delete(nodes: NodeHandle[]) {
+  delete(nodes: NodeHandle[]) {
     nodes.forEach((node) => {
       node.parent[node.key] = undefined
     })
   }
 
-  public change(nodes: NodeHandle[], setValue: any | ((val: any) => any)) {
+  change(nodes: NodeHandle[], setValue: any | ((val: any) => any)) {
     nodes.forEach((node) => {
       node.parent[node.key] = typeof setValue === "function" ? setValue(node.value) : setValue
     })
   }
 
-  public add(nodes: NodeHandle[], addNodes: AddNode[] | ((val: any) => AddNode[])) {
+  add(nodes: NodeHandle[], addNodes: AddNode[] | ((val: any) => AddNode[])) {
     nodes.forEach((node) => {
       const newNodes = typeof addNodes === "function" ? addNodes(node.value) : addNodes
       newNodes.forEach((newNode) => (node.parent[newNode.key] = newNode.value))
