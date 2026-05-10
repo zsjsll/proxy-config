@@ -1,14 +1,10 @@
 // import type { ProxyProviders } from "./script/@types/clash-config"
 
-
-
 // import type { ProxyProviders } from "./script/@types"
 
+const a = "".split(",")
 
+console.log(a)
 
-
-
-const o: ProxyProviders = {} as ProxyProviders
-o.asdasd?.["health-check"]
-o.airport.interval
-o.hhhh?.type
+const b = {}
+console.log(b)

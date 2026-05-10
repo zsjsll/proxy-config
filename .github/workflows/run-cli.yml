@@ -1,30 +1,16 @@
-name: Run CLI
+name: 🔧 Run CLI push to gist
 
 on:
   push:
     branches:
       - clash
   workflow_dispatch:
-    inputs: # (可选) 定义手动输入的参数
-      environment:
-        description: "选择部署环境"
-        required: true
-        default: "staging"
-        type: choice
-        options:
-          - staging
-          - production
-      debug_mode:
-        description: "开启调试模式?"
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IS_FORMAT: ${{ vars.IS_FORMAT }}
+      IS_FORMAT: false
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
       DELETE_PROPERTY: '["tun","global_anchor"]'
 
@@ -37,7 +23,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Create Bun runtime
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
@@ -49,7 +36,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
-      - name: Build project
+      - name: Build clash config
         shell: sh
         run: |
           bun run cli
+
+      - name: Push to gist
+        uses: gorgbus/gist-actions@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIST_TOKEN }}
+        with:
+          action: update
+          gist_id: ec4b27f6ee5736e3d60da5d2dc0dbcad
+          file_name: dist
+          content: test

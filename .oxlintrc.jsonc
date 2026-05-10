@@ -25,6 +25,7 @@
     "numeric-separators-style": "off",
     "sort-imports": "off",
     "func-style": "off",
+    "no-useless-undefined": "off",
   },
   "env": {
     "builtin": true,

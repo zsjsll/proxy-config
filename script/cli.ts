@@ -20,7 +20,7 @@ if (env.PROVIDER_URLS !== undefined) {
   const s = clash.search(["proxy-providers.airport"])
   clash.add(s, (airport: Airport) => {
     const addNodes: AddNode[] = []
-    for (const [i, v] of env.PROVIDER_URLS.entries()) {
+    for (const [i, v] of env.PROVIDER_URLS!.entries()) {
       const key = `airport${i.toString()}`
       const value = { ...airport, url: v }
       addNodes.push({ key, value })
@@ -39,3 +39,4 @@ await clash.save(env.IS_FORMAT)
 
 console.log(env.IS_FORMAT, 11111111111)
 console.log(env.DELETE_PROPERTY, 11111111111)
+console.log(env.PROVIDER_URLS, 11111111111)
