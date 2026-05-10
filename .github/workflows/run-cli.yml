@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IS_FORMAT: false
+      IS_DEPLOY: true
+      GIST_ID: ec4b27f6ee5736e3d60da5d2dc0dbcad
+      GIST_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
       DELETE_PROPERTY: '["tun","global_anchor"]'
 
