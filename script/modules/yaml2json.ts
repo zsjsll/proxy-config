@@ -70,9 +70,6 @@ export default class Yaml2Json {
           // 普通键：将指定子节点加入队列
           queue.push({ node: node[currentKey], parent: node, key: currentKey, level: nextLevel })
         }
-        // else {
-
-        // }
       }
       const nowResultsLength = results.length
       if (previousResultsLength === nowResultsLength) {
