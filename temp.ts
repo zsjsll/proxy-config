@@ -11,3 +11,12 @@ oo.a = 123123
 console.log(o)
 
 console.log(typeof undefined === "object")
+
+const promise = new Promise((resolve) => {
+  resolve("成功")
+  // 没有调用 reject
+})
+
+function aaa() {
+  promise.then((result) => console.log("then:", result)).catch((error) => console.log("catch:", error))
+}

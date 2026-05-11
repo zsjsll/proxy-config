@@ -1,17 +1,23 @@
+import { type BunFile } from "bun"
 import { basename, dirname, extname, resolve } from "node:path"
 
-export class HandleYaml {
+export class Yaml {
   #fileName: string
-  #inputPath: string
-  #outputPath: string
-  #doc: string | object | undefined = undefined
+  #inputFileRef: BunFile
+  #outputFileRef: BunFile
+  #doc: object | undefined = undefined
 
-  constructor(input: string, output: string) {
-    const hasFileName = extname(output).startsWith(".")
-    const runMainDir = dirname(Bun.main)
-    this.#fileName = hasFileName ? basename(output) : basename(input)
-    this.#inputPath = Bun.resolveSync(input, runMainDir)
-    this.#outputPath = hasFileName ? resolve(runMainDir, output) : resolve(runMainDir, output, this.#fileName)
+  constructor(inputPath: string, outputPath: string) {
+    const hasFileName = extname(outputPath).startsWith(".")
+    this.#fileName = hasFileName ? basename(outputPath) : basename(inputPath)
+    this.#inputFileRef = Yaml.getFileRef(inputPath)
+    this.#outputFileRef = hasFileName ? Yaml.getFileRef(outputPath) : Yaml.getFileRef(outputPath, this.#fileName)
+  }
+
+  static getFileRef(...path: string[]) {
+    const mainDir = dirname(Bun.main)
+    const resolvePath = resolve(mainDir, ...path)
+    return Bun.file(resolvePath)
   }
 
   get fileName(): string {
@@ -22,31 +28,27 @@ export class HandleYaml {
     return this.#doc
   }
 
-  async load() {
-    console.log("load from:", this.#inputPath)
-    this.#doc = Bun.YAML.parse(await Bun.file(this.#inputPath).text()) as object
+  async load(): Promise<Readonly<{ fileName: string; doc: object }>> {
+    // console.log("load from:", this.#inputFileRef.name)
+    this.#doc = Bun.YAML.parse(await this.#inputFileRef.text()) as object
     return { fileName: this.#fileName, doc: this.#doc }
   }
 
-  async save(text?: string, format = true) {
-    this.#doc = text ?? this.#doc
-    if (this.#doc === undefined) throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
+  async save(doc?: string, format = true) {
+    // if (this.#doc === undefined) throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
+    const suffix = extname(this.#outputFileRef.name as string).toLowerCase()
+    if (doc) {
+      await this.#outputFileRef.write(doc)
+    }
     const space = format ? 2 : 0
-    const suffix = extname(this.#outputPath).toLowerCase()
-    if (suffix === ".ts") await Bun.write(this.#outputPath, this.#doc as string)
-
     if (suffix === ".yml" || suffix === ".yaml") {
-      await Bun.write(this.#outputPath, Bun.YAML.stringify(this.#doc, undefined, space))
+      await this.#outputFileRef.write(Bun.YAML.stringify(this.#doc, undefined, space))
     }
-    if (suffix === ".json" || suffix === ".jsonc") {
-      await Bun.write(this.#outputPath, JSON.stringify(this.#doc, undefined, space))
-    }
-
-    console.log(`save to: ${[this.#outputPath]}`)
+    console.log(`💾 save to: ${[this.#outputFileRef.name]}`)
   }
 
   search(paths: string[]) {
-    if (typeof this.#doc === "object") throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
+    if (this.#doc === undefined) throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
     const results: NodeHandle[] = []
 
     let previousResultsLength = results.length
@@ -124,4 +126,14 @@ interface Queue {
 export interface AddNode {
   key: string | number
   value: any
+}
+
+if (import.meta.main) {
+  const a = Yaml.getFileRef("../../config")
+  console.log(a)
+
+  const yaml = new Yaml("../../config/clash.yaml", "../../dist")
+  await yaml.load()
+
+  yaml.save()
 }

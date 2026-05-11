@@ -1,22 +1,21 @@
 import json2ts from "@hacxy/json2ts"
-import { HandleYaml } from "./modules/handle-yaml"
+import { Yaml } from "./modules/yaml-tools"
 
 const inputPath = "../config/clash.yaml"
 const outputPath = "./@types/clash-config.d.ts"
 
-// const handleYaml = new HandleYaml(inputPath, outputPath)
-// await handleYaml.load()
+const yaml = new Yaml(inputPath, outputPath)
+await yaml.load()
 
-// const result = await json2ts(JSON.stringify(handleYaml.doc), "DefaultConfig")
-// await handleYaml.save(result)
+const result = await json2ts(JSON.stringify(yaml.doc), "DefaultConfig")
+await yaml.save(result)
 
-const doc = await import(inputPath)
+// const inputFileRef = Yaml.getFileRef(inputPath)
+// const outputFileRef = Yaml.getFileRef(outputPath)
 
-const result = await json2ts(JSON.stringify(doc), "DefaultConfig")
-
-
-
-
+// const doc = await import(inputFileRef.name as string)
+// const result = await json2ts(JSON.stringify(doc), "DefaultConfig")
+// outputFileRef.write(result)
 
 // const input = jsonInputForTargetLanguage("typescript")
 // await input.addSource({

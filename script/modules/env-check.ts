@@ -8,11 +8,14 @@ const booleanSchema = v.pipe(
 )
 
 const urlSchema = v.pipe(
-  v.pipe(
-    v.string(),
-    v.url(),
-    // v.transform((s) => s),
-  ),
+  v.string(),
+  v.url(),
+  // v.transform((s) => s),
+)
+
+const stringSchema = v.pipe(
+  v.string(),
+  // v.transform((s) => s),
 )
 
 const mathExprSchema = v.pipe(
@@ -34,17 +37,19 @@ const arraySechema = v.pipe(
     if (input.startsWith("[") && input.endsWith("]")) return JSON.parse(input)
     if (!input.startsWith("[") && !input.endsWith("]")) return input.split(",").map((item) => item.trim())
   }),
+  v.array(v.string()),
 )
 
 const envSchema = v.object({
   DELETE_PROPERTY: v.optional(arraySechema),
+  RULE_PROVIDERS_PROXY_URL: v.optional(urlSchema),
   PROVIDER_URLS: v.optional(arraySechema),
   CHECK_URL: v.optional(urlSchema),
   PROVIDERS_INTERVAL: v.optional(mathExprSchema),
   CHECK_INTERVAL: v.optional(mathExprSchema),
 
-  GIST_TOKEN: v.optional(v.string()),
-  GIST_ID: v.optional(v.string()),
+  GIST_TOKEN: v.optional(stringSchema),
+  GIST_ID: v.optional(stringSchema),
   IS_DEPLOY_TO_GIST: v.optional(booleanSchema),
 })
 

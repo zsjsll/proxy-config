@@ -21,15 +21,15 @@ export class DeployGist {
       const response = await Bun.fetch(this.#gistUrl, payload)
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(`GitHub API Error: ${response.status} ${response.statusText}\n${JSON.stringify(errorData, undefined, 2)}`)
+        throw new Error(`❌ GitHub API Error: ${response.status} ${response.statusText}\n${JSON.stringify(errorData, undefined, 2)}`)
       }
       const result = (await response.json()) as any
       console.log("✅ Update successful!")
       if (!isCI) {
         console.log(`🔗 Gist URL: ${result.html_url}`)
+        const date = new Date(result.updated_at)
+        console.log(`🕒 Last update: ${date.toLocaleString("zh-CN")}`)
       }
-      const date = new Date(result.updated_at)
-      console.log(`🕒 Last update: ${date.toLocaleString("zh-CN")}`)
     } catch (error) {
       console.error("❌ Update failed:", error)
       process.exit(1)
