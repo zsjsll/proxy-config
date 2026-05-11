@@ -42,3 +42,11 @@ if (env.GIST_ID && env.GIST_TOKEN && env.IS_DEPLOY_TO_GIST) {
   const deployGist = new DeployGist(env.GIST_ID, env.GIST_TOKEN)
   deployGist.pushToGist(clash.fileName, JSON.stringify(clash.doc))
 }
+
+const isGitHubActions = Bun.env.GITHUB_ACTIONS === "true"
+
+if (isGitHubActions) {
+  console.log("Running in GitHub Actions")
+} else {
+  console.log("Running locally")
+}
