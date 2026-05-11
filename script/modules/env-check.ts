@@ -17,6 +17,11 @@ const stringSchema = v.pipe(
   v.string(),
   // v.transform((s) => s),
 )
+const gistTokenSchema = v.pipe(
+  v.string(),
+  v.startsWith("ghp_", "Must start with 'ghp_'."),
+  // v.transform((s) => s),
+)
 
 const mathExprSchema = v.pipe(
   v.string(),
@@ -48,7 +53,7 @@ const envSchema = v.object({
   PROVIDERS_INTERVAL: v.optional(mathExprSchema),
   CHECK_INTERVAL: v.optional(mathExprSchema),
 
-  GIST_TOKEN: v.optional(stringSchema),
+  GIST_TOKEN: v.optional(gistTokenSchema),
   GIST_ID: v.optional(stringSchema),
   IS_DEPLOY_TO_GIST: v.optional(booleanSchema),
 })
