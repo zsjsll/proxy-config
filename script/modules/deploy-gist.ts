@@ -23,15 +23,16 @@ export class DeployGist {
       }
       const result = (await response.json()) as any
       console.log("✅ 同步成功！")
-
       console.log(`🔗 Gist URL: ${result.html_url}`)
-
       const date = new Date(result.updated_at)
-
       console.log(`🕒 最后更新: ${date.toLocaleString("zh-CN")}`)
     } catch (error) {
       console.error("❌ 同步失败:", error)
       process.exit(1)
     }
   }
+}
+
+if (import.meta.main) {
+  // const deployGist = new DeployGist("1", "2")
 }

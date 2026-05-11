@@ -1,17 +1,20 @@
 name: 🔧 Run CLI
 
 on:
+  schedule:
+    # 分 时 日 月 周
+    - cron: "0 3 * * *"
   push:
     branches:
       - clash
+
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IS_FORMAT: false
-      IS_DEPLOY: true
+      IS_DEPLOY_TO_GIST: true
       GIST_ID: ec4b27f6ee5736e3d60da5d2dc0dbcad
       GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}

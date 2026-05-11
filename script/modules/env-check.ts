@@ -37,7 +37,6 @@ const arraySechema = v.pipe(
 )
 
 const envSchema = v.object({
-  IS_FORMAT: v.optional(booleanSchema, "false"),
   DELETE_PROPERTY: v.optional(arraySechema),
   PROVIDER_URLS: v.optional(arraySechema),
   CHECK_URL: v.optional(urlSchema),
@@ -46,7 +45,7 @@ const envSchema = v.object({
 
   GIST_TOKEN: v.optional(v.string()),
   GIST_ID: v.optional(v.string()),
-  IS_DEPLOY: v.optional(booleanSchema, "false"),
+  IS_DEPLOY_TO_GIST: v.optional(booleanSchema, "false"),
 })
 
 export function parseEnv() {

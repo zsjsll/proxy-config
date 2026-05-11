@@ -1,5 +1,5 @@
 import json2ts from "@hacxy/json2ts"
-import Yaml2Json from "./modules/yaml2json"
+import { Yaml2Json } from "./modules/yaml2json"
 
 const inputPath = "../config/clash.yaml"
 const outputPath = "./@types/clash-config.d.ts"

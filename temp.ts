@@ -4,7 +4,7 @@
 
 const a = "".split(",")
 
-console.log(a)
+console.log()
 
 const b = {}
 console.log(b)

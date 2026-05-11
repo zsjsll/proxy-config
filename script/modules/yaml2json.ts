@@ -1,10 +1,10 @@
 import { basename, dirname, extname, resolve } from "node:path"
 
-export default class Yaml2Json {
+export class Yaml2Json {
   #fileName: string
   #inputPath: string
   #outputPath: string
-  #doc: object | undefined = undefined
+  #doc = {}
 
   constructor(input: string, output: string) {
     const hasFileName = extname(output).startsWith(".")
