@@ -1,3 +1,5 @@
+import isCI from "is-ci"
+
 export class DeployGist {
   readonly #gistUrl: URL
   #headers: Bun.HeadersInit
@@ -22,12 +24,14 @@ export class DeployGist {
         throw new Error(`GitHub API Error: ${response.status} ${response.statusText}\n${JSON.stringify(errorData, undefined, 2)}`)
       }
       const result = (await response.json()) as any
-      console.log("✅ 同步成功！")
-      console.log(`🔗 Gist URL: ${result.html_url}`)
+      console.log("✅ Update successful!")
+      if (!isCI) {
+        console.log(`🔗 Gist URL: ${result.html_url}`)
+      }
       const date = new Date(result.updated_at)
-      console.log(`🕒 最后更新: ${date.toLocaleString("zh-CN")}`)
+      console.log(`🕒 Last update: ${date.toLocaleString("zh-CN")}`)
     } catch (error) {
-      console.error("❌ 同步失败:", error)
+      console.error("❌ Update failed:", error)
       process.exit(1)
     }
   }

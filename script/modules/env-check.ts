@@ -27,7 +27,7 @@ const arraySechema = v.pipe(
     if (input.startsWith("[") && !input.endsWith("]")) return false
     if (!input.startsWith("[") && input.endsWith("]")) return false
     return true
-  }, "miss '['with start or miss ']' with end ."),
+  }, "❌ Missing '['with start, or missing ']' with end."),
 
   v.transform((input) => {
     if (input === "" || input === "[]" || input === '[""]') return undefined
@@ -45,7 +45,7 @@ const envSchema = v.object({
 
   GIST_TOKEN: v.optional(v.string()),
   GIST_ID: v.optional(v.string()),
-  IS_DEPLOY_TO_GIST: v.optional(booleanSchema, "false"),
+  IS_DEPLOY_TO_GIST: v.optional(booleanSchema),
 })
 
 export function parseEnv() {

@@ -1,17 +1,26 @@
 import json2ts from "@hacxy/json2ts"
-import { Yaml2Json } from "./modules/yaml2json"
+import { HandleYaml } from "./modules/handle-yaml"
 
 const inputPath = "../config/clash.yaml"
 const outputPath = "./@types/clash-config.d.ts"
-const clash = new Yaml2Json(inputPath, outputPath)
-const clashJson = await clash.load()
 
-const result = await json2ts(JSON.stringify(clashJson), "DefaultConfig")
-await clash.save(undefined, result)
+// const handleYaml = new HandleYaml(inputPath, outputPath)
+// await handleYaml.load()
+
+// const result = await json2ts(JSON.stringify(handleYaml.doc), "DefaultConfig")
+// await handleYaml.save(result)
+
+const doc = await import(inputPath)
+
+const result = await json2ts(JSON.stringify(doc), "DefaultConfig")
+
+
+
+
 
 // const input = jsonInputForTargetLanguage("typescript")
 // await input.addSource({
-//   name: "ClashConfig",
+//   name: "DefaultConfig",
 //   samples: [JSON.stringify(clashJson)],
 // })
 
@@ -21,8 +30,8 @@ await clash.save(undefined, result)
 // const result = await quicktype({
 //   inputData,
 //   lang: "typescript",
-// })
-// await clash.save(undefined, result.lines.join("\n"))
+// }).lines.join("\n")
+// await clash.save(undefined, result)
 
 // bun -e "console.log(JSON.stringify(Bun.YAML.parse(await Bun.file('config/clash.yaml').text())))" | bunx quicktype -l ts -o clashconfig.ts -t ClashConfig
 // bun -e "console.log(JSON.stringify(await import(await Bun.resolve('../config/clash.yaml',Bun.main))))"|bunx quicktype -l ts -o ./script/@types/clash-config.ts -t ClashConfig

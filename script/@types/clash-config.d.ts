@@ -8,7 +8,7 @@ export interface AutoTest {
 }
 
 export interface ProxyGroups {
-  auto_test: AutoTest;
+  "auto-test": AutoTest;
 }
 
 export interface Default {
@@ -53,14 +53,15 @@ export interface Profile {
 }
 
 export interface Tun {
-  enable:                  boolean;
-  stack:                   string;
-  device:                  string;
-  "dns-hijack":            string[];
-  "auto-route":            boolean;
-  "auto-redirect":         boolean;
-  "auto-detect-interface": boolean;
-  "strict-route":          boolean;
+  enable:                      boolean;
+  stack:                       string;
+  device:                      string;
+  "dns-hijack":                string[];
+  "auto-route":                boolean;
+  "auto-redirect":             boolean;
+  "auto-detect-interface":     boolean;
+  "strict-route":              boolean;
+  "route-exclude-address-set": string[];
 }
 
 export interface HTTP {
@@ -122,7 +123,7 @@ export interface ProxyGroup {
 }
 
 export interface DefaultConfig {
-  global_anchor:         GlobalAnchor;
+  "global-anchor":       GlobalAnchor;
   "proxy-providers":     ProxyProviders;
   "mixed-port":          number;
   "socks-port":          number;

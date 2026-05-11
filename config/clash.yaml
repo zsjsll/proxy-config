@@ -1,6 +1,6 @@
-global_anchor:
+global-anchor:
   proxy-groups:
-    auto_test: &auto_test { type: url-test, tolerance: 30, include-all: true, interval: 86400, timeout: 1000, url: https://www.gstatic.com/generate_204 }
+    auto-test: &auto-test { type: url-test, tolerance: 30, include-all: true, interval: 86400, timeout: 1000, url: https://www.gstatic.com/generate_204 }
 
   rule-providers:
     default: &default { type: http, interval: 43200 }
@@ -42,7 +42,7 @@ profile:
 
 # 入站
 tun:
-  enable: true
+  enable: false
   # system/gvisor/mixed
   stack: mixed
   device: utun
@@ -57,10 +57,10 @@ tun:
   auto-detect-interface: true
   strict-route: true
   # 设置绕过clash的流量
-  # route-exclude-address-set:
-  #   - fakeip-filter
-  #   - cn
-  #   - geosite-private
+  route-exclude-address-set:
+    - geosite-fakeip_filter
+    - geosite-cn
+    - geosite-private
 
 # 嗅探
 sniffer:
@@ -159,8 +159,8 @@ proxy-groups:
   - { name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, ✋ 手动选择] }
   - { name: ✋ 手动选择, type: select, include-all: true }
 
-  - { name: ♻️ 自动选择, <<: *auto_test }
-  # - { <<: *auto_test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
+  - { name: ♻️ 自动选择, <<: *auto-test }
+  # - { <<: *auto-test, name: 💡 AI节点, exclude-filter: "(?i)🏴‍☠️|❓|其他|other|🇭🇰|港|hk|hong ?kong|🇷🇺|俄罗斯|ru|Russia" }
 
   - { name: 🚫 广告, type: select, proxies: [🔴 拒绝, 🟢 直连] } # 域名
 
@@ -246,9 +246,6 @@ rule-providers:
         ases/download/mihomo-ruleset/mediaip.mrs" }
   geoip-telegram: { <<: *ip, url: "https://github.boki.moe/https://github.com/DustinWin/ruleset_geodata/rele\
         ases/download/mihomo-ruleset/telegramip.mrs" }
-  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
-        nfig/refs/heads/dist/rules/clash/proxy.yaml" }
-  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
-        nfig/refs/heads/dist/rules/clash/direct.yaml" }
-  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-co\
-        nfig/refs/heads/dist/rules/clash/reject.yaml" }
+  custom-proxy: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/proxy.yaml" }
+  custom-direct: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/direct.yaml" }
+  custom-reject: { <<: *class, url: "https://github.boki.moe/https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/reject.yaml" }

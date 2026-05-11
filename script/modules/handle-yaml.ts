@@ -1,10 +1,10 @@
 import { basename, dirname, extname, resolve } from "node:path"
 
-export class Yaml2Json {
+export class HandleYaml {
   #fileName: string
   #inputPath: string
   #outputPath: string
-  #doc = {}
+  #doc: string | object | undefined = undefined
 
   constructor(input: string, output: string) {
     const hasFileName = extname(output).startsWith(".")
@@ -23,28 +23,30 @@ export class Yaml2Json {
   }
 
   async load() {
-    console.log(this.#inputPath)
+    console.log("load from:", this.#inputPath)
     this.#doc = Bun.YAML.parse(await Bun.file(this.#inputPath).text()) as object
-    return this.#doc
+    return { fileName: this.#fileName, doc: this.#doc }
   }
 
-  async save(format = false, doc: object | string | undefined = this.#doc) {
-    if (doc === undefined) throw new TypeError("doc is undefined")
+  async save(text?: string, format = true) {
+    this.#doc = text ?? this.#doc
+    if (this.#doc === undefined) throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
     const space = format ? 2 : 0
-    const endFix = extname(this.#outputPath)
-    if ([".json", ".jsonc"].includes(endFix)) {
-      await Bun.write(this.#outputPath, JSON.stringify(doc, undefined, space))
-    } else if ([".ts", ".d.ts", ".mts"].includes(endFix)) {
-      await Bun.write(this.#outputPath, doc.toString())
-    } else {
-      await Bun.write(this.#outputPath, Bun.YAML.stringify(doc, undefined, space))
+    const suffix = extname(this.#outputPath).toLowerCase()
+    if (suffix === ".ts") await Bun.write(this.#outputPath, this.#doc as string)
+
+    if (suffix === ".yml" || suffix === ".yaml") {
+      await Bun.write(this.#outputPath, Bun.YAML.stringify(this.#doc, undefined, space))
     }
+    if (suffix === ".json" || suffix === ".jsonc") {
+      await Bun.write(this.#outputPath, JSON.stringify(this.#doc, undefined, space))
+    }
+
     console.log(`save to: ${[this.#outputPath]}`)
   }
 
   search(paths: string[]) {
-    if (this.#doc === undefined) throw new ReferenceError("not read file !")
-
+    if (typeof this.#doc === "object") throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
     const results: NodeHandle[] = []
 
     let previousResultsLength = results.length
@@ -75,10 +77,10 @@ export class Yaml2Json {
       }
       const nowResultsLength = results.length
       if (previousResultsLength === nowResultsLength) {
-        throw new Error(`⚠️  not find node, in params path:
+        throw new Error(`❌ No node was found, in params path:
            ${Bun.inspect(paths)}
            -> ${Bun.inspect(paths.at(pathIndex))}
-           -> ${Bun.inspect(keys[queue.at(-1)!.level])} ❌
+           -> ${Bun.inspect(keys[queue.at(-1)!.level])} 👈
            spell error ?`)
       }
       previousResultsLength = nowResultsLength

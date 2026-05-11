@@ -1,10 +1,13 @@
-// import type { ProxyProviders } from "./script/@types/clash-config"
+const o = { a: 1, b: 2, c: 3 }
 
-// import type { ProxyProviders } from "./script/@types"
+function a() {
+  return { oo: o, text: JSON.stringify(o) }
+}
 
-const a = "".split(",")
+const { oo } = a()
 
-console.log()
+oo.a = 123123
 
-const b = {}
-console.log(b)
+console.log(o)
+
+console.log(typeof undefined === "object")
