@@ -46,7 +46,10 @@
 				"abierbaum.vscode-file-peek",
 				"dncrews.vscode-github-actions-embedded-syntax",
 				"github.vscode-github-actions",
-				"donjayamanne.githistory"
+				"donjayamanne.githistory",
+				"biomejs.biome",
+				"formulahendry.code-runner",
+				"esbenp.prettier-vscode"
 			]
 		}
 	}
