@@ -13,22 +13,22 @@ const env = parseEnv()
 
 // 删除不需要的模块
 if (env.DELETE_PROPERTY !== undefined) {
-  yaml.delete(yaml.search(env.DELETE_PROPERTY))
+	yaml.delete(yaml.search(env.DELETE_PROPERTY))
 }
 
 if (env.PROVIDER_URLS !== undefined) {
-  // 添加订阅 并把模板删除
-  const s = yaml.search(["proxy-providers.airport"])
-  yaml.add(s, (airport: Airport) => {
-    const addNodes: AddNode[] = []
-    for (const [i, v] of env.PROVIDER_URLS!.entries()) {
-      const key = `airport${i.toString()}`
-      const value = { ...airport, url: v }
-      addNodes.push({ key, value })
-    }
-    return addNodes
-  })
-  yaml.delete(s)
+	// 添加订阅 并把模板删除
+	const s = yaml.search(["proxy-providers.airport"])
+	yaml.add(s, (airport: Airport) => {
+		const addNodes: AddNode[] = []
+		for (const [i, v] of env.PROVIDER_URLS!.entries()) {
+			const key = `airport${i.toString()}`
+			const value = { ...airport, url: v }
+			addNodes.push({ key, value })
+		}
+		return addNodes
+	})
+	yaml.delete(s)
 }
 
 // 修改部分参数
@@ -40,6 +40,6 @@ if (env.RULE_PROVIDERS_PROXY_URL) yaml.change(yaml.search(["rule-providers.*.url
 if (!env.IS_DEPLOY_TO_GIST) await yaml.save()
 
 if (env.GIST_ID && env.GIST_TOKEN && env.IS_DEPLOY_TO_GIST) {
-  const deployGist = new DeployGist(env.GIST_ID, env.GIST_TOKEN)
-  deployGist.pushToGist(yaml.fileName, JSON.stringify(yaml.doc))
+	const deployGist = new DeployGist(env.GIST_ID, env.GIST_TOKEN)
+	deployGist.pushToGist(yaml.fileName, JSON.stringify(yaml.doc))
 }
