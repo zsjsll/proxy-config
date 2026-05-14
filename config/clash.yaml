@@ -207,6 +207,7 @@ rules:
   - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve #📲 电报!CN
   - MATCH,🐟 漏网之鱼
 
+# prettier-ignore
 rule-providers:
   geosite-fakeip_filter: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs" }
   geosite-private: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }

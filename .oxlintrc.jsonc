@@ -7,7 +7,7 @@
     "perf": "warn",
     "suspicious": "warn",
     "pedantic": "warn",
-    "style": "warn",
+    "style": "warn"
     // "restriction": "warn",
     // "nursery": "warn"
   },
@@ -25,10 +25,10 @@
     "numeric-separators-style": "off",
     "sort-imports": "off",
     "func-style": "off",
-    "no-useless-undefined": "off",
+    "no-useless-undefined": "off"
   },
   "env": {
-    "builtin": true,
+    "builtin": true
   },
-  "ignorePatterns": ["script/@types/**/*.{d.ts,ts}"],
+  "ignorePatterns": ["script/@types/**/*.{d.ts,ts}"]
 }

@@ -1,3 +1,5 @@
+import { array } from "valibot"
+
 const o = { a: 1, b: 2, c: 3 }
 
 function a() {
@@ -20,3 +22,19 @@ const promise = new Promise((resolve) => {
 function aaa() {
   promise.then((result) => console.log("then:", result)).catch((error) => console.log("catch:", error))
 }
+
+function find(fn: (...arg: string[]) => void) {
+  if (typeof fn === "function") {
+    fn()
+  }
+}
+
+function hello(vb: any) {
+  console.log(vb)
+}
+
+find(hello)
+
+const foo = [].map(hello)
+
+;[].forEach(hello)

@@ -1,56 +1,56 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	// "name": "Ubuntu",
-	"name": "proxy-config",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "mcr.microsoft.com/devcontainers/base:noble",
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:4-24-trixie",
-	"features": {
-		"ghcr.io/michidk/devcontainers-features/bun:1": {}
-	},
+  // "name": "Ubuntu",
+  "name": "proxy-config",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  // "image": "mcr.microsoft.com/devcontainers/base:noble",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:4-24-trixie",
+  "features": {
+    "ghcr.io/michidk/devcontainers-features/bun:1": {}
+  },
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "sudo ln -sf $(which bun) /usr/local/bin/node",
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "sudo ln -sf $(which bun) /usr/local/bin/node",
 
-	// Configure tool-specific properties.
-	// "customizations": {},
+  // Configure tool-specific properties.
+  // "customizations": {},
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "root",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"MS-CEINTL.vscode-language-pack-zh-hans",
-				"oxc.oxc-vscode",
-				"johnny-zhao.oai-compatible-copilot",
-				"idered.npm",
-				"oderwat.indent-rainbow",
-				"christian-kohler.path-intellisense",
-				"xqvvu.shell-tidy-vscode",
-				"holysheng.snaketocamel",
-				"ChakrounAnas.turbo-console-log",
-				"TypeScriptTeam.native-preview",
-				"redhat.vscode-yaml",
-				"meganrogge.template-string-converter",
-				"antfu.smart-clicks",
-				"mahatolalit.sizecostimport",
-				"timonwong.shellcheck",
-				"oven.bun-vscode",
-				"mhutchie.git-graph",
-				"mkxml.vscode-filesize",
-				"abierbaum.vscode-file-peek",
-				"dncrews.vscode-github-actions-embedded-syntax",
-				"github.vscode-github-actions",
-				"donjayamanne.githistory",
-				"formulahendry.code-runner"
-			]
-		}
-	}
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "MS-CEINTL.vscode-language-pack-zh-hans",
+        "oxc.oxc-vscode",
+        "johnny-zhao.oai-compatible-copilot",
+        "idered.npm",
+        "oderwat.indent-rainbow",
+        "christian-kohler.path-intellisense",
+        "xqvvu.shell-tidy-vscode",
+        "holysheng.snaketocamel",
+        "ChakrounAnas.turbo-console-log",
+        "TypeScriptTeam.native-preview",
+        "redhat.vscode-yaml",
+        "meganrogge.template-string-converter",
+        "antfu.smart-clicks",
+        "mahatolalit.sizecostimport",
+        "timonwong.shellcheck",
+        "oven.bun-vscode",
+        "mhutchie.git-graph",
+        "mkxml.vscode-filesize",
+        "abierbaum.vscode-file-peek",
+        "dncrews.vscode-github-actions-embedded-syntax",
+        "github.vscode-github-actions",
+        "donjayamanne.githistory",
+        "formulahendry.code-runner"
+      ]
+    }
+  }
 }
