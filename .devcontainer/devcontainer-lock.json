@@ -1,5 +1,10 @@
 {
   "features": {
+    "ghcr.io/devcontainer-config/features/dot-config:4": {
+      "version": "4.0.0",
+      "resolved": "ghcr.io/devcontainer-config/features/dot-config@sha256:d9ca770ccb218e619d5725fd50f00dfacdf582d92a8c3901f11b53b1caddd878",
+      "integrity": "sha256:d9ca770ccb218e619d5725fd50f00dfacdf582d92a8c3901f11b53b1caddd878"
+    },
     "ghcr.io/michidk/devcontainers-features/bun:1": {
       "version": "1.0.1",
       "resolved": "ghcr.io/michidk/devcontainers-features/bun@sha256:568cc553062d184932ba993db954d4ace2bda3907d129477ce174777ac686dbd",

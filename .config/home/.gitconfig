@@ -1,0 +1,12 @@
+[user]
+	name = zsjsll
+	email = 124119885@qq.com
+# [https]
+# 	proxy = socks5://127.0.0.1:7890
+# [http]
+# 	proxy = socks5://127.0.0.1:7890
+[credential]
+	helper = "!f() { /root/.vscode-server/bin/974500e64f0d1cfdf7c9821a2a51c2cb3bf0e561/node /tmp/vscode-remote-containers-dbc245be-402a-4c4f-9860-5855b9878fb1.js git-credential-helper $*; }; f"
+[safe]
+	directory = /workspaces/vsc/js_dingding
+	directory = /workspaces/vsc/proxy-config
