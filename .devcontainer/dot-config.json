@@ -1,8 +1,0 @@
-{
-	"home": {
-		".bashrc": "/root/.bashrc",
-		".gitconfig": "/root/.gitconfig",
-		".npmrc": "/root/.npmrc",
-		".zshrc": "/root/.zshrc"
-	}
-}
