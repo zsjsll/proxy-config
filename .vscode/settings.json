@@ -26,6 +26,9 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "prettier.printWidth": 200
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 
   // "editor.defaultFormatter": "biomejs.biome"
