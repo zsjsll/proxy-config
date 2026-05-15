@@ -2,7 +2,7 @@
   "name": "proxy-config",
   "private": true,
   "scripts": {
-    "format": "biome format --write --log-level=error",
+    "fmt": "biome format --write --log-level=error",
     "yaml2ts": "bun run script/generate-types.ts",
     "cli": "bun run script/cli.ts"
   },
