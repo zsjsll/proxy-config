@@ -29,13 +29,11 @@ export class Yaml {
   }
 
   async load(): Promise<Readonly<{ fileName: string; doc: object }>> {
-    // console.log("load from:", this.#inputFileRef.name)
     this.#doc = Bun.YAML.parse(await this.#inputFileRef.text()) as object
     return { fileName: this.#fileName, doc: this.#doc }
   }
 
   async save(doc?: string, format = true) {
-    // if (this.#doc === undefined) throw new ReferenceError("❌ The object cannot be read and the load() function has not been run ?")
     const suffix = extname(this.#outputFileRef.name as string).toLowerCase()
     if (doc) {
       await this.#outputFileRef.write(doc)

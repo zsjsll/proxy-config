@@ -2,17 +2,18 @@
   "name": "proxy-config",
   "private": true,
   "scripts": {
-    "fmt": "biome format --write --log-level=error",
-    "yaml2ts": "bun run script/generate-types.ts",
-    "cli": "bun run script/cli.ts"
+    "fmt": "bunx biome format --write --log-level=error",
+    "gen-dts": "bun script/generate-types.ts",
+    "cli": "bun script/cli.ts"
   },
   "dependencies": {
     "expr-eval": "^2.0.2",
     "is-ci": "^4.1.0",
+    "quicktype-core": "^23.2.6",
     "valibot": "^1.4.0"
   },
   "devDependencies": {
-    "@hacxy/json2ts": "latest",
+    "@biomejs/biome": "latest",
     "@types/bun": "latest",
     "oxfmt": "latest",
     "oxlint": "latest"

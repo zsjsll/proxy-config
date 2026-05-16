@@ -1,4 +1,4 @@
-// import type ClashConfig from "./clash-config"
+import type { Airport } from "./clash-config"
 
 declare module "./clash-config.d.ts" {
   interface ProxyProviders {
@@ -6,6 +6,6 @@ declare module "./clash-config.d.ts" {
   }
 }
 
-// declare global {
-//   type ProxyProviders = ClashConfig.ProxyProviders
-// }
+declare global {
+  type ProxyProviders = ClashConfig.ProxyProviders
+}

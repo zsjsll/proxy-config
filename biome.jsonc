@@ -7,7 +7,7 @@
   },
 
   "files": {
-    "includes": ["**", "!!**/dist", "!!script/@types/**/*.{d.ts,ts}"]
+    "includes": ["**", "!!**/dist", "!!script/@types/clash-config.d.ts"]
   },
   "formatter": {
     "enabled": true,

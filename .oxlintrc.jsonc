@@ -30,5 +30,5 @@
   "env": {
     "builtin": true
   },
-  "ignorePatterns": ["script/@types/**/*.{d.ts,ts}"]
+  "ignorePatterns": ["script/@types/clash-config.d.ts"]
 }
