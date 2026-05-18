@@ -29,8 +29,13 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "code-runner.executorMap": {
+    // "javascript": "deno -A",
+    // "typescript": "deno -A"
+    "typescript": "bun run",
+    "javascript": "bun run"
   }
-
   // "editor.defaultFormatter": "biomejs.biome"
   // "editor.defaultFormatter": "denoland.vscode-deno"
 }
