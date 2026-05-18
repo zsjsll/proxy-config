@@ -39,7 +39,8 @@ export class Yaml {
       await this.#outputFileRef.write(doc)
     }
     const space = format ? 2 : 0
-    if (suffix === ".yml" || suffix === ".yaml") {
+
+    if (new Set([".yml", ".yaml"]).has(suffix)) {
       await this.#outputFileRef.write(Bun.YAML.stringify(this.#doc, undefined, space))
     }
     console.log(`💾 save to: ${[this.#outputFileRef.name]}`)
