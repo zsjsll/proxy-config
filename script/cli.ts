@@ -41,5 +41,5 @@ if (!env.IS_DEPLOY_TO_GIST) await yaml.save()
 
 if (env.GIST_ID && env.GIST_TOKEN && env.IS_DEPLOY_TO_GIST) {
   const deployGist = new DeployGist(env.GIST_ID, env.GIST_TOKEN)
-  deployGist.pushToGist(yaml.fileName, JSON.stringify(yaml.doc))
+  deployGist.pushToGist(yaml.fileName, Bun.YAML.stringify(yaml.doc, undefined, 2))
 }
