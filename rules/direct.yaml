@@ -44,3 +44,5 @@ payload:
   - DOMAIN-SUFFIX,1ms.run
   - DOMAIN,docker.1panel.live
   - DOMAIN,05f073ad3c0010ea0f4bc00b7105ec20.mirror.swr.myhuaweicloud.com
+
+  - DOMAIN,testufo.com
