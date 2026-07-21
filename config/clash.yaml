@@ -101,7 +101,7 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:geosite-fakeip_filter,geosite-cn,geosite-private,custom-direct"
+    - "rule-set:geosite-fakeip_filter,geosite-cn,geosite-private,custom-direct,custom-fakeip_filter"
 
   nameserver-policy:
     # 用于广告拦截，的话就不能开启 direct-nameserver-follow-policy: true
@@ -231,3 +231,4 @@ rule-providers:
   custom-proxy: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/proxy.yaml" }
   custom-direct: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/direct.yaml" }
   custom-reject: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/reject.yaml" }
+  custom-fakeip_filter: { <<: *class, url: "https://raw.githubusercontent.com/zsjsll/proxy-config/refs/heads/clash/rules/fakeip_filter.yaml" }
