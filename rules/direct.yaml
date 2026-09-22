@@ -51,6 +51,3 @@ payload:
   - DOMAIN,nvidia.com
   # 异星工厂
   - DOMAIN,mods.factorio.com
-  # pubg
-  - DOMAIN-SUFFIX,pubg.com
-  - DOMAIN-SUFFIX,pubgmaps.gg
