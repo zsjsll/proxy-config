@@ -53,3 +53,4 @@ payload:
   - DOMAIN,mods.factorio.com
   # pubg
   - DOMAIN-SUFFIX,pubg.com
+  - DOMAIN-SUFFIX,pubgmaps.gg
