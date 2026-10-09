@@ -5,19 +5,19 @@
     "": {
       "name": "proxy-config",
       "dependencies": {
-        "expr-eval": "latest",
-        "is-ci": "latest",
-        "quicktype-core": "latest",
-        "valibot": "latest",
+        "expr-eval": "^2.0.2",
+        "is-ci": "^4.1.0",
+        "quicktype-core": "^23.2.6",
+        "valibot": "^1.4.0",
       },
       "devDependencies": {
-        "@biomejs/biome": "latest",
-        "@types/bun": "latest",
-        "oxfmt": "latest",
-        "oxlint": "latest",
+        "@biomejs/biome": "^2.4.15",
+        "@types/bun": "^1.3.14",
+        "oxfmt": "^0.51.0",
+        "oxlint": "^1.66.0",
       },
       "peerDependencies": {
-        "typescript": "latest",
+        "typescript": "^6.0.3",
       },
     },
   },
