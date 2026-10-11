@@ -53,3 +53,5 @@ payload:
   - DOMAIN-SUFFIX,microsoft.com
   # 异星工厂
   - DOMAIN,mods.factorio.com
+  # 驱动
+  - DOMAIN-SUFFIX,cd4o.com
