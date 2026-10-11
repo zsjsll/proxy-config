@@ -48,6 +48,8 @@ payload:
   # 显示器测试
   - DOMAIN,testufo.com
   # 显卡
-  - DOMAIN,nvidia.com
+  - DOMAIN-SUFFIX,nvidia.com
+  - DOMAIN-SUFFIX,amd.com
+  - DOMAIN-SUFFIX,microsoft.com
   # 异星工厂
   - DOMAIN,mods.factorio.com
