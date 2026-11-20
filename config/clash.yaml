@@ -188,7 +188,7 @@ rules:
   - RULE-SET,custom-direct,🏠 国内FB
   - RULE-SET,custom-reject,🚫 广告
   - RULE-SET,geosite-ads,🚫 广告
-  - RULE-SET,geosite-private,DIRECT #🔐 私有网络
+  - RULE-SET,geosite-private,DIRECT #🔒 私有网络
   - RULE-SET,geosite-networktest,📈 网络测试
   - RULE-SET,geosite-trackerslist,📋 BT下载
   - RULE-SET,geosite-microsoft_cn,Ⓜ️ 微软CN
@@ -201,7 +201,7 @@ rules:
   - RULE-SET,geosite-tld_proxy,🧱 海外FB
   - RULE-SET,geosite-proxy,🧱 海外FB
   - RULE-SET,geosite-cn,🏠 国内FB
-  - RULE-SET,geoip-private,DIRECT,no-resolve #🔐 私有网络
+  - RULE-SET,geoip-private,DIRECT,no-resolve #🔒 私有网络
   - RULE-SET,geoip-cn,🏠 国内FB
   - RULE-SET,geoip-media,🌍 媒体!CN
   - RULE-SET,geoip-telegram,🌍 媒体!CN,no-resolve #📲 电报!CN
