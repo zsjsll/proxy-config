@@ -191,10 +191,10 @@ rules:
   - RULE-SET,geosite-private,DIRECT #🔒 私有网络
   - RULE-SET,geosite-networktest,📈 网络测试
   - RULE-SET,geosite-trackerslist,📋 BT下载
-  - RULE-SET,geosite-microsoft_cn,Ⓜ️ 微软CN
-  - RULE-SET,geosite-apple_cn,🍎 苹果CN
-  - RULE-SET,geosite-google_cn,🌈 谷歌CN
   - RULE-SET,geosite-games_cn,🎮 游戏CN
+  - RULE-SET,geosite-microsoft_cn,Ⓜ️ 微软CN
+  - RULE-SET,geosite-google_cn,🌈 谷歌CN
+  - RULE-SET,geosite-apple_cn,🍎 苹果CN
   - RULE-SET,geosite-ai,🤖 AI!CN
   - RULE-SET,geosite-games,🕹️ 游戏!CN
   - RULE-SET,geosite-media,🌍 媒体!CN
