@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IS_DEPLOY_TO_GIST: true
+      GIST_ID: ${{ secrets.GIST_ID }}
       GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
       PROVIDER_URLS: ${{ secrets.PROVIDER_URLS }}
 
