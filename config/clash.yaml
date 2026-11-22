@@ -1,6 +1,6 @@
 global-anchor:
   proxy-groups:
-    auto-test: &auto-test { type: url-test, tolerance: 30, include-all: true, interval: 86400, timeout: 1000, url: https://www.gstatic.com/generate_204 }
+    auto-test: &auto-test { type: url-test, tolerance: 30, include-all: true, interval: 43200, timeout: 1000, url: https://www.gstatic.com/generate_204 }
 
   rule-providers:
     default: &default { type: http, interval: 43200 }
@@ -35,7 +35,7 @@ log-level: silent
 find-process-mode: "off"
 disable-keep-alive: false #在 Android 强制为 true, 关闭心跳包的发送，减少耗电
 keep-alive-idle: 600
-keep-alive-interval: 15
+keep-alive-interval: 30
 profile:
   store-selected: true
   store-fake-ip: true
@@ -143,8 +143,9 @@ dns:
     - system#DIRECT
     - 222.172.200.68#DIRECT
     - 61.166.150.123#DIRECT
-    - 223.6.6.6#DIRECT
     - 223.5.5.5#DIRECT
+    - 223.6.6.6#DIRECT
+
 
   # 不要用 fallback ，在解析的时候会同时使用 nameserver 和 fallback ，造成DNS泄露
   nameserver:
