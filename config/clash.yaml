@@ -163,8 +163,8 @@ dns:
 
   # 不要用 fallback ，在解析的时候会同时使用 nameserver 和 fallback ，造成DNS泄露
   nameserver:
-    - https://8.8.8.8/dns-query#proxy=🚀 节点选择&ecs=222.172.200.68/24&ecs-override=true
-    - https://8.8.4.4/dns-query#proxy=🚀 节点选择&ecs=222.172.200.68/24&ecs-override=true
+    - https://8.8.8.8/dns-query#proxy=🚀%20节点选择&ecs=222.172.200.68/24&ecs-override=true
+    - https://8.8.4.4/dns-query#proxy=🚀%20节点选择&ecs=222.172.200.68/24&ecs-override=true
     # - https://101.101.101.101/dns-query&proxy=🚀 节点选择
     # - https://101.102.103.104/dns-query&proxy=🚀 节点选择
     # - https://1.1.1.1/dns-query&proxy=🚀 节点选择
