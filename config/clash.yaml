@@ -199,9 +199,9 @@ proxy-groups:
   - { name: 🔴 拒绝, type: select, proxies: [REJECT], hidden: true }
 
 rules:
+  # - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((RULE-SET,geosite-cn)))),REJECT
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((RULE-SET,geoip-cn)))),REJECT
-  # - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   - RULE-SET,custom-proxy,🧱 海外FB
   - RULE-SET,custom-direct,🏠 国内FB
   - RULE-SET,custom-reject,🚫 广告
