@@ -54,14 +54,14 @@ tun:
   auto-detect-interface: true
   strict-route: true
   # 设置绕过clash的流量
-  # route-exclude-address-set:
-  #   - geosite-fakeip_filter
-  #   - geosite-cn
-  #   - geosite-private
-  #   - geoip-cn
-  #   - geoip-private
-  #   - custom-direct
-  #   - custom-fakeip_filter
+  route-exclude-address-set:
+    - geosite-fakeip_filter
+    - geosite-cn
+    - geosite-private
+    - geoip-cn
+    - geoip-private
+    - custom-direct
+    - custom-fakeip_filter
 
 # 嗅探
 sniffer:
