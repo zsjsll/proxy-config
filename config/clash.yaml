@@ -122,8 +122,11 @@ dns:
     # 这样的话, 不论如何设置广告的路由, 都会导致优先匹配nameserver-policy, 也就是说 广告会一直过滤, 导致开关无效
 
     # 为了不触发某些应用的 fallback 机制, 所以返回 rcode://success
-    "rule-set:geosite-ads,custom-reject":
+    "rule-set:geosite-ads":
       - rcode://success
+    "rule-set:custom-reject":
+      - rcode://success
+
     # direct-nameserver-follow-policy: true 不开启的话, 下面这个2个规则其实都没有什么用了,都会优先走 direct-nameserver
     # 可以注释掉
 
@@ -168,7 +171,7 @@ dns:
     # direct-nameserver-follow-policy: true  # 如果开启这个配置 direct-nameserver 的优先级会低于 nameserver-policy
     # 用于 direct 出口域名解析的 DNS 服务器
   direct-nameserver:
-    - system#DIRECT
+    - system
     - 222.172.200.68#DIRECT
     - 61.166.150.123#DIRECT
     - 221.3.131.11#DIRECT
