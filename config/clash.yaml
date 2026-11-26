@@ -44,7 +44,7 @@ profile:
 tun:
   enable: false
   # system/gvisor/mixed
-  stack: mixed
+  stack: mips
   device: utun
   dns-hijack:
     - any:53
