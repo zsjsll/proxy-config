@@ -99,7 +99,7 @@ dns:
   use-system-hosts: true
   respect-rules: true
   # 可选值 fake-ip/redir-host，默认redir-host
-  enhanced-mode: fake-ip
+  enhanced-mode: redir-host
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
