@@ -3,15 +3,20 @@ payload:
   # - DOMAIN-SUFFIX,google.com
   # - DOMAIN-KEYWORD,google
   # - DOMAIN,ad.com
-  # - SRC-IP-CIDR,192.168.1.201/32
+  # - DOMAIN-WILDCARD,*.google.com
+
   # - IP-CIDR,127.0.0.0/8
+  # - IP-SUFFIX,8.8.8.8/24
+
   # - GEOIP,CN
+  # - GEOSITE,youtube
+
+  # - SRC-GEOIP,CN
+  # - SRC-IP-CIDR,192.168.1.201/32
+  # - SRC-IP-SUFFIX,192.168.1.201/8
+
   # - DST-PORT,80
   # - SRC-PORT,7777
-
-  # google DNS
-  # - IP-CIDR,8.8.8.8/32
-  # - IP-CIDR,8.8.4.4/32
 
   # DNS泄露测试网站
   - DOMAIN-SUFFIX,browserscan.net
