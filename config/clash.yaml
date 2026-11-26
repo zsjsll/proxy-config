@@ -167,7 +167,7 @@ dns:
     # direct-nameserver-follow-policy: true  # 如果开启这个配置 direct-nameserver 的优先级会低于 nameserver-policy
     # 用于 direct 出口域名解析的 DNS 服务器
   direct-nameserver:
-    - system
+    - system#DIRECT
     # - 222.172.200.68#DIRECT
     # - 61.166.150.123#DIRECT
     # - 221.3.131.11#DIRECT
