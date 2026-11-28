@@ -22,6 +22,13 @@ payload:
   - DOMAIN-SUFFIX,bigpig.online
   - DOMAIN-SUFFIX,zsjsll.pp.ua
   - DOMAIN-SUFFIX,zsjsll.iask.in
+  - DOMAIN-SUFFIX,qwert.us.ci
+  - DOMAIN-SUFFIX,qwert.de5.net
+  - DOMAIN-SUFFIX,qwe.us.ci
+  - DOMAIN-SUFFIX,qwe.ccwu.cc
+  - DOMAIN-SUFFIX,1l1.ccwu.cc
+
+
 
   - DOMAIN-SUFFIX,cloudflare.com
   - DOMAIN-SUFFIX,cloudflare-dns.com
